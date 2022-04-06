@@ -6,8 +6,23 @@
 }
 .loader1 img.loder-logo{
     width: 160px;
+    vertical-align: middle;
 }
 
+.loader2{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+    padding-top: 20vh;
+}
+.loader2 img.loder-logo{
+    width: 140px;
+    vertical-align: middle;
+}
+.loader2 .redirect{
+    font-size: 12px;
+    color: #676767;
+}
 .loader-line {
     width: 200px;
     height: 3px;
@@ -35,6 +50,13 @@
     border-radius: 20px;
 }
 
+.loader2 .user {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: auto;
+}
+
 @keyframes lineAnim {
     0% {
         left: -40%;
@@ -47,4 +69,87 @@
         left: 100%;
         width: 100%;
     }
+}
+
+
+/* second loader */
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 6px solid #4671F0;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #4671F0 transparent transparent transparent;
+    z-index: 2;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  .cercle{
+    width: 100px;
+    height: 100px;
+    border-radius: 75px;
+    position: absolute;
+    z-index: 1;
+    border: 8px solid #EBEBFA;
+  }
+  .loader2 img.loder-icon{
+      width: 80px;
+      padding-top: 10px;
+  }
+  .cercle, .logo-icon {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    }
+  .blink-2 {
+	-webkit-animation: blink-2 0.9s infinite;
+	animation: blink-2 0.9s infinite;
+}
+@-webkit-keyframes blink-2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes blink-2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
