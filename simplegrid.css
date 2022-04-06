@@ -5,56 +5,7 @@
   Site - http://dallasbass.com
 */
 
-
-/* Black */
-@font-face {
-  font-family: 'CircularXX TT', sans-serif;;
-  src: url('../../fonts/v3/CircularXXTT-Black.woff2') format('woff2'),
-      url('../../fonts/v3/CircularXXTT-Black.woff') format('woff'),
-      url('../../fonts/v3/CircularXXTT-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-/* Bold */
-@font-face {
-  font-family: 'CircularXX TT';
-  src: url('../../fonts/v3/CircularXXTT-Bold.woff2') format('woff2'),
-      url('../../fonts/v3/CircularXXTT-Bold.woff') format('woff'),
-      url('../../fonts/v3/CircularXXTT-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-
-/* medium */
-@font-face {
-  font-family: 'CircularXX TT';
-  src: url('../../fonts/v3/CircularXXTT-Medium.woff2') format('woff2'),
-      url('../../fonts/v3/CircularXXTT-Medium.woff') format('woff'),
-      url('../../fonts/v3/CircularXXTT-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Regular */
-@font-face {
-  font-family: 'CircularXX TT';
-  src: url('../../fonts/v3/CircularXXTT-Regular.woff2') format('woff2'),
-      url('../../fonts/v3/CircularXXTT-Regular.woff') format('woff'),
-      url('../../fonts/v3/CircularXXTT-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-/* @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 html,
 body {
@@ -65,7 +16,7 @@ body {
   left: 0;
   top: 0;
   color: #1d1d1f;
-  font-family: "CircularXX TT", sans-serif;
+  font-family: 'Inter';
   font-weight: normal;
   font-style: normal;
   line-height: 1.5;
@@ -127,7 +78,7 @@ img {
 /* TYPOGRAPHY */
 
 h1 {
-  font-family: "CircularXX TT", sans-serif;
+  font-family: 'Inter';
   font-weight: 900;
   font-style: normal;
   line-height: 86px;
@@ -141,7 +92,7 @@ h1 {
 
 h2 {
   font-size: 35px;
-  font-family: "CircularXX TT", sans-serif;
+  font-family: 'Inter';
   font-weight: 800;
   font-style: normal;
   line-height: 1.25;
@@ -151,7 +102,7 @@ h2 {
 
 
 h3 {
-  font-family: "CircularXX TT", sans-serif;
+  font-family: 'Inter';
   font-size: 24px;
   line-height: 30px;
   font-weight: 600;
@@ -161,7 +112,7 @@ h3 {
 }
 
 h4 {
-  font-family: "CircularXX TT", sans-serif;
+  font-family: 'Inter';
   margin-top: 16px;
   margin-bottom: 16px;
   font-size: 18px;
