@@ -17,7 +17,10 @@ html {
  */
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "CircularXX TT", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
 }
 /* HTML5 display definitions
    ========================================================================== */
