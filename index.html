@@ -49,6 +49,14 @@
           <div class="app-screen">
             <a data-original-title="Notes" data-animation="false" data-easein="fadeIn" rel="popover" data-placement="left" data-content="Scribble meeting notes on the go" data-trigger="hover">
               <div class="app-icons">
+                <span class="material-symbols-rounded">
+                  image
+                </span>
+                Virtual Background
+              </div>
+            </a>
+            <a data-original-title="Notes" data-animation="false" data-easein="fadeIn" rel="popover" data-placement="left" data-content="Scribble meeting notes on the go" data-trigger="hover">
+              <div class="app-icons">
                   <span class="material-symbols-rounded">
                     description
                   </span>
@@ -193,12 +201,18 @@
             <source src="https://media.istockphoto.com/videos/beautiful-young-black-woman-talking-video-id1317152004" type="video/mp4">
           </video>
        </div>
-       <div class="grid-video">
+       <div class="grid-video me">
           <div class="pin"></div>
           <div class="eye"></div>
+          <div class="mute" style="display: none;"></div>
           <div class="speaker"></div>
           <h5>Me</h5>
-          <video  autoplay muted loop preload="metadata"  width="100%" height="">
+          <div class="off-camera" style="display: none;">
+            <div class="initial heartbeat">
+              SB
+            </div>
+          </div>
+          <video  autoplay muted loop preload="metadata"  width="100%" height="" id="off-camera">
             <source src="https://media.istockphoto.com/videos/woman-applicant-look-at-webcam-conference-calling-for-job-interview-video-id1198862305" type="video/mp4">
           </video>
        </div>
@@ -241,6 +255,7 @@
       <div class="layout2-widget">
         <div class="pin" id="unpin"></div>
         <div class="eye"></div>
+        <div class="mute" style="display: none;"></div>
         <h5>Me</h5>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/woman-applicant-look-at-webcam-conference-calling-for-job-interview-video-id1198862305" type="video/mp4">
@@ -294,6 +309,22 @@
   <!-- screenshare -->
   <div class="screenshare" style="display: none;">
     <div class="layout2-widget screen-img">
+      <div class="presenter-video" id="draggable">
+        <div class="video-container" id="widget">
+          <video  autoplay muted loop preload="metadata"  width="100%" height="">
+            <source src="https://media.istockphoto.com/videos/woman-applicant-look-at-webcam-conference-calling-for-job-interview-video-id1198862305" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <div class="sharing-info">
+        <div><b>Cheyenne Dorwart</b> is presenting</div>
+        <div class="stop-btn">
+          <button type="submit" class="btn btn-primary" id="stop-share">Stop Sharing</button>
+        </div>
+        <div class="full-screen">
+          <img src="./assets/images/full.svg" alt="">
+        </div>
+      </div>
     </div>
     <div class="theater-user">
       <div class="relative">
@@ -346,11 +377,17 @@
       </div>
       <div class="center-section">
         <div class="action-icons-widget">
-          <div tooltip="Turn off microphone">
+          <div tooltip="Turn off microphone" id="soundOff">
             <img src="./assets/images/sound.svg" alt="">
           </div>
-          <div tooltip="Turn off camera">
+          <div tooltip="Turn on microphone" style="display: none;" id="soundOn">
+            <img src="./assets/images/sound-off.svg" alt="">
+          </div>
+          <div tooltip="Turn off camera" id="cameraOff">
             <img src="./assets/images/video.svg" alt="">
+          </div>
+          <div tooltip="Turn on camera" id="cameraOn" style="display:none">
+            <img src="./assets/images/video-off.svg" alt="">
           </div>
           <div tooltip="Start recording">
             <img src="./assets/images/record.svg" alt="">
@@ -369,34 +406,44 @@
       <div class="right-section">
         <div class="widget-section">
           <div class="icon appstore" tooltip="App store">
-            <span class="material-symbols-rounded">
-              grid_view
-            </span>
+            <img src="./assets/images/app-icon.svg" alt="">
           </div>
           <div class="icon" tooltip="Chat">
-            <span class="material-symbols-rounded">
-              chat
-            </span>
+            <img src="./assets/images/chat.svg" alt="">
           </div>
           <div class="icon participants" style="margin-right: 10px;" tooltip="Participants">
-            <span class="material-symbols-rounded">
-              group
-            </span>
+            <div class="count">
+              <div class="number">9</div>
+            </div>
+            <img src="./assets/images/participants.svg" alt="">
           </div>
           <div class="devider"></div>
           <div class="icon" style="margin-left: 20px;" tooltip="Grid View" id="grid">
-            <span class="material-symbols-rounded">
-              window
-            </span>
+            <img src="./assets/images/grid-view.svg" alt="">
           </div>
           <div class="icon" tooltip="Theater View" flow="left" id="theater">
-            <span class="material-symbols-rounded">
-              table_chart
-            </span>
+            <img src="./assets/images/theater-view.svg" alt="">
+          </div>
+          <div class="icon" id="full" tooltip="Full Screen" flow="left" onclick="openFullscreen();">
+            <img src="./assets/images/full.svg" alt="">
+          </div>
+          <div class="icon" id="exit" tooltip="Exit Full Screen" flow="left" onclick="closeFullscreen();" style="display: none;">
+            <img src="./assets/images/exit.svg" alt="">
           </div>
         </div>
       </div>
     </div>
+    <!-- Unmute message -->
+    <div class="unmute-alert" style="display: none;">
+      <div class="unmute-content">
+        <div class="close-sound-alert">
+          <img src="./assets/images/close-black.svg" alt="">
+        </div>
+        <h4>Hey you are talking? Your mic is off.</h4>
+        <p>Click the mic to turn it on</p>
+      </div>
+    </div>
+    <!-- Unmute message -->
     <!-- Modal -->
     <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="vertical-alignment-helper">
@@ -415,6 +462,7 @@
     </div>
   </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js'></script>
+  <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
   <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
   <script>
     $(document).ready(function(){
@@ -432,50 +480,161 @@
         $(".app").hide();
         $(".users").hide();
       });
-    });
-    $(document).ready(function(){
+
       $(".participants").click(function(){
         $(".sidenav").addClass("sidenav-open");
         $("#main").addClass("body-margin");
         $(".users").show();
         $(".app").hide();
       });
-    });
-    $(document).ready(function(){
+
       $("#grid").click(function(){
         $(".layout1").show();
         $(".layout2").hide();
         $(".screenshare").hide();
       });
-    });
-    $(document).ready(function(){
+
       $("#theater").click(function(){
         $(".layout2").show();
         $(".layout1").hide();
         $(".screenshare").hide();
       });
-    });
-    $(document).ready(function(){
+
       $(".pin").click(function(){
         $(".layout2").show();
         $(".layout1").hide();
         $(".screenshare").hide();
       });
-    });
-    $(document).ready(function(){
+
       $("#unpin").click(function(){
         $(".layout1").show();
         $(".layout2").hide();
         $(".screenshare").hide();
       });
-    });
-    $(document).ready(function(){
+
       $(".screen").click(function(){
         $(".screenshare").show();
         $(".layout1").hide();
         $(".layout2").hide();
       });
+
+      $("#stop-share").click(function(){
+        $(".screenshare").hide();
+        $(".layout1").show();
+        $(".layout2").hide();
+      });
+
+      $("#cameraOff").click(function(){
+        $("#cameraOn").show();
+        $("#cameraOff").hide();
+        $(".off-camera").show();
+        $("#off-camera").hide();
+      });
+
+      $("#cameraOn").click(function(){
+        $("#cameraOff").show();
+        $("#cameraOn").hide();
+        $(".off-camera").hide();
+        $("#off-camera").show();
+      });
+
+      $("#soundOff").click(function(){
+        $("#soundOn").show();
+        $("#soundOff").hide();
+        $(".mute").show();
+        $(".unmute-alert").delay(1000).fadeIn(100);
+      });
+
+      $("#soundOn").click(function(){
+        $("#soundOff").show();
+        $("#soundOn").hide();
+        $(".mute").hide();
+        $(".unmute-alert").hide();
+      });
+
+      $(".close-sound-alert").click(function(){
+        $(".unmute-alert").hide();
+      });
+
+      $("#full").click(function(){
+        $("#exit").show();
+        $("#full").hide();
+      });
+      $("#exit").click(function(){
+        $("#full").show();
+        $("#exit").hide();
+      });
+
     });
+    // Using JavaScript to open the page in fullscreen mode
+    var elem = document.documentElement;
+    function openFullscreen() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    }
+    function closeFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+      }
+    }
+
+    // $( function() {
+    //   $( "#draggable" ).draggable();
+    // } );
+
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("draggable"));
+
+    function dragElement(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (document.getElementById(elmnt.id + "widget")) {
+        // if present, the header is where you move the DIV from:
+        document.getElementById(elmnt.id + "widget").onmousedown = dragMouseDown;
+      } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+
   </script>
           
 </body>
