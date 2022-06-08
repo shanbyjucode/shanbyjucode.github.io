@@ -18,34 +18,243 @@
 <body>
   <div id="mySidenav" class="sidenav">
     <div class="side-container">
-      <!-- participants -->
-      <div class="users" style="display: none;">
-        <div class="header">
-          Participants Details
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">
-            <span class="material-symbols-rounded" style="font-weight: bold;">
-              close
-            </span>
-          </a>
-        </div>
-      </div>
-      <!-- participants -->
-      <div class="app" style="display: none">
-        <div class="header">
-          App Store
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">
-            <span class="material-symbols-rounded" style="font-weight: bold;">
-              close
-            </span>
-          </a>
-        </div>
-        <div class="scroll-area">
-          <div class="search">
-            <span class="material-symbols-rounded">
-              search
-            </span>
-            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Search Apps">
+      <!-- chat -->
+      <section class="container-widget chat-widget" style="display: none;">
+        <header id="header">
+          <div class="header">
+            Chat
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">
+              <span class="material-symbols-rounded" style="font-weight: bold;">
+                close
+              </span>
+            </a>
           </div>
+        </header>
+        <article id="content">
+          <div class="message-wrapper">
+            <div class="profile-picture">
+              <img src="./assets/images/participant2.jpg" alt="pp">
+            </div>
+            <div class="message-content">
+              <p class="name">Gustavo Lubin</p>
+              <div class="message">Hello! Can you hear me?🤯 <a class="mention">@Jocelyn</a></div>
+              <div class="time">05:49 PM</div>
+            </div>
+          </div>
+          <div class="message-wrapper">
+            <div class="profile-picture">
+              <img src="./assets/images/participant3.jpg" alt="pp">
+            </div>
+            <div class="message-content">
+              <p class="name">Jocelyn Baptista</p>
+              <div class="message">Yes, Yes! Let's get started it.</div>
+              <div class="time">05:49 PM</div>
+            </div>
+          </div>
+          <div class="message-wrapper reverse">
+            <div class="profile-picture">
+              <img src="./assets/images/participant2.jpg" alt="pp">
+            </div>
+            <div class="message-content">
+              <p class="name">You</p>
+              <div class="message">Good morning!🌈</div>
+              <div class="time">05:49 PM</div>
+            </div>
+          </div>
+        </article>
+        <footer>
+          <div class="chat-typing-area">
+            <input type="text" placeholder="Type your meesage..." class="chat-input" id="usermsg">
+            <button class="send-button">
+              <img src="./assets/images/sent.svg" alt="">
+            </button>
+          </div>
+          <div class="chat-action">
+            <div class="emoji-icon">
+              <img src="./assets/images/emoji.png" alt="">
+            </div>
+            <div class="attach">
+              <img src="./assets/images/image.svg" alt="">
+              <input type="file" name="">
+            </div>
+          </div>
+        </footer>
+        <!-- emoji -->
+        <div class="emoji-widget">
+          <div class="emoji-content">
+            <ul class="emojis">
+              <li class="" onclick="enableTxt(this)">😊</li>
+              <li class="" onclick="enableTxt(this)">😀</li>
+              <li class="" onclick="enableTxt(this)">😂</li>
+              <li class="" onclick="enableTxt(this)">😇</li>
+              <li class="" onclick="enableTxt(this)">😈</li>
+              <li class="" onclick="enableTxt(this)">😉</li>
+              <li class="" onclick="enableTxt(this)">😋</li>
+              <li class="" onclick="enableTxt(this)">😍</li>
+              <li class="" onclick="enableTxt(this)">😎</li>
+              <li class="" onclick="enableTxt(this)">😴</li>
+              <li class="" onclick="enableTxt(this)">😳</li>
+              <li class="" onclick="enableTxt(this)">😷</li>
+              <li class="" onclick="enableTxt(this)">🤓</li>
+              <li class="" onclick="enableTxt(this)">😠</li>
+              <li class="" onclick="enableTxt(this)">😡</li>
+              <li class="" onclick="enableTxt(this)">😢</li>
+              <li class="" onclick="enableTxt(this)">🤧</li>
+              <li class="" onclick="enableTxt(this)">🧐</li>
+              <li class="" onclick="enableTxt(this)">👍</li>
+              <li class="" onclick="enableTxt(this)">👎</li>
+              <li class="" onclick="enableTxt(this)">💪</li>
+              <li class="" onclick="enableTxt(this)">👆</li>
+              <li class="" onclick="enableTxt(this)">✌</li>
+              <li class="" onclick="enableTxt(this)">🤘</li>
+              <li class="" onclick="enableTxt(this)">🖐</li>
+              <li class="" onclick="enableTxt(this)">👌</li>
+              <li class="" onclick="enableTxt(this)">👊</li>
+              <li class="" onclick="enableTxt(this)">👀</li>
+              <li class="" onclick="enableTxt(this)">👋</li>
+              <li class="" onclick="enableTxt(this)">🚫</li>
+              <li class="" onclick="enableTxt(this)">🙏</li>
+            </ul>
+          </div>
+        </div>
+        <!-- emoji -->
+      </section>
+      <!-- participants -->
+      <section class="container-widget users" style="display: none;">
+        <header id="header">
+          <div class="header">
+            Participants
+            <a href="javascript:void(0)" class="closebtn">
+              <span class="material-symbols-rounded" style="font-weight: bold;">
+                close
+              </span>
+            </a>
+          </div>
+        </header>
+        <article id="content" >
+          <div class="host-btn">Host Details 
+            <span class="material-symbols-rounded fa">
+            navigate_next
+            </span>
+          </div>
+          <div class="host-show" style="display: none;">
+            <div class="host-label">This meeting is hosted by</div>
+            <div class="host-details">
+              <div class="host-pic initial">CD</div>
+              <div class="name">Cheyenne Dorwart <span>cheyenne@company.com</span></div>
+            </div>
+          </div>
+          <!-- participants -->
+          <div class="parti-container" style="padding-top: 15px;">
+            <div class="host-pic initial">AD</div>
+            <div class="name" tooltip="Anika Dias">Anika</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant2.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Gustavo Lubin">Gustavo</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+          <div class="parti-container">
+            <div class="host-pic initial" style="background: url(./assets/images/participant3.jpg) no-repeat; background-size: cover;"></div>
+            <div class="name"  tooltip="Jocelyn Baptista">Jocelyn</div>
+            <div class="icon-present">
+              <img src="./assets/images/sound.svg" alt="">
+              <img src="./assets/images/video.svg" alt="">
+              <img src="./assets/images/pin-new.svg" alt=""  class="pin-icon2" style="cursor: pointer;">
+              <img src="./assets/images/un-pinn-new.svg" class="un-pinned2" alt="" style="display: none; cursor: pointer;">
+            </div>
+          </div>
+        </article>
+      </section>
+      <section class="container-widget app" style="display: none;">
+        <header id="header">
+          <div class="header">
+            App Store
+            <a href="javascript:void(0)" class="closebtn">
+              <span class="material-symbols-rounded" style="font-weight: bold;">
+                close
+              </span>
+            </a>
+          </div>
+        </header>
+        <div class="search">
+          <span class="material-symbols-rounded">
+            search
+          </span>
+          <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="Search Apps">
+        </div>
+        <article id="content">
           <div class="app-screen">
             <a data-original-title="Notes" data-animation="false" data-easein="fadeIn" rel="popover" data-placement="left" data-content="Scribble meeting notes on the go" data-trigger="hover">
               <div class="app-icons">
@@ -160,8 +369,8 @@
               </div>
             </a>
           </div>
-        </div>
-      </div>
+        </article>
+      </section>
     </div>
   </div>
 
@@ -169,7 +378,7 @@
     <div class="video-bg layout1">
       <div class="parent">
         <div class="grid-video">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Anika Dias</h5>
           <video autoplay muted loop preload="metadata"  width="100%" height="">
@@ -177,7 +386,7 @@
           </video>
        </div>
        <div class="grid-video">
-          <div class="pin"></div>
+        <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Gustavo Lubin</h5>
           <video autoplay muted loop preload="metadata"  width="100%" height="">
@@ -185,7 +394,7 @@
           </video>
        </div>
        <div class="grid-video">
-          <div class="pin"></div>
+        <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Jocelyn Baptista</h5>
           <video autoplay muted loop preload="metadata"  width="100%" height="">
@@ -202,14 +411,14 @@
           </video>
        </div>
        <div class="grid-video me">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <div class="mute" style="display: none;"></div>
           <div class="speaker"></div>
-          <h5>Me</h5>
+          <h5>You</h5>
           <div class="off-camera" style="display: none;">
             <div class="initial heartbeat">
-              SB
+              CD
             </div>
           </div>
           <video  autoplay muted loop preload="metadata"  width="100%" height="" id="off-camera">
@@ -217,7 +426,7 @@
           </video>
        </div>
        <div class="grid-video">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Mira Levin</h5>
           <video  autoplay muted loop preload="metadata"  width="100%" height="">
@@ -225,7 +434,7 @@
           </video>
        </div>
        <div class="grid-video">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Justin Bergson</h5>
           <video  autoplay muted loop preload="metadata"  width="100%" height="">
@@ -233,7 +442,7 @@
           </video>
        </div>
        <div class="grid-video">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Cheyenne Dorwart</h5>
           <video  autoplay muted loop preload="metadata"  width="100%" height="">
@@ -241,7 +450,7 @@
           </video>
        </div>
        <div class="grid-video bg">
-          <div class="pin"></div>
+          <div class="pin pin-icon"></div>
           <div class="eye"></div>
           <h5>Alfredo Gouse</h5>
           <video  autoplay muted loop preload="metadata"  width="100%" height="">
@@ -405,13 +614,14 @@
       </div>
       <div class="right-section">
         <div class="widget-section">
-          <div class="icon appstore" tooltip="App store">
+          <div class="icon appstore" tooltip="App store (Ctrl + A)">
             <img src="./assets/images/app-icon.svg" alt="">
           </div>
-          <div class="icon" tooltip="Chat">
+          <div class="icon chat" tooltip="Chat (Ctrl + C)">
+            <div class="dot"></div>
             <img src="./assets/images/chat.svg" alt="">
           </div>
-          <div class="icon participants" style="margin-right: 10px;" tooltip="Participants">
+          <div class="icon participants" style="margin-right: 10px;" tooltip="Participants (Ctrl + P)">
             <div class="count">
               <div class="number">9</div>
             </div>
@@ -471,14 +681,15 @@
         $("#main").addClass("body-margin");
         $(".app").show();
         $(".users").hide();
+        $(".chat-widget").hide();
       });
-    });
-    $(document).ready(function(){
+      
       $(".closebtn").click(function(){
         $(".sidenav").removeClass("sidenav-open");
         $("#main").removeClass("body-margin");
         $(".app").hide();
         $(".users").hide();
+        $(".chat-widget").hide();
       });
 
       $(".participants").click(function(){
@@ -486,6 +697,16 @@
         $("#main").addClass("body-margin");
         $(".users").show();
         $(".app").hide();
+        $(".chat-widget").hide()
+      });
+
+      $(".chat").click(function(){
+        $(".sidenav").addClass("sidenav-open");
+        $("#main").addClass("body-margin");
+        $(".users").hide();
+        $(".chat-widget").show();
+        $(".app").hide();
+        $(".chat-input").focus();
       });
 
       $("#grid").click(function(){
@@ -500,7 +721,7 @@
         $(".screenshare").hide();
       });
 
-      $(".pin").click(function(){
+      $(".pin-icon").click(function(){
         $(".layout2").show();
         $(".layout1").hide();
         $(".screenshare").hide();
@@ -509,7 +730,22 @@
       $("#unpin").click(function(){
         $(".layout1").show();
         $(".layout2").hide();
+      });
+
+      $(".pin-icon2").click(function(){
+        // $(this).addClass("pinned-icon2");
+        $(this).parent().find(".pin-icon2").hide();
+        $(this).parent().find(".un-pinned2").show();
+        $(".layout2").show();
+        $(".layout1").hide();
         $(".screenshare").hide();
+      });
+
+      $(".un-pinned2").click(function(){
+        $(".pin-icon2").show();
+        $(".un-pinned2").hide();
+        $(".layout1").show();
+        $(".layout2").hide();
       });
 
       $(".screen").click(function(){
@@ -563,6 +799,11 @@
       $("#exit").click(function(){
         $("#full").show();
         $("#exit").hide();
+      });
+
+      $(this).on("click", ".host-btn", function() {
+        $(this).parent().find(".host-show").toggle();
+        $(this).find(".fa").toggleClass('active');
       });
 
     });
@@ -634,7 +875,72 @@
         document.onmousemove = null;
       }
     }
+    // keys
+    document.onkeydown = function (e) {
+        // sound mute
+        if (e.keyCode == 32) {
+          $("#soundOn").toggle();
+          $("#soundOff").toggle();
+          $(".mute").toggle();
+        }
+        // close
+        if (e.keyCode == 27) {
+          $(".sidenav").removeClass("sidenav-open");
+          $("#main").removeClass("body-margin");
+          $(".app").hide();
+          $(".users").hide();
+          $(".chat-widget").hide();
+        }
+        // app
+        if (event.ctrlKey && event.which === 65) {
+          $(".sidenav").addClass("sidenav-open");
+          $("#main").addClass("body-margin");
+          $(".app").show();
+          $(".users").hide();
+          $(".chat-widget").hide();
+          event.preventDefault();
+        }
 
+         // chat
+         if (event.ctrlKey && event.which === 67) {
+          $(".sidenav").addClass("sidenav-open");
+          $("#main").addClass("body-margin");
+          $(".users").hide();
+          $(".app").hide();
+          $(".chat-widget").show();
+          $(".chat-input").focus();
+          event.preventDefault();
+        }
+         // participants
+         if (event.ctrlKey && event.which === 80) {
+          $(".sidenav").addClass("sidenav-open");
+          $("#main").addClass("body-margin");
+          $(".users").show();
+          $(".app").hide();
+          $(".chat-widget").hide();
+          event.preventDefault();
+        }
+    };
+
+    // emoji
+    $('.emoji-icon').click(function(e) {
+      $('.emoji-widget').slideToggle('fast');
+      e.stopPropagation();
+    });
+    $(".emoji-widget").click(function(e){
+      e.stopPropagation();
+    });
+    $(document).click(function(e){
+      $(".emoji-widget").slideUp('fast'); 
+      e.stopPropagation();
+    });
+    $('.emojis li').click(function(e) {
+      $('.emoji-widget').slideToggle('fast');
+      e.stopPropagation();
+    });
+    function enableTxt(elem) {
+      $('#usermsg').val($('#usermsg').val() + $(elem).html());    
+    }
   </script>
           
 </body>
