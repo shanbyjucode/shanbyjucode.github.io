@@ -968,6 +968,8 @@
         $(".layout2").hide();
         $("#grid").addClass('disabled')
         $("#theater").addClass('disabled')
+          const audio = new Audio("https://freesound.org/data/previews/501/501690_1661766-lq.mp3");
+        audio.play();
       });
 
       $(".screen-off").click(function(){
@@ -1193,8 +1195,8 @@
       $('#usermsg').val($('#usermsg').val() + $(elem).html());    
     }
 
+    // plsy video
 
-    $('#editor').trumbowyg();
   </script>
           
 </body>
