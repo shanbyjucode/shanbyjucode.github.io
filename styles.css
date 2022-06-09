@@ -1603,9 +1603,6 @@ a.closebtn{
     animation: none;
   }
   .parent{
-    position: fixed;
     height: calc(100vh - 16vh);
-    top: 0;
-    left: 0;
   }
 }
