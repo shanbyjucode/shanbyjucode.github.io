@@ -626,42 +626,122 @@
     </div>
     <div class="theater-user">
       <div class="relative">
+        <div class="overlay-content">
+          <div class="inner">
+            <div class="name">Anika</div>
+            <div class="icons">
+              <div class="eye"></div>
+              <div class="mute"></div>
+              <div class="pin" id="unpin"></div>
+            </div>
+          </div>
+        </div>
         <video autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/smiling-woman-pretty-face-looking-at-camera-closeup-portrait-video-id1180679969" type="video/mp4">
         </video>
      </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Gustavo</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/young-businessman-talk-on-webcam-having-video-call-video-id1324497974" type="video/mp4">
         </video>
      </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Jocelyn</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/man-typing-while-working-from-home-camera-point-of-view-video-id1309082285" type="video/mp4">
         </video>
       </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Hanna</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/beautiful-young-black-woman-talking-video-id1317152004" type="video/mp4">
         </video>
      </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Mira</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/confident-young-woman-speaking-to-camera-at-home-video-id1216439618" type="video/mp4">
         </video>
      </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Justin</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <div class="speaker"></div>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/smiling-arabic-businessman-coach-talk-look-at-camera-in-office-video-id1178391138" type="video/mp4">
         </video>
      </div>
      <div class="relative">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Cheyenne</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/man-applicant-greeting-hr-managers-pass-job-interview-by-videocall-video-id1254416604" type="video/mp4">
         </video>
      </div>
      <div class="relative bg">
+      <div class="overlay-content">
+        <div class="inner">
+          <div class="name">Alfredo</div>
+          <div class="icons">
+            <div class="eye"></div>
+            <div class="mute"></div>
+            <div class="pin" id="unpin"></div>
+          </div>
+        </div>
+      </div>
         <video  autoplay muted loop preload="metadata"  width="100%" height="">
           <source src="https://media.istockphoto.com/videos/headshot-portrait-man-talk-to-friend-use-videoconference-call-app-video-id1287940608" type="video/mp4">
         </video>
@@ -693,8 +773,36 @@
           <div tooltip="Present" class="screen">
             <img src="./assets/images/share.svg" alt="">
           </div>
-          <div tooltip="More options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="./assets/images/more.svg" alt="">
+          <div tooltip="Stop Present" class="screen-off" style="display: none">
+            <img src="./assets/images/share.svg" alt="">
+          </div>
+          <div class="more-widget">
+            <div class="more-options">
+              <ul>
+                <li>
+                  <div class="menu-icon">
+                    <img src="./assets/images/filter.svg" alt="">
+                  </div>
+                  <div class="list-text">
+                    Check audio and video
+                  </div>
+                </li>
+                <li>
+                  <div class="menu-icon">
+                    <img src="./assets/images/info.svg" alt="">
+                  </div>
+                  <div class="list-text">
+                    Report a problem
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="more-icon" tooltip="More options">
+              <img src="./assets/images/more.svg" alt="">
+            </div>
+            <div class="more-icon-active" tooltip="Hide options" style="display: none;">
+              <img src="./assets/images/more.svg" alt="">
+            </div>
           </div>
           <div tooltip="Leave call" data-toggle="modal" data-target="#exampleModal">
             <img src="./assets/images/end.svg" alt="">
@@ -743,6 +851,19 @@
       </div>
     </div>
     <!-- Unmute message -->
+    <!-- toast -->
+    <div class="toast">
+      <div class="toast-content">
+        <div class="icon">
+          <img src="./assets/images/tick.svg" alt="">
+        </div>
+        <div class="message">
+          <span class="title">Stopped sharing</span>
+          <span class="para">You stopped sharing screen</span>
+        </div>
+      </div>
+    </div>
+    <!-- toast -->
     <!-- Modal -->
     <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="vertical-alignment-helper">
@@ -797,6 +918,7 @@
         $(".chat-widget").show();
         $(".app").hide();
         $(".chat-input").focus();
+        $(".dot").hide();
       });
 
       $("#grid").click(function(){
@@ -839,15 +961,41 @@
       });
 
       $(".screen").click(function(){
+        $(".screen").hide();
+        $(".screen-off").show();
         $(".screenshare").show();
         $(".layout1").hide();
         $(".layout2").hide();
+        $("#grid").addClass('disabled')
+        $("#theater").addClass('disabled')
       });
 
-      $("#stop-share").click(function(){
+      $(".screen-off").click(function(){
+        $(".screen").show();
+        $(".screen-off").hide();
         $(".screenshare").hide();
         $(".layout1").show();
         $(".layout2").hide();
+        $("#grid").removeClass('disabled')
+        $("#theater").removeClass('disabled')
+        $(".toast").addClass('active');
+        setTimeout(function() {
+          $('.toast').removeClass('active');
+        }, 3000);
+      });
+
+      $("#stop-share").click(function(){
+        $(".screen").show();
+        $(".screenshare").hide();
+        $(".layout1").show();
+        $(".layout2").hide();
+        $(".screen-off").hide();
+        $("#grid").removeClass('disabled')
+        $("#theater").removeClass('disabled')
+        $(".toast").addClass('active');
+        setTimeout(function() {
+          $('.toast').removeClass('active');
+        }, 3000);
       });
 
       $("#cameraOff").click(function(){
@@ -889,6 +1037,10 @@
       $("#exit").click(function(){
         $("#full").show();
         $("#exit").hide();
+      });
+
+      $('.more-icon').click(function(){
+        $('.more-options').toggle();
       });
 
       $(this).on("click", ".host-btn", function() {
@@ -999,6 +1151,7 @@
           $(".app").hide();
           $(".chat-widget").show();
           $(".chat-input").focus();
+          $(".dot").hide();
           event.preventDefault();
         }
          // participants
@@ -1011,6 +1164,13 @@
           event.preventDefault();
         }
     };
+
+    $(document).click(function(e) 
+      { 
+      var target = e.target; 
+      if (!$(target).is('.more-icon') && !$(target).parents().is('.more-icon')) 
+        { $('.more-options').hide(); }
+      });
 
     // emoji
     $('.emoji-icon').click(function(e) {
