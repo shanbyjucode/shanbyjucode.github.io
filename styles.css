@@ -1602,4 +1602,7 @@ a.closebtn{
   .footer-nav.fade-in-bottom{
     animation: none;
   }
+  .parent{
+    height: calc(100vh - 16vh);
+  }
 }
