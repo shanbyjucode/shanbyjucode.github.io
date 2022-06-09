@@ -1581,11 +1581,6 @@ a.closebtn{
 @media screen and (min-width: 320px) and (max-width: 767px){
   #main{
     padding: 10px;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    left: 0;
-    right: 0;
   }
   .left-section{
     display: none;
@@ -1601,8 +1596,5 @@ a.closebtn{
   }
   .footer-nav.fade-in-bottom{
     animation: none;
-  }
-  .parent{
-    height: calc(100vh - 16vh);
   }
 }
