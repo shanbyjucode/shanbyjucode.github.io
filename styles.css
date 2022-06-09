@@ -127,7 +127,7 @@ body {
   flex: 1 1 25%;
 }
 .left-section img{
-  width: 110px;
+  width: 105px;
 }
 .center-section{
   align-items: center;
@@ -304,7 +304,7 @@ body {
 .parti-container .initial{
   width: 39px;
   height: 39px !important;
-  font-size: 18px;
+  font-size: 15px;
 }
 .parti-container .name{
   padding-left: 15px;
@@ -332,6 +332,9 @@ body {
   display: inline-block;
   position: relative;
   cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .host-btn .fa {
@@ -674,6 +677,48 @@ a.closebtn{
     height: 25px !important;
     background-size: 18px 18px;
   }
+  .theater-user .relative:hover .overlay-content{
+    opacity: 9;
+  }
+  .theater-user .overlay-content{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    background-color: rgb(250 250 250 / 72%);
+    border-radius: 10px;
+    opacity: 0;
+    transition: all 0.2s ease-in-out 0s;
+  }
+  .theater-user .overlay-content .inner .eye, .theater-user .overlay-content .inner .mute, .theater-user .overlay-content .inner .pin{
+    position: static !important;
+    width: 25px !important;
+    height: 25px !important;
+    margin: 0 1px;
+  }
+  .theater-user .overlay-content .inner{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    height: 100%;
+    justify-content: center;
+  }
+  .theater-user .overlay-content .inner .icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+  }
+  .theater-user .overlay-content .inner .icons .pin{
+    background: url(./assets/images/pin-black.png);
+    opacity: .9;
+    background-size: contain;
+  }
+  .theater-user .overlay-content .inner .name{
+    font-weight: 500;
+  }
   .rec{
     height: 30px;
     display: flex;
@@ -789,6 +834,7 @@ a.closebtn{
 }
 .relative{
   position: relative;
+  overflow: hidden;
 }
 .speak{
   border: 3px #4671F0 solid;
@@ -862,6 +908,15 @@ a.closebtn{
   text-align: center;
   line-height: 14px;
   transition: all 0.2s ease-in-out 0s;
+  position: relative;
+}
+.new-label{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: #a0e6a0;
 }
 .app-icons:hover{
   border-color: #111111;
