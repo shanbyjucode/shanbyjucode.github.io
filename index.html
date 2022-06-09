@@ -767,7 +767,7 @@
           <div tooltip="Turn on camera" id="cameraOn" style="display:none">
             <img src="./assets/images/video-off.svg" alt="">
           </div>
-          <div tooltip="Start recording">
+          <div tooltip="Start recording" class="recording">
             <img src="./assets/images/record.svg" alt="">
           </div>
           <div tooltip="Present" class="screen">
@@ -862,6 +862,7 @@
           <span class="para">You stopped sharing screen</span>
         </div>
       </div>
+      <div class="close close-toast">×</div>
     </div>
     <!-- toast -->
     <!-- Modal -->
@@ -968,8 +969,6 @@
         $(".layout2").hide();
         $("#grid").addClass('disabled')
         $("#theater").addClass('disabled')
-          const audio = new Audio("https://freesound.org/data/previews/501/501690_1661766-lq.mp3");
-        audio.play();
       });
 
       $(".screen-off").click(function(){
@@ -981,6 +980,8 @@
         $("#grid").removeClass('disabled')
         $("#theater").removeClass('disabled')
         $(".toast").addClass('active');
+        const audio = new Audio("https://shanbyjucode.github.io/assets/images/hangoutsmessage.mp3");
+          audio.play();
         setTimeout(function() {
           $('.toast').removeClass('active');
         }, 3000);
@@ -995,9 +996,15 @@
         $("#grid").removeClass('disabled')
         $("#theater").removeClass('disabled')
         $(".toast").addClass('active');
+        const audio = new Audio("https://shanbyjucode.github.io/assets/images/hangoutsmessage.mp3");
+          audio.play();
         setTimeout(function() {
           $('.toast').removeClass('active');
         }, 3000);
+      });
+
+      $(".close-toast").click(function(){
+        $(".toast").removeClass('active');
       });
 
       $("#cameraOff").click(function(){
