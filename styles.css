@@ -1579,6 +1579,9 @@ a.closebtn{
 /* mobile */
 
 @media screen and (min-width: 320px) and (max-width: 767px){
+  #main{
+    padding: 10px;
+  }
   .left-section{
     display: none;
   }
@@ -1590,5 +1593,12 @@ a.closebtn{
   }
   .screen{
     display: none;
+  }
+  .footer-nav.fade-in-bottom{
+    animation: none;
+  }
+  .footer-nav{
+    position: absolute;
+    height: auto;
   }
 }
