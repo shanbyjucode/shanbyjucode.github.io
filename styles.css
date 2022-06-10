@@ -560,6 +560,15 @@ ul.emojis li{
 	cursor: pointer;
   font-size: 22px;
 }
+
+.chat-widget .initial{
+  width: 32px;
+  height: 32px !important;
+  font-size: 13px;
+}
+
+
+
 /* chat */
 
 /* toast */
