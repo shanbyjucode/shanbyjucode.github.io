@@ -126,8 +126,23 @@ body {
   display: flex;
   flex: 1 1 25%;
 }
-.left-section img{
+.left-section img.logo{
   width: 105px;
+}
+.recording-gif{
+  padding-left: 20px;
+  position: relative;
+  display: none;
+}
+.recording-gif img{
+  width: 60px;
+}
+.timer{
+  display: inline-block;
+  padding: 4px 0 0 4px;
+  color: #bcbcbc;
+  position: relative;
+  top: 1px;
 }
 .center-section{
   align-items: center;
