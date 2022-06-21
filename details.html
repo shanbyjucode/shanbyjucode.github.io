@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Baiju</title>
+  <link rel="stylesheet" href="./reset.css">
+  <link rel="stylesheet" href="./simplegrid.css">
+  <link rel="stylesheet" href="./details.css">
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+</head>
+
+<body>
+  <div class="video-player">
+    <video id="player" playsinline controls data-poster="/path/to/poster.jpg">
+        <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
+        <!-- <source src="/path/to/video.webm" type="video/webm" /> -->
+      
+        <!-- Captions are optional -->
+        <track kind="captions" label="English captions" src="./assets/images/caption.vtt" srclang="en" default />
+      </video>
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js'></script>
+  <script src="https://cdn.plyr.io/3.7.2/plyr.polyfilled.js"></script>
+  <script>
+    const player = new Plyr('#player');
+  </script>
+          
+</body>
+
+</html>
