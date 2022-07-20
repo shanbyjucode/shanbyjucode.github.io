@@ -480,6 +480,9 @@ body {
   max-width: calc(100% - 32px);
   color: #2c303a
 }
+.message-wrapper .message a img{
+  border-radius: 8px;
+}
 .message-wrapper .time{
   text-align: right;
   max-width: calc(100% - 32px);
