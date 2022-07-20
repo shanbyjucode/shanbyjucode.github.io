@@ -13,21 +13,27 @@
 </head>
 
 <body>
-  <div class="video-player">
-    <video id="player" playsinline controls data-poster="/path/to/poster.jpg">
-        <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
-        <!-- <source src="/path/to/video.webm" type="video/webm" /> -->
-      
-        <!-- Captions are optional -->
-        <track kind="captions" label="English captions" src="./assets/images/caption.vtt" srclang="en" default />
-      </video>
-  </div>
+  <section class="container" >
+    <header id="header" >
+      <div class="video-player">
+        <video id="player" playsinline controls data-poster="/path/to/poster.jpg">
+            <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
+            <!-- <source src="/path/to/video.webm" type="video/webm" /> -->
+          </video>
+      </div>
+    </header>
+    <article id="content" >
+      <div class="card">
+        
+      </div>
+    </article>
+    <footer id="footer" >This is a footer</footer>
+  </section>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js'></script>
   <script src="https://cdn.plyr.io/3.7.2/plyr.polyfilled.js"></script>
   <script>
     const player = new Plyr('#player');
   </script>
-          
 </body>
 
 </html>

@@ -224,6 +224,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #27374d;
+  border-radius: 10px;
+  border: 2px solid red;
 }
 .initial{
   width: 50px;
@@ -512,7 +515,7 @@ body {
 }
 .chat-action{
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding-top: 7px;
 }
 .chat-action img{
@@ -541,6 +544,21 @@ body {
   height: 100%;
   z-index: 1;
   cursor: pointer;
+}
+.chat-action .action-icons{
+  display: flex;
+}
+.chat-action select{
+  width: 85px;
+  background: #fafafa;
+  color: #111111;
+  border-color: #4671f0;
+  border-radius: 5px;
+  padding: 2px 2px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 input[type=file] {
   display: block;
@@ -698,8 +716,8 @@ ul.layout-list li.active{
  
 .sidenav .closebtn {
   position: absolute;
-  top: -4px;
-  right: 0;
+  top: -11px;
+  right: -10px;
   font-weight: bold !important;
   width: 40px;
   height: 40px;
@@ -923,7 +941,6 @@ a.closebtn{
     padding: 20px;
     border-radius: 10px;
     position: relative;
-    border: 2px solid red;
     position: relative;
   }
   .unmute-alert::before{
@@ -1052,6 +1069,17 @@ a.closebtn{
   padding-bottom: 30px;
   /* height: calc(80vh - 90px);
   overflow: auto; */
+}
+.poor-network{
+  position: absolute !important;
+  top: 9px;
+  display: inline-block;
+  background-color: red;
+  color: #fafafa;
+  height: auto !important;
+  font-size: 12px;
+  padding: 1px 9px;
+  border-radius: 6px;
 }
 .app-screen a{
   color: #111111;
@@ -1262,6 +1290,65 @@ a.closebtn{
 	-webkit-animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 	animation: fade-in-bottom 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
+
+.vibrate-1 {
+	-webkit-animation: vibrate-1 0.3s linear both;
+	        animation: vibrate-1 0.3s linear both;
+}
+
+@-webkit-keyframes vibrate-1 {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+@keyframes vibrate-1 {
+  0% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+  20% {
+    -webkit-transform: translate(-2px, 2px);
+            transform: translate(-2px, 2px);
+  }
+  40% {
+    -webkit-transform: translate(-2px, -2px);
+            transform: translate(-2px, -2px);
+  }
+  60% {
+    -webkit-transform: translate(2px, 2px);
+            transform: translate(2px, 2px);
+  }
+  80% {
+    -webkit-transform: translate(2px, -2px);
+            transform: translate(2px, -2px);
+  }
+  100% {
+    -webkit-transform: translate(0);
+            transform: translate(0);
+  }
+}
+
   /* tooltip */
   /* START TOOLTIP STYLES */
 [tooltip] {

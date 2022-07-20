@@ -70,12 +70,28 @@
             </button>
           </div>
           <div class="chat-action">
-            <div class="emoji-icon">
-              <img src="./assets/images/emoji.png" alt="">
+            <div>
+              Chat with
+              <select class="form-select">
+                <option title="everyone">Everyone</option>
+                <option>Anika Dias</option>
+                <option>Gustavo Lubin</option>
+                <option>Jocelyn Baptista</option>
+                <option>Hanna Calzoni</option>
+                <option>Mira Levin</option>
+                <option>Justin Bergson</option>
+                <option>Cheyenne Dorwart</option>
+                <option>Alfredo Gouse</option>
+              </select>
             </div>
-            <div class="attach">
-              <img src="./assets/images/image.svg" alt="">
-              <input type="file" name="">
+            <div class="action-icons">
+              <div class="emoji-icon">
+                <img src="./assets/images/emoji.png" alt="">
+              </div>
+              <div class="attach">
+                <img src="./assets/images/image.svg" alt="">
+                <input type="file" name="">
+              </div>
             </div>
           </div>
         </footer>
@@ -402,7 +418,8 @@
           <div class="speaker"></div>
           <h5>You</h5>
           <div class="off-camera" style="display: none;">
-            <div class="initial heartbeat">
+            <div class="poor-network vibrate-1">Poor Network</div>
+            <div class="initial">
               CD
             </div>
           </div>
@@ -1074,6 +1091,7 @@
         $("#cameraOff").hide();
         $(".off-camera").show();
         $("#off-camera").hide();
+        $('.poor-network').fadeOut(3500);
       });
 
       $("#cameraOn").click(function(){
@@ -1081,6 +1099,7 @@
         $("#cameraOn").hide();
         $(".off-camera").hide();
         $("#off-camera").show();
+        $('.poor-network').fadeIn();
       });
 
       $("#soundOff").click(function(){
