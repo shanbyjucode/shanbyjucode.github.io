@@ -16,16 +16,62 @@ body{
     font-display: swap;
 }
 
-
+.plyr__control plyr__control--overlaid{
+    z-index: 10;
+}
 .video-player{
     width: 100%;
     margin: auto;
     border-radius: 15px;
     overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease-in-out 0s;
 }
+.video-player button{
+    opacity: 0;
+}
+.video-player:hover button{
+    opacity: 7;
+    transition: all 0.2s ease-in-out 0s;
+}
+.video-player .actions img{
+    width: 60px;
+}
+.video-player button{
+    background: transparent;
+    border: none;
+    outline: none;
+}
+.video-player button:hover{
+    opacity: 9;
+}
+.f-btn1{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    z-index: 1;
+    margin: auto;
+    top: 0; 
+    left: 10%; 
+    bottom: 0; 
+}
+.f-btn2{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    z-index: 1;
+    margin: auto;
+    top: 0; 
+    right: 10%; 
+    bottom: 0;
+}
+
 .video-player video{
     border-radius: 8px;
 }
+
+
+
 .main-container{
     display: flex;
     flex-direction: row;

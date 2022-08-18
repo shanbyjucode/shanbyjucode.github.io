@@ -35,12 +35,22 @@
     </div>
     <div class="section2">
       <section class="container" >
-        <header id="header" >
+        <header id="header">
           <div class="video-player">
             <video id="player" playsinline controls  data-poster="/path/to/poster.jpg">
               <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
               <!-- <source src="/path/to/video.webm" type="video/webm" /> -->
             </video>
+            <div class="f-btn1">
+              <button type="button" class="js-rewind">
+                <img src="./assets/images/rewind.png" alt="">
+              </button>
+            </div>
+           <div class="f-btn2">
+            <button type="button" class="js-forward">
+              <img src="./assets/images/forward.png" alt="">
+            </button>
+           </div>
         </div>
         </header>
         <article id="content">
@@ -211,6 +221,25 @@
     $(document).ready(function(){
       $("input").select(function(){
         alert("Text marked!");
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => { 
+      // Expose
+      window.player = player;
+
+      // Bind event listener
+      function on(selector, type, callback) {
+        document.querySelector(selector).addEventListener(type, callback, false);
+      }
+      // Rewind
+      on('.js-rewind', 'click', () => { 
+        player.rewind(10);
+      });
+
+      // Forward
+      on('.js-forward', 'click', () => { 
+        player.forward(10);
       });
     });
   </script>
