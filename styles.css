@@ -1109,6 +1109,7 @@ a.closebtn{
   transition: all 0.2s ease-in-out 0s;
   position: relative;
 }
+
 .new-label{
   position: absolute;
   top: -6px;

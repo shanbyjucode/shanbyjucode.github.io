@@ -1,10 +1,36 @@
 
 body{
-    background-color: #FAFAFA;
+    background-color: #FAFAFA !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
 }
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('./assets/fonts/IBMPlexMono.woff2') format('woff2'),
+        url('./assets/fonts/IBMPlexMono.woff') format('woff'),
+        url('./assets/fonts/IBMPlexMono.ttf') format('truetype'),
+        url('./assets/fonts/IBMPlexMono.svg#IBMPlexMono') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 
 .video-player{
     width: 100%;
+    margin: auto;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.video-player video{
+    border-radius: 8px;
+}
+.main-container{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    position: relative; 
 }
 .container {
     display: flex;
@@ -17,11 +43,155 @@ body{
     flex: 1 1 auto;
     overflow-y: auto;
     min-height: 0px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #EAECEE;
     padding: 15px;
 }
-.card{
-    background: #ffffff;
-    border: 1px solid #E2E2E5;
-    border-radius: 5px;
-    padding: 13px;
+
+
+.section1{
+    display: inline-block;
+    width: 33%;
+    padding: 12px;
 }
+.section2{
+    display: inline-block;
+    width: 33%;
+    padding: 12px;
+}
+.section3{
+    display: inline-block;
+    width: 33%;
+    padding: 12px;
+}
+.main-container .logo img{
+    width: 110px;
+}
+.main-container header{
+    padding-bottom: 10px;
+}
+
+.active-text{
+    display: inline-block;
+    border-radius: 4px;
+    padding: 2px 7px;
+    background-color: #4671F0;
+    color: #ffffff;
+}
+
+.transcript-speaker p::selection {
+  background: #90c2ff;
+  color: #111111;
+}
+/* Tabs */
+.tab-wrapper {
+    text-align: center;
+    display: block;
+    margin: auto;
+    max-width: 500px;
+  }
+  
+  .tabs {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .tab-link {
+    margin: 0 1%;
+    list-style: none;
+    padding: 10px 20px;
+    color: #aaa;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all ease 0.5s;
+    border-bottom: solid 3px rgba(255, 255, 255, 0);
+    letter-spacing: 1px;
+  }
+  
+  .tab-link:hover {
+    color: #999;
+    border-color: #999;
+  }
+  
+  .tab-link.active {
+    color: #4671F0;
+    border-color: #4671F0;
+  }
+  
+  .content-wrapper {
+    padding: 40px 80px;
+  }
+  
+  .tab-content {
+    display: none;
+    text-align: center;
+    color: #888;
+    font-weight: 300;
+    font-size: 15px;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeIn 0.5s ease 1 forwards;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* tabs */
+
+  .meeting-details h4{
+    margin-top: 0;
+    margin-bottom: 2px;
+  }
+  .main-container .sub{
+    color: #767676;
+  }
+
+  .transcript{
+    font-family: 'IBM Plex Mono';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+  }
+  .partici-name{
+    font-family: "CircularXX TT", sans-serif;
+    font-weight: normal;
+    color: #888;
+    padding-bottom: 4px;
+  }
+  .transcript-speaker p{
+      padding-left: 15px;
+      margin-bottom: 10px;
+  }
+
+  /* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #221f23 transparent;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #949494;
+    border-radius: 10px;
+    border: 3px solid transparent;
+  }
