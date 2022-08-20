@@ -1,6 +1,6 @@
 
 body{
-    background-color: #FAFAFA !important;
+    background-color: #ffffff !important;
     font-size: 16px !important;
     font-weight: 400 !important;
 }
@@ -46,8 +46,8 @@ body{
     opacity: 9;
 }
 .f-btn1{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     z-index: 1;
     margin: auto;
@@ -56,8 +56,8 @@ body{
     bottom: 0; 
 }
 .f-btn2{
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     position: absolute;
     z-index: 1;
     margin: auto;
@@ -69,7 +69,27 @@ body{
 .video-player video{
     border-radius: 8px;
 }
-
+.search-transcript{
+    position: relative;
+    width: 70%;
+}
+.search-transcript .search-icon{
+    position: absolute;
+    top: 7px;
+    left: 10px;
+}
+.search-transcript input{
+    width: 100%;
+    border: 1px solid #E2E2E5;
+    border-radius: 10px;
+    padding: 7px 15px;
+    padding-left: 33px;
+    transition: all ease 0.5s;
+}
+.search-transcript input:focus{
+    border-color: #4671F0;
+    outline: none;
+}
 
 
 .main-container{
@@ -93,8 +113,26 @@ body{
     border-radius: 15px;
     border: 1px solid #EAECEE;
     padding: 15px;
+    position: relative;
 }
-
+.floating-ation{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.other-action{
+    display: flex;
+    justify-content: space-between;
+}
+.trans-edit{
+    background-color: #F1F3F4;
+    font-size: 15px;
+    color: #575757;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
 
 .section1{
     display: inline-block;
@@ -142,19 +180,18 @@ body{
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
   
   .tab-link {
     margin: 0 1%;
     list-style: none;
-    padding: 10px 20px;
+    padding: 10px 18px;
     color: #aaa;
     cursor: pointer;
     font-weight: 700;
     transition: all ease 0.5s;
     border-bottom: solid 3px rgba(255, 255, 255, 0);
-    letter-spacing: 1px;
   }
   
   .tab-link:hover {
