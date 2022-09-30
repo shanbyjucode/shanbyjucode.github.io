@@ -11,231 +11,408 @@
   <link rel="stylesheet" href="./details.css">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+  <link rel="stylesheet" href="https://goodmeetings.ai/assets/css/v2/owl.carousel.min.css">
 </head>
 
 <body>
-  <div class="main-container">
-    <div class="section1">
-      <section class="container" >
-        <header id="header" >
-          <div class="logo">
-            <img src="./assets/images/gm-logo.png" alt="">
-          </div>
-        </header>
-        <article id="content" >
-          <div class="card">
-            <div class="meeting-details">
-              <h4>GM onboarding of Limechat</h4>
-              <div class="sub">25 July 2022, 1:39 PM</div>
-            </div>
-          </div>
-        </article>
-        <!-- <footer id="footer" >This is a footer</footer> -->
-      </section>
+  <header class="header-widget">
+    <div class="header-inner">
+      <div class="gm-logo">
+        <a><img src="https://goodmeetings.ai/assets/images/v2/goodmeetings-logo.png" alt="goodmeetings-logo"></a>
+      </div>
+      <div class="nav">
+        <a href="" class="btn-share">Share Page</a>
+        <a href="">Sign In / Sign Up</a>
+      </div>
     </div>
-    <div class="section2">
-      <section class="container" >
-        <header id="header">
-          <div class="video-player">
-            <video id="player" playsinline controls  data-poster="/path/to/poster.jpg">
-              <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
-              <!-- <source src="/path/to/video.webm" type="video/webm" /> -->
-            </video>
-            <div class="f-btn1">
-              <button type="button" class="js-rewind">
-                <img src="./assets/images/rewind.png" alt="">
-              </button>
-            </div>
-           <div class="f-btn2">
-            <button type="button" class="js-forward">
-              <img src="./assets/images/forward.png" alt="">
-            </button>
-           </div>
+  </header>
+  <div class="grid grid-details">
+    <div class="left-content">
+      <div class="video-player">
+        <video id="player" playsinline controls  data-poster="/path/to/poster.jpg">
+          <source src="https://storage.googleapis.com/agora-rec-cloud/1b71f91ba893452cbd13214d9da966d6/0c33e1ddd1440c2e49945fb00b3303d2_ccb5d83f-0d3a-4b6c-aa5f-91da1ef5718d_0.mp4" type="video/mp4" />
+          <track kind="captions" label="English captions" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" srclang="en" default />
+        </video>
+        <div class="f-btn1">
+          <button type="button" class="js-rewind">
+            <img src="./assets/images/rewind.png" alt="">
+          </button>
         </div>
-        </header>
-        <div class="floating-ation">
-          <div class="search-transcript">
-            <span class="search-icon">
-              <img src="./assets/images/search-icon.svg" alt="">
-            </span>
-            <input type="text"  placeholder="Search transcript">
-          </div>
-          <div class="other-action">
-            <div class="trans-edit">Edit</div>
-            <!-- <div>More</div> -->
-          </div>
+       <div class="f-btn2">
+        <button type="button" class="js-forward">
+          <img src="./assets/images/forward.png" alt="">
+        </button>
+       </div>
+     </div>
+     <div class="high-summary">
+       <div class="top">
+        <div>
+           <b>Meeting Highlights</b>
         </div>
-        <article id="content">
-          <div class="card">
-            <div class="transcript">
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>
-                  <span class="active-text">Yeah.</span> I think boarding now on. I think green. So 
-                  that is.
-                </p>
-                <p>
-                  Learn more@green.com. Can you see that?
-                </p>
+         <div data-tab="2">View All</div>
+       </div>
+       <div id="highlight-slider" class="owl-carousel owl-theme">
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">0:12</div>
+                </button>
               </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  I can see. Look at the participant in the participant, 
-                  you can see something.
-                </p>
-                <p>
-                  This call is being recorded. With the Goodmeetings.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>
-                  Let me just take a screenshot of that. And. Centered 
-                  again. And then can you see the participant that is green.com?
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  Yeah.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>
-                  Uh, Uh, some other bodies recording. The squad.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  It is recording. I sent that one.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>                  
-                  Um, yeah. This call is being recorded. Okay. Now. So, 
-                  this is fine. I just show you though.
-                </p>
-                <p>
-                  The lead is showing up in the dashboard. Basically. Uh, 
-                  when the recording is going on, right.
-                </p>
-                <p>
-                  I just share my screen.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  Yeah. If I click on that link.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>
-                  It's showing like that gap. Okay. Yeah. Showing the same 
-                  thing. It is allowing you to highlight those again.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  It's asking to signing.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Samparna Tripathy</div>
-                <p>
-                  Think that is what it is. See, I show you. Uh, that is a 
-                  discipline.
-                </p>
-                <p>
-                  Uh, so can you see this, uh, I wanted to show you this 
-                  portion. So basically I'm better at recording rate.
-                </p>
-                <p>
-                  They have this. So the transcripts are there at the 
-                  bottom.
-                </p>
-                <p>
-                  They have made the transcripts, if example, right. 
-                  Wherever you are right now, for example, Right. So.
-                </p>
-                <p>
-                  This is actually taking it because this is the CF taken 
-                  life transcripts also. The nothing has been done 
-                  late. So I think this will come in later. Uh, at the 
-                  time, once we are ready with the console and stuff like 
-                  that.
-                </p>
-                <p>
-                  You're doing only post transcripts, but in the post 
-                  transcripts also, they have this. Uh, like, you know, Uh, 
-                  this one. But you're down to current position.
-                </p>
-                <p>
-                  So, if you even let us say you are there somewhere. You 
-                  want it? You want to maybe, uh, this particular team.
-                </p>
-              </div>
-              <div class="transcript-speaker">
-                <div class="partici-name">Shanavas Baiju</div>
-                <p>
-                  Maybe if you stole a few minutes, a. A few seconds. Then 
-                  I think after that, if you start speaking now again, I 
-                  mean, I don't know. We'll see you then. Hmm.
-                </p>
-              </div>
+              <h6>Intro</h6>
             </div>
           </div>
-        </article>
-        <!-- <footer id="footer" >This is a footer</footer> -->
-      </section>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">0:20</div>
+                </button>
+              </div>
+              <h6>Product features</h6>
+            </div>
+          </div>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">0:45</div>
+                </button>
+              </div>
+              <h6>Pricing 
+                details & off...</h6>
+            </div>
+          </div>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">1:17</div>
+                </button>
+              </div>
+              <h6>Next step</h6>
+            </div>
+          </div>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">2:42</div>
+                </button>
+              </div>
+              <h6>Feedback about rec...</h6>
+            </div>
+          </div>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">2:42</div>
+                </button>
+              </div>
+              <h6>Feedback about rec...</h6>
+            </div>
+          </div>
+          <div class="item">
+            <div class="hig-card">
+              <div class="cover">
+                <img src="./assets/images/high1.png" alt="">
+                <button class="ply-btn">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M9.8,22.8c0,1.1,1.2,1.9,2.2,1.3l11.8-6.3c1.1-0.6,1.1-2.1,0-2.6L12,8.9c-1-0.5-2.2,0.2-2.2,1.3V22.8z"></path></svg>
+                  <div class="ply-duration">2:42</div>
+                </button>
+              </div>
+              <h6>Feedback about rec...</h6>
+            </div>
+          </div>
+      </div>
+      <div class="summary-card">
+        <div class="details-btn">
+          <h5>Goodmeetings onboarding of Limechat</h5>
+          <div class="toggle-arrow">
+            <img src="./assets/images/arrow-right.svg" alt="">
+          </div>
+          <div class="date-details">
+            <div class="date">
+              <img src="./assets/images/cal-icon.svg" alt="">
+              <span>17 Aug 2022</span>
+            </div>
+            <div class="date">
+              <img src="./assets/images/clock-icon.svg" alt="">
+              <span>2:00 PM - 2:30 PM</span>
+            </div>
+          </div>
+        </div>
+        <div class="summary-btn">
+          <button class="btn-share">
+            <img src="./assets/images/summary-icon.svg" alt=""> Summary
+          </button>
+          <button class="btn-share">
+            <img src="./assets/images/media-icon.svg" alt="">Media Files
+          </button>
+        </div>
+        <div class="details-show" style="display: none;">
+          <section>
+            <div class="sec-2">
+              <div class="head-sm">Participants</div>
+              <div class="participant-sec">
+                <div class="part-pic">
+                  <img src="./assets/images/participant4.jpg" alt="">
+                </div>
+                <div class="part-details">
+                  <div class="name">Neha Agarwal</div>
+                  <div class="int-lable">Internal</div>
+                </div>
+              </div>
+            </div>
+            <div class="sec-2">
+              <div class="participant-sec">
+                <div class="part-pic">
+                  <img src="./assets/images/participant3.jpg" alt="">
+                </div>
+                <div class="part-details">
+                  <div class="name">Lincoln Bergson</div>
+                  <div class="int-lable">External</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="sec-2">
+              <div class="head-sm" style="padding-bottom: 2px">Client</div>
+              <b>Goodmeetings</b>
+            </div>
+            <div class="sec-2">
+              <div class="head-sm" style="padding-bottom: 2px">Host</div>
+              <b>Srinivasan Narayan</b>
+            </div>
+          </section>
+          <section>
+            <div class="sec-2">
+              <div class="head-sm" style="padding-bottom: 2px">Meeting Platform</div>
+              <b>Zoom</b>
+            </div>
+          </section>
+        </div>
+      </div>
+     </div>
     </div>
-    <div class="section3">
-      <section class="container" >
-        <header id="header" >
-          <div class="tab-wrapper">
-            <ul class="tabs">
-                <li class="tab-link active" data-tab="1">Highlights</li>
-                <li class="tab-link" data-tab="2">Performance</li>
-                <li class="tab-link" data-tab="3">Comments</li>
-            </ul>
-          </div>
-        </header>
-        <article id="content" >
-          <div class="card">
-            <div class="content-wrapper">
-              <div id="tab-1" class="tab-content active">Hypertext Markup Language (HTML) is the standard markup language for creating web pages and web applications. With Cascading Style Sheets (CSS) and JavaScript, it forms a triad of cornerstone technologies for the World Wide Web. </div>
-              <div id="tab-2" class="tab-content">CSS stands for Cascading Style Sheets. CSS describes how HTML elements are to be displayed on screen, paper, or in other media. CSS saves a lot of work. It can control the layout of multiple web pages all at once.</div>
-              <div id="tab-3"class="tab-content">jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, event handling, animation, and Ajax much simpler with an easy-to-use API that works across a multitude of browsers.</div>
+    <div class="right-content">
+      <div class="sticky-content">
+        <section class="container" >
+          <header id="header" >
+            <div class="tab-wrapper">
+              <ul class="tabs">
+                  <li class="tab-link active transcript-link" data-tab="1">Transcripts</li>
+                  <li class="tab-link highlight-link" data-tab="2">Highlights</li>
+              </ul>
+            </div>
+          </header>
+          <div class="floating-ation">
+            <div class="search-transcript">
+              <span class="search-icon">
+                <img src="./assets/images/search-icon.svg" alt="">
+              </span>
+              <input type="text" placeholder="Search transcript" id="search">
             </div>
           </div>
-        </article>
-        <!-- <footer id="footer" >This is a footer</footer> -->
-      </section>
+          <article id="content" >
+            <div class="card">
+              <div class="content-wrapper">
+                <div id="tab-1" class="tab-content active">
+                    <div class="transcript">
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>
+                          <span class="active-text">Yeah.</span> I think boarding now on. I think green. So 
+                          that is.
+                        </p>
+                        <p>
+                          Learn more@green.com. Can you see that?
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          I can see. Look at the participant in the participant, 
+                          you can see something.
+                        </p>
+                        <p>
+                          This call is being recorded. With the Goodmeetings.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>
+                          Let me just take a screenshot of that. And. Centered 
+                          again. And then can you see the participant that is green.com?
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          Yeah.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>
+                          Uh, Uh, some other bodies recording. The squad.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          It is recording. I sent that one.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>                  
+                          Um, yeah. This call is being recorded. Okay. Now. So, 
+                          this is fine. I just show you though.
+                        </p>
+                        <p>
+                          The lead is showing up in the dashboard. Basically. Uh, 
+                          when the recording is going on, right.
+                        </p>
+                        <p>
+                          I just share my screen.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          Yeah. If I click on that link.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>
+                          It's showing like that gap. Okay. Yeah. Showing the same 
+                          thing. It is allowing you to highlight those again.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          It's asking to signing.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Samparna Tripathy</div>
+                        <p>
+                          Think that is what it is. See, I show you. Uh, that is a 
+                          discipline.
+                        </p>
+                        <p>
+                          Uh, so can you see this, uh, I wanted to show you this 
+                          portion. So basically I'm better at recording rate.
+                        </p>
+                        <p>
+                          They have this. So the transcripts are there at the 
+                          bottom.
+                        </p>
+                        <p>
+                          They have made the transcripts, if example, right. 
+                          Wherever you are right now, for example, Right. So.
+                        </p>
+                        <p>
+                          This is actually taking it because this is the CF taken 
+                          life transcripts also. The nothing has been done 
+                          late. So I think this will come in later. Uh, at the 
+                          time, once we are ready with the console and stuff like 
+                          that.
+                        </p>
+                        <p>
+                          You're doing only post transcripts, but in the post 
+                          transcripts also, they have this. Uh, like, you know, Uh, 
+                          this one. But you're down to current position.
+                        </p>
+                        <p>
+                          So, if you even let us say you are there somewhere. You 
+                          want it? You want to maybe, uh, this particular team.
+                        </p>
+                      </div>
+                      <div class="transcript-speaker">
+                        <div class="partici-name">Shanavas Baiju</div>
+                        <p>
+                          Maybe if you stole a few minutes, a. A few seconds. Then 
+                          I think after that, if you start speaking now again, I 
+                          mean, I don't know. We'll see you then. Hmm.
+                        </p>
+                      </div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-content">CSS stands for Cascading Style Sheets. CSS describes how HTML elements are to be displayed on screen, paper, or in other media. CSS saves a lot of work. It can control the layout of multiple web pages all at once.</div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
     </div>
   </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js'></script>
   <script src="https://cdn.plyr.io/3.7.2/plyr.polyfilled.js"></script>
+  <script src="https://zengde.github.io/plyr-plugin-thumbnail/plyr-plugin-thumbnail.js"></script>
+  <script src="https://zengde.github.io/plyr-thumbnail-generate/plyr-thumbnail-generate.js"></script>
+  <script src='https://goodmeetings.ai/assets/js/v2/owl.carousel.min.js'></script>
+  <script src="https://goodmeetings.ai/assets/js/v2/jquery.waypoints.min.js"></script>
   <script>
-    const player = new Plyr('#player');
-    // tabs
-    $('.tab-link').click( function() {
-      var tabID = $(this).attr('data-tab');
-      $(this).addClass('active').siblings().removeClass('active');
-      $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
-    });
-
-    $(document).ready(function(){
-      $("input").select(function(){
-        alert("Text marked!");
-      });
-    });
-
+    const player = new Plyr('#player',{
+		//debug:true,
+		speed: {
+			selected: 1,
+			options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+		},
+		controls: [
+			'play-large',
+			// 'restart',
+			// 'rewind',
+			// 'play',
+			// 'fast-forward',
+			'progress',
+			'current-time',
+			'mute',
+			'volume',
+			'captions',
+			'settings',
+			'airplay',
+			'fullscreen',
+			'capture'
+		],
+    thumbnailCreate:{
+        after:'download',
+        width:220,
+        height:170
+    },
+		thumbnail:{
+			enabled:true,
+		    pic_num: 184,
+			width: 178,
+			height: 100,
+			col: 7,
+			row: 7,
+			offsetX:0,
+			offsetY:0,
+			urls: ['https://cdn.plyr.io/static/demo/thumbs/100p-00001.jpg',
+			'https://cdn.plyr.io/static/demo/thumbs/100p-00002.jpg',
+			'https://cdn.plyr.io/static/demo/thumbs/100p-00003.jpg',
+			'https://cdn.plyr.io/static/demo/thumbs/100p-00004.jpg']
+		}
+	});
     document.addEventListener('DOMContentLoaded', () => { 
       // Expose
       window.player = player;
@@ -254,6 +431,52 @@
         player.forward(10);
       });
     });
+    // tabs
+    $('.tab-link').click( function() {
+      var tabID = $(this).attr('data-tab');
+      $(this).addClass('active').siblings().removeClass('active');
+      $('#tab-'+tabID).addClass('active').siblings().removeClass('active');
+    });
+
+    $('.highlight-link').click( function() {
+      $('.floating-ation').hide();
+    });
+    $('.transcript-link').click( function() {
+      $('.floating-ation').show();
+    });
+
+    $('.details-btn').click( function() {
+      $('.details-show').toggle();
+      $('.toggle-arrow').toggleClass('active');
+    });
+
+    $(this).on("click", ".details-btn", function() {
+      $(this).parent().find(".details-show").toggle();
+      $(this).find(".fa").toggleClass('active');
+    });
+
+    jQuery(document).ready(function($) {
+
+      $('#highlight-slider').owlCarousel({
+          loop:false,
+          margin:10,
+          nav:true,
+          dots : false,
+          responsive:{
+              0:{
+                  items:1
+              },
+              600:{
+                  items:3
+              },
+              1000:{
+                  items:5
+              }
+          }
+      })
+
+    });
+
   </script>
 </body>
 
