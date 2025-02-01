@@ -257,6 +257,7 @@ body {
 
 .card-body strong{
     display: inline-block;
+    font-weight: 600;
     width: 100%;
 }
 
