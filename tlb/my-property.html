@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="p-4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TLB Dashboard</title>
+
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+<body>
+
+    <!-- Mobile Menu Toggle Button -->
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i> <!-- Hamburger Icon -->
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="./assets/images/tlb-logo.png" alt="">
+        </div>
+        <a href="index.html"><i class="bi bi-file-text"></i> Find My Land</a>
+        <a href="#" class="active"><i class="bi bi-file-text"></i> My Property </a>
+        <a href="#"><i class="bi bi-file-text"></i> My Land Docs</a>
+        <a href="#"><i class="bi bi-crosshair"></i> My Land Surveys</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h5>My Property</h5>
+            <!-- Profile Section -->
+            <div class="profile-dropdown">
+                <div class="d-flex align-items-center profile-info">
+                    <img src="./assets/images/amar.png" alt="Profile">
+                    <div>
+                        <strong style="font-weight: 400;">Amarendra Sahu</strong> <br>
+                        <small style="font-weight: normal; color: #7F7A7A;">amar@thelandbankers.com</small>
+                    </div>
+                    <i class="bi bi-caret-down-fill"></i> <!-- Down Arrow Icon -->
+                </div>
+                <!-- Dropdown -->
+                <div class="dropdown-menu">
+                    <a href="#"><i class="bi bi-person"></i> Profile</a>
+                    <a href="#"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="content">
+            <div class="container mt-5">
+                <!-- Row for Property Details -->
+                <div class="row">
+                    <!-- Left Side Column (Property Details) -->
+                    <div class="col-md-8">
+                        <div class="card" style="background-color: #ffffff; border-color: #ECEBEB;">
+                            <div class="card-body">
+                                <p>Owner Name: <strong>Amarendra Sahu s/o Ananda Chandra Sahu</strong></p>
+            
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p>Plot Number <strong>41.40338, 2.17403</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Village Name <strong>Brahmapur</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Tehsil Name <strong>Bhadrak</strong></p>
+                                    </div>
+                                </div>
+            
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p>Thehsil Number <strong>309</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Thana Name <strong>150</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>Thana Number <strong>150</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>District Name <strong>Bhadrak</strong></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>Khata Number <strong>897/829</strong></p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p>Khata Number <strong>897/829</strong></p>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p>Google Map location <strong>https://goo.gl/maps/2E8Gz5J7xGq4cXfP9</strong></p>
+                                    </div>
+                                </div>
+            
+                            </div>
+                        </div>
+                         <!-- Accordion for Physical Details -->
+                         <div class="accordion mt-4" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Add Physical Details
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <!-- Content for Physical Details (Add your fields here) -->
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label">Property Name</label>
+                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="What would you like to call this land?">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlTextarea1" class="form-label">Property Address</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter details like house number, floor, block, street name, landmark"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleFormControlInput1" class="form-label">Navigation</label>
+                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Google Map link">
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Property Type Select -->
+                                            <div class="col-md-6">
+                                                <label for="propertyType" class="form-label">Select Property Type</label>
+                                                <select id="propertyType" class="form-select">
+                                                    <option selected>Select a Property Type</option>
+                                                    <option value="residential">Residential</option>
+                                                    <option value="commercial">Commercial</option>
+                                                    <option value="industrial">Industrial</option>
+                                                    <option value="agricultural">Agricultural</option>
+                                                    <option value="mixed-use">Mixed-Use</option>
+                                                </select>
+                                            </div>
+                                        
+                                            <!-- Pincode Input -->
+                                            <div class="col-md-6">
+                                                <label for="pincode" class="form-label">Pincode</label>
+                                                <input type="text" id="pincode" class="form-control" placeholder="Enter Pincode">
+                                            </div>
+                                        </div>
+                                        <hr style="color: #7F7A7A; margin-top: 20px; margin-bottom: 20px;">
+                                        <h5>Local Person’s Contact Details</h5>
+                                        <p style="color: #727272;">This should be the person who can help us during the physical survey of your land</p>
+                                        <div class="mb-3">
+                                            <label class="form-label">Who is this property for?</label>
+                                            <div class="d-flex">
+                                                <div class="form-check me-3">
+                                                    <input class="form-check-input" type="radio" name="propertyOwner" id="itsMe" value="itsMe" checked>
+                                                    <label class="form-check-label" for="itsMe">
+                                                        It's Me
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="propertyOwner" id="other" value="other">
+                                                    <label class="form-check-label" for="other">
+                                                        Other
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="name" class="form-label">Name</label>
+                                                    <input type="text" class="form-control" id="name" placeholder="Enter full name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="contact" class="form-label">Contact</label>
+                                                    <input type="text" class="form-control" id="contact" placeholder="Enter 10 digit mobile number">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-primary">Submit Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-danger">Delete This Record</button>
+                    </div>
+            
+                    <!-- Right Side Column (Sticky Card with Actions) -->
+                    <div class="col-md-4">
+                        <h5 style="padding-bottom: 14px;">What do you want to do now? </h5>
+                        <div class="card position-sticky" style="top: 80px;">
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><a href="#" class="d-flex align-items-center"><span>Lock it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="#" class="d-flex align-items-center"><span>Upload more docs</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="#" class="d-flex align-items-center"><span>Monitor it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="#" class="d-flex align-items-center"><span>Sell it or rent it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="#" class="d-flex align-items-center"><span>Get services</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Toast Notification -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="propertyAddedToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: #293450;">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Property added successfully!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+        
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+       // Check if the propertyAdded flag exists in localStorage
+        if (localStorage.getItem('propertyAdded') === 'true') {
+            // Show the toast message
+            var toast = new bootstrap.Toast(document.getElementById('propertyAddedToast'));
+            toast.show();
+
+            // Remove the flag from localStorage so it doesn't show again
+            localStorage.removeItem('propertyAdded');
+        }
+    </script>
+</body>
+</html>

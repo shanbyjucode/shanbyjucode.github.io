@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="p-4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TLB Dashboard</title>
+
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+<body>
+
+    <!-- Mobile Menu Toggle Button -->
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i> <!-- Hamburger Icon -->
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="./assets/images/tlb-logo.png" alt="">
+        </div>
+        <a href="#" class="active"><i class="bi bi-file-text"></i> Find My Land</a>
+        <a href="my-property.html"><i class="bi bi-file-text"></i> My Property </a>
+        <a href="#"><i class="bi bi-file-text"></i> My Land Docs</a>
+        <a href="#"><i class="bi bi-crosshair"></i> My Land Surveys</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h5>Locate My Land</h5>
+            <!-- Profile Section -->
+            <div class="profile-dropdown">
+                <div class="d-flex align-items-center profile-info">
+                    <img src="./assets/images/amar.png" alt="Profile">
+                    <div>
+                        <strong style="font-weight: 400;">Amarendra Sahu</strong> <br>
+                        <small style="font-weight: normal; color: #7F7A7A;">amar@thelandbankers.com</small>
+                    </div>
+                    <i class="bi bi-caret-down-fill"></i> <!-- Down Arrow Icon -->
+                </div>
+                <!-- Dropdown -->
+                <div class="dropdown-menu">
+                    <a href="#"><i class="bi bi-person"></i> Profile</a>
+                    <a href="#"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="content">
+            <h5 style="font-size: 18px; padding-bottom: 10px;">Do you know the plot / khata number</h5>
+            <div class="col-md-9 ">
+                <!-- Radio Button Options -->
+                <div class="btn-group mb-3" role="group" aria-label="Land Search Options" style="padding-bottom: 20px;">
+                    <input type="radio" class="btn-check" name="landOption" id="option-details" autocomplete="off" value="details" checked>
+                    <label class="btn btn-outline-primary" for="option-details">Yes, I know the details</label>
+            
+                    <input type="radio" class="btn-check" name="landOption" id="option-location" autocomplete="off" value="location">
+                    <label class="btn btn-outline-primary" for="option-location">No, but I know the land location</label>
+            
+                    <input type="radio" class="btn-check" name="landOption" id="option-noidea" autocomplete="off" value="noidea">
+                    <label class="btn btn-outline-primary" for="option-noidea">No, I have no idea</label>
+                </div>
+            
+                <!-- Section: If user knows land details -->
+                <div id="detailsSection">
+                    <div class="d-flex mb-3">
+                        <select class="form-select me-1" style="flex: 1;">
+                            <option selected>Select a State</option>
+                            <option>State 1</option>
+                            <option>State 2</option>
+                        </select>
+            
+                        <select class="form-select me-1" style="flex: 1;">
+                            <option selected>Select a District</option>
+                            <option>District 1</option>
+                            <option>District 2</option>
+                        </select>
+            
+                        <select class="form-select me-1" style="flex: 1;">
+                            <option selected>Select a Tehsil</option>
+                            <option>Tehsil 1</option>
+                            <option>Tehsil 2</option>
+                        </select>
+            
+                        <select class="form-select" style="flex: 1;">
+                            <option selected>Select a Village</option>
+                            <option>Village 1</option>
+                            <option>Village 2</option>
+                        </select>
+                    </div>
+            
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input me-2" type="radio" name="landIdentifier" id="plotNumber" checked>
+                            <label class="form-check-label me-3" for="plotNumber">Plot Number</label>
+            
+                            <input class="form-check-input me-2" type="radio" name="landIdentifier" id="khataNumber">
+                            <label class="form-check-label" for="khataNumber">Khata Number</label>
+                        </div>
+                    </div>
+            
+                    <div class="mb-3 col-4" >
+                        <input type="text" id="landInput" class="form-control" placeholder="Enter Plot Number">
+                    </div>
+                </div>
+            
+                <!-- Section: If user knows land location -->
+                <div id="locationSection" style="display: none;">
+                    <div class="mb-3 col-3">
+                        <select class="form-select">
+                            <option selected>Select a State</option>
+                            <option>State 1</option>
+                            <option>State 2</option>
+                        </select>
+                    </div>
+            
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center">
+                            <input class="form-check-input me-2" type="radio" name="locationMethod" id="googleMap" checked>
+                            <label class="form-check-label me-3" for="googleMap">Google Map Link</label>
+            
+                            <input class="form-check-input me-2" type="radio" name="locationMethod" id="latLong">
+                            <label class="form-check-label" for="latLong">Latitude & Longitude</label>
+                        </div>
+                    </div>
+            
+                    <div class="mb-3 col-10">
+                        <input type="text" id="locationInput" class="form-control" placeholder="Enter Google Map Link here">
+                    </div>
+                </div>
+            
+                <!-- Section: If user has no idea -->
+                <div id="noIdeaSection" style="display: none;">
+                    <div class="d-flex mb-3 gap-3">
+                        <input type="text" class="form-control me-1" placeholder="Name of the Landowner">
+                        <input type="text" class="form-control" placeholder="Father's Name">
+                    </div>
+            
+                    <div class="d-flex mb-3 gap-3">
+                        <input type="text" class="form-control me-1" placeholder="District of Land Location">
+                        <input type="text" class="form-control" placeholder="Village of Land Location">
+                    </div>
+                    <br/>
+                    <p>Share your details, and we'll notify you as soon as we find the information.</p>
+            
+                    <div class="d-flex mb-3 gap-3">
+                        <input type="text" class="form-control me-1" placeholder="Your Name">
+                        <input type="email" class="form-control" placeholder="Your Email ID">
+                    </div>
+                </div>
+            
+                <!-- Submit Button -->
+                <button id="findLandBtn" type="submit" class="btn btn-primary btn-lg" style="font-size: 16px;">
+                    <i class="bi bi-search me-2"></i> Find My Land
+                </button>
+            </div>
+        </div>
+        <!-- Skeleton Loader -->
+    <div id="skeletonLoader" class="mt-4" style="display: none; padding: 20px;">
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-small"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-small"></div>
+        <div class="skeleton skeleton-text"></div>
+    </div>
+    <div style="padding: 20px;">
+        <!-- Result Card -->
+        <div id="resultCard" class="mt-4 result-card">
+            <p>We found 1 result for your search</p>
+            <div class="card">
+                <div class="card-body">
+                    <p>Owner Name: <strong>Amarendra Sahu s/o Ananda Chandra Sahu</strong></p>
+    
+                    <div class="row">
+                        <!-- First item in its own column -->
+                        <div class="col-md-3">
+                            <p>Plot Number <strong>41.40338, 2.17403</strong></p>
+                        </div>
+                    
+                        <!-- Second item in its own column -->
+                        <div class="col-md-3">
+                            <p>Village Name <strong>Brahmapur</strong></p>
+                        </div>
+                    
+                        <!-- Third item in its own column -->
+                        <div class="col-md-3">
+                            <p>Tehsil Name <strong>Bhadrak</strong></p>
+                        </div>
+                    
+                        <!-- Fourth item in its own column -->
+                        <div class="col-md-3">
+                            <p>Thehsil Number <strong>309</strong></p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Fifth item in its own column -->
+                        <div class="col-md-3">
+                            <p>Thana Name <strong>150</strong></p>
+                        </div>
+                    
+                        <!-- Sixth item in its own column -->
+                        <div class="col-md-3">
+                            <p>Thana Number <strong>150</strong></p>
+                        </div>
+                    
+                        <!-- Seventh item in its own column -->
+                        <div class="col-md-3">
+                            <p>District Name <strong>Bhadrak</strong></p>
+                        </div>
+                    
+                        <!-- Eighth item in its own column -->
+                        <div class="col-md-3">
+                            <p>Khata Number <strong>897/829</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div id="actionButtons" class="mt-3 d-flex justify-content-between" style="opacity: 0">
+            <div>
+                <button class="btn btn-outline-secondary" style="margin-right: 15px;">Summarize Record</button>
+                <button class="btn btn-outline-secondary">Get Record</button>
+            </div>
+            <div>
+                <button class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#propertyModal">This is my property</button>
+                
+                <!-- Dropdown for More Actions -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        More Actions
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">I am interested in this</a></li>
+                        <li><a class="dropdown-item" href="#">I am an agent for this</a></li>
+                        <li><a class="dropdown-item" href="#">This is of a friend</a></li>
+                        <li><a class="dropdown-item" href="#">Report an issue</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <br><br><br><br><br><br><br>
+
+    <!-- Modal This is my property -->
+    <div class="modal fade" id="propertyModal" tabindex="-1" aria-labelledby="propertyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="propertyModalLabel">This is my property</h5>
+                    <!-- Close Icon -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: #696A6C;">As per official records, this property belongs to <strong style="color: #111111;">Amarendra Sahu s/o Ananda Chandra Sahu</strong>. By clicking on Add Property, you agree that you are either the property owner or authorised to manage it on their behalf.</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- Add Property Button -->
+                    <button type="button" class="btn btn-primary" id="addPropertyBtn">Add Property</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function toggleLandFields() {
+            var selectedValue = document.querySelector('input[name="landOption"]:checked').value;
+            var detailsSection = document.getElementById("detailsSection");
+            var locationSection = document.getElementById("locationSection");
+            var noIdeaSection = document.getElementById("noIdeaSection");
+    
+            detailsSection.style.display = selectedValue === "details" ? "block" : "none";
+            locationSection.style.display = selectedValue === "location" ? "block" : "none";
+            noIdeaSection.style.display = selectedValue === "noidea" ? "block" : "none";
+        }
+    
+        // Attach event listeners to radio buttons
+        document.querySelectorAll('input[name="landOption"]').forEach((radio) => {
+            radio.addEventListener("change", toggleLandFields);
+        });
+    
+        // Toggle placeholder in location input based on radio selection
+        document.getElementById("googleMap").addEventListener("change", function () {
+            document.getElementById("locationInput").placeholder = "Enter Google Map Link here";
+        });
+    
+        document.getElementById("latLong").addEventListener("change", function () {
+            document.getElementById("locationInput").placeholder = "Enter Latitude, Longitude";
+        });
+    
+        // Toggle placeholder in land input field based on radio selection
+        document.getElementById("plotNumber").addEventListener("change", function () {
+            document.getElementById("landInput").placeholder = "Enter Plot Number";
+        });
+    
+        document.getElementById("khataNumber").addEventListener("change", function () {
+            document.getElementById("landInput").placeholder = "Enter Khata Number";
+        });
+    
+        // Initialize fields on page load
+        toggleLandFields();
+
+
+        document.getElementById("findLandBtn").addEventListener("click", function() {
+            // Show loader, hide results and action buttons
+            document.getElementById("skeletonLoader").style.display = "block";
+            document.getElementById("resultCard").style.display = "none";
+            document.getElementById("actionButtons").style.opacity = "0";
+
+            // Simulate delay (5 seconds)
+            setTimeout(function() {
+                // Hide skeleton loader and show the result card
+                document.getElementById("skeletonLoader").style.display = "none";
+                document.getElementById("resultCard").style.display = "block";
+                
+                // Smooth scroll to the result card
+                document.getElementById("resultCard").scrollIntoView({ behavior: "smooth" });
+
+                // Show action buttons after another 5 seconds
+                setTimeout(function() {
+                    document.getElementById("actionButtons").style.opacity = ".9";
+                }, 100); // Action buttons appear after 5 more seconds
+            }, 3000); // Result card appears after 5 seconds
+        });
+
+        // When the Add Property button is clicked
+        document.getElementById('addPropertyBtn').addEventListener('click', function () {
+            // Store a flag in localStorage to indicate that the property was added
+            localStorage.setItem('propertyAdded', 'true');
+
+            // Redirect to my-property.html
+            window.location.href = 'my-property.html';
+        });
+    </script>
+</body>
+</html>
