@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head class="p-4">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TLB Dashboard</title>
+
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./dashboard.css">
+</head>
+<body>
+
+    <!-- Mobile Menu Toggle Button -->
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="bi bi-list"></i> <!-- Hamburger Icon -->
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="./assets/images/tlb-logo.png" alt="">
+        </div>
+        <a href="index.html"><i class="bi bi-search"></i> Find My Land</a>
+        <a href="my-property.html"><i class="bi bi-house-check"></i> My Property </a>
+        <a href="#"  class="active"><i class="bi bi-file-text"></i> My Land Docs</a>
+        <a href="#"><i class="bi bi-crosshair"></i> My Land Surveys</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h5>My Land Docs</h5>
+            <!-- Profile Section -->
+            <div class="profile-dropdown">
+                <div class="d-flex align-items-center profile-info">
+                    <img src="./assets/images/amar.png" alt="Profile">
+                    <div>
+                        <strong style="font-weight: 400;">Amarendra Sahu</strong> <br>
+                        <small style="font-weight: normal; color: #7F7A7A; position: relative; top: -5px;">amar@thelandbankers.com</small>
+                    </div>
+                    <i class="bi bi-caret-down-fill"></i> <!-- Down Arrow Icon -->
+                </div>
+                <!-- Dropdown -->
+                <div class="dropdown-menu">
+                    <a href="#"><i class="bi bi-person"></i> Profile</a>
+                    <a href="#"><i class="bi bi-box-arrow-right"></i> Sign Out</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="content">
+            Hello
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
