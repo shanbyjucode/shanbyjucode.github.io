@@ -26,7 +26,7 @@
         </div>
         <a href="index.html"><i class="bi bi-search"></i> Find My Land</a>
         <a href="#" class="active"><i class="bi bi-house-check"></i> My Property </a>
-        <a href="#"><i class="bi bi-file-text"></i> My Land Docs</a>
+        <a href="my-doc.html"><i class="bi bi-file-text"></i> My Land Docs</a>
         <a href="#"><i class="bi bi-crosshair"></i> My Land Surveys</a>
     </div>
 
@@ -170,9 +170,8 @@
                                         </div>
                                         <hr style="color: #7F7A7A; margin-top: 20px; margin-bottom: 20px;">
                                         <h5>Local Person’s Contact Details</h5>
-                                        <p style="color: #727272;">This should be the person who can help us during the physical survey of your land</p>
+                                        <p style="color: #727272;">This should be the person who can help us during the physical survey of your land.</p>
                                         <div class="mb-3">
-                                            <label class="form-label">Who is this property for?</label>
                                             <div class="d-flex">
                                                 <div class="form-check me-3">
                                                     <input class="form-check-input" type="radio" name="propertyOwner" id="itsMe" value="itsMe" checked>
@@ -201,7 +200,7 @@
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-end">
-                                            <button type="submit" class="btn btn-primary">Submit Details</button>
+                                            <button type="submit" class="btn btn-primary" id="submitBtn2">Submit Details</button>
                                         </div>
                                     </div>
                                 </div>
@@ -218,7 +217,7 @@
                             <div class="card-body">
                                 <ul class="list-unstyled">
                                     <li><a href="#" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#lockItModal"><span>Lock it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
-                                    <li><a href="#" class="d-flex align-items-center"><span>Upload more docs</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="my-doc.html" class="d-flex align-items-center"><span>Upload more docs</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="#" class="d-flex align-items-center"><span>Monitor it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="#" class="d-flex align-items-center"><span>Sell it or rent it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="#" class="d-flex align-items-center"><span>Get services</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
@@ -326,6 +325,11 @@
             var modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
 
+            // Show toast message
+            var toastElement = new bootstrap.Toast(document.getElementById('toastMessage'));
+            toastElement.show();
+        });
+        document.getElementById('submitBtn2').addEventListener('click', function() {
             // Show toast message
             var toastElement = new bootstrap.Toast(document.getElementById('toastMessage'));
             toastElement.show();
