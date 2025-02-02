@@ -430,12 +430,18 @@
             // Store original HTML content
             let originalContent = button.innerHTML;
 
+            // Disable button and change cursor
+            button.disabled = true;
+            button.style.cursor = "not-allowed";
+
             // Replace content with spinner
             button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
             // Restore original content after 3 seconds
             setTimeout(() => {
                 button.innerHTML = originalContent;
+                button.innerHTML = originalContent;
+                button.disabled = false; // Re-enable button
             }, 3000);
         }
 
@@ -445,12 +451,18 @@
             // Store original HTML content
             let originalContent = button.innerHTML;
 
+            // Disable button and change cursor
+            button.disabled = true;
+            button.style.cursor = "not-allowed";
+
             // Replace content with spinner
             button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
 
             // Restore original content after 3 seconds
             setTimeout(() => {
                 button.innerHTML = originalContent;
+                button.disabled = false; // Re-enable button
+                button.style.cursor = ""; // Restore default cursor
             }, 3000);
         }
     </script>
