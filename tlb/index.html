@@ -24,8 +24,8 @@
         <div class="logo">
             <img src="./assets/images/tlb-logo.png" alt="">
         </div>
-        <a href="#" class="active"><i class="bi bi-file-text"></i> Find My Land</a>
-        <a href="my-property.html"><i class="bi bi-file-text"></i> My Property </a>
+        <a href="#" class="active"><i class="bi bi-search"></i> Find My Land</a>
+        <a href="my-property.html"><i class="bi bi-house-check"></i> My Property </a>
         <a href="#"><i class="bi bi-file-text"></i> My Land Docs</a>
         <a href="#"><i class="bi bi-crosshair"></i> My Land Surveys</a>
     </div>
@@ -164,13 +164,14 @@
             </div>
         </div>
         <!-- Skeleton Loader -->
-    <div id="skeletonLoader" class="mt-4" style="display: none; padding: 20px;">
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-small"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-small"></div>
-        <div class="skeleton skeleton-text"></div>
-    </div>
+        <div id="skeletonLoader" class="mt-4" style="display: none; padding: 20px;">
+            <p style="font-size: 14px; color: #727272;">Getting everything ready... Extracting land details now!</p>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-small"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-small"></div>
+            <div class="skeleton skeleton-text"></div>
+        </div>
     <div style="padding: 20px;">
         <!-- Result Card -->
         <div id="resultCard" class="mt-4 result-card">
@@ -227,9 +228,9 @@
         </div>
 
         <!-- Action Buttons -->
-        <div id="actionButtons" class="mt-3 d-flex justify-content-between" style="opacity: 0">
+        <div id="actionButtons" class="mt-3 d-flex justify-content-between" style="opacity: 0; position: relative; z-index: 200;">
             <div>
-                <button class="btn btn-outline-secondary" style="margin-right: 15px;">Summarize Record</button>
+                <button class="btn btn-outline-secondary" id="summarybtn" style="margin-right: 15px;">Summarize Record</button>
                 <button class="btn btn-outline-secondary">Get Record</button>
             </div>
             <div>
@@ -240,7 +241,7 @@
                     <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                         More Actions
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" style="z-index: 100;">
                         <li><a class="dropdown-item" href="#">I am interested in this</a></li>
                         <li><a class="dropdown-item" href="#">I am an agent for this</a></li>
                         <li><a class="dropdown-item" href="#">This is of a friend</a></li>
@@ -249,6 +250,67 @@
                 </div>
             </div>
         </div>
+        <!-- Skeleton Loader -->
+        <div id="skeletonLoader2" class="mt-4" style="display: none;">
+            <p style="font-size: 14px; color: #727272;">Summarizing record, please wait...</p>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-small"></div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-small"></div>
+            <div class="skeleton skeleton-text"></div>
+        </div>
+        <!-- Summarized -->
+         <div class="summary" id="summaryRecord" style="padding-top: 40px; display: none;">
+            <h5 style="padding-bottom: 10px;">Summaraized RoR</h5>
+            <div class="card" style="background-color: #ffffff; border-color: #ECEBEB;">
+                <div class="card-body">
+                    <h5 style="padding-bottom: 10px;">Risk/Safety Section</h5>
+                    <div style="padding-left: 20px;">
+                        <h5 style="font-size: 18px;">High Risk</h5>
+                        <p>
+                            Several plots are owned by the government or have land use types meant for public use, such as Gochara (for grazing) and Jungla forest. These plots cannot be sold.
+                        </p>
+                        <h5 style="font-size: 18px;">Moderate Risk</h5>
+                        <p>
+                            Some plots are owned by private corporations, which may require additional authorization for sale.
+                        </p>
+                        <h5 style="font-size: 18px;">Lower Risk</h5>
+                        <p>Plots owned by private individuals may be safer for buying/selling, subject to proper documentation and verification.</p>
+                    </div>
+                    <br>
+                    <h5>Next Steps</h5>
+                    <ul>
+                        <li>Conduct a thorough boundary verification for all plots to ensure accurate demarcation.</li>
+                        <li>Obtain additional documents, such as sale deeds, mutation records, and encumbrance certificates, to verify ownership and legal status.</li>
+                        <li>For plots owned by private corporations, obtain board resolutions or authorizations for the sale.</li>
+                        <li>For plots owned by the government or with land use types meant for public use, explore legal options or alternative arrangements, if any.</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Action Buttons -->
+            <div class="mt-3 d-flex justify-content-between">
+                <div>
+                    <button class="btn btn-outline-secondary">Get Record</button>
+                </div>
+                <div>
+                    <button class="btn btn-primary" style="margin-right: 15px;" data-bs-toggle="modal" data-bs-target="#propertyModal">This is my property</button>
+                    
+                    <!-- Dropdown for More Actions -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            More Actions
+                        </button>
+                        <ul class="dropdown-menu" style="z-index: 100;">
+                            <li><a class="dropdown-item" href="#">I am interested in this</a></li>
+                            <li><a class="dropdown-item" href="#">I am an agent for this</a></li>
+                            <li><a class="dropdown-item" href="#">This is of a friend</a></li>
+                            <li><a class="dropdown-item" href="#">Report an issue</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     </div>
     <br><br><br><br><br><br><br>
@@ -334,6 +396,22 @@
                 setTimeout(function() {
                     document.getElementById("actionButtons").style.opacity = ".9";
                 }, 100); // Action buttons appear after 5 more seconds
+            }, 3000); // Result card appears after 5 seconds
+        });
+
+        document.getElementById("summarybtn").addEventListener("click", function() {
+            // Show loader, hide results and action buttons
+            document.getElementById("skeletonLoader2").style.display = "block";
+            document.getElementById("summaryRecord").style.display = "none";
+
+            // Simulate delay (5 seconds)
+            setTimeout(function() {
+                // Hide skeleton loader and show the result card
+                document.getElementById("skeletonLoader2").style.display = "none";
+                document.getElementById("summaryRecord").style.display = "block";
+                
+                // Smooth scroll to the result card
+                document.getElementById("summaryRecord").scrollIntoView({ behavior: "smooth" });
             }, 3000); // Result card appears after 5 seconds
         });
 
