@@ -109,9 +109,29 @@
                          <div class="accordion mt-4" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="background-color: #ffffff; font-weight: 500;">
-                                        Add Physical Details
+                                    <button class="accordion-button d-flex align-items-center" 
+                                            type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#collapseOne" 
+                                            aria-expanded="true" 
+                                            aria-controls="collapseOne" 
+                                            style="background-color: #ffffff; font-weight: 500;">
+
+                                        <!-- Left Side: Title -->
+                                        <span>Add Physical Details</span>
+
+                                        <!-- Right Side: Progress Bar (Aligned Right) -->
+                                        <div class="d-flex align-items-center ms-auto" style="width: 40%; gap: 10px;">
+                                            <div class="progress flex-grow-1" role="progressbar" 
+                                                aria-label="Success example" aria-valuenow="10" 
+                                                aria-valuemin="0" aria-valuemax="100" style="height: 8px;">
+                                                <div class="progress-bar bg-danger" style="width: 10%"></div>
+                                            </div>
+                                            <span style="font-size: 13px; color: #696A6C; font-weight: 500;">10% Completed</span>
+                                        </div>
+
                                     </button>
+
                                 </h2>
                                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
