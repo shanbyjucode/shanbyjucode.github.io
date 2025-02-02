@@ -252,7 +252,7 @@ body {
 .card{
     background-color: #F7FFFB;
     border: 1px solid #29AC9A;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 .card-body strong{
@@ -268,7 +268,7 @@ a.dropdown-item{
 #resultCard, #actionButtons { display: none; } /* Hide results and buttons initially */
 
 .modal-content{
-    border-radius: 20px !important;
+    border-radius: 10px !important;
 }
 
 .toast {
