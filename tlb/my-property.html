@@ -219,7 +219,7 @@
                                     <li><a href="#" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#lockItModal"><span>Lock it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="my-doc.html" class="d-flex align-items-center"><span>Upload more docs</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="#" class="d-flex align-items-center"><span>Monitor it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
-                                    <li><a href="#" class="d-flex align-items-center"><span>Sell it or rent it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
+                                    <li><a href="#" class="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#sellItModal"><span>Sell it or rent it</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                     <li><a href="#" class="d-flex align-items-center"><span>Get services</span> <i class="bi bi-box-arrow-up-right"></i></a></li>
                                 </ul>
                             </div>
@@ -245,12 +245,13 @@
         <div class="modal fade" id="lockItModal" tabindex="-1" aria-labelledby="lockItModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="align-items: baseline;">
+                <div class="modal-header d-flex flex-column align-items-start">
                     <div class="d-flex align-items-center">
                         <h5 class="modal-title me-2" id="lockItModalLabel">Lock it</h5>
                         <span class="badge text-bg-primary" style="background-color: #D2F8F2 !important; color: #696A6C !important; font-weight: normal !important;">Coming Soon</span>
                     </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <p class="mt-2" style="margin: 0; color: #727272;">Request to hide property from public search</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 22px; right: 22px;"></button>
                 </div>
                 <div class="modal-body">
         
@@ -291,6 +292,57 @@
             </div>
         </div>
 
+         <!-- Sell It -->
+         <div class="modal fade" id="sellItModal" tabindex="-1" aria-labelledby="lockItModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header d-flex flex-column align-items-start">
+                    <div class="d-flex align-items-center">
+                        <h5 class="modal-title me-2" id="lockItModalLabel">Sell it</h5>
+                        <span class="badge text-bg-primary" style="background-color: #D2F8F2 !important; color: #696A6C !important; font-weight: normal !important;">Coming Soon</span>
+                    </div>
+                    <p class="mt-2" style="margin: 0; color: #727272;">Let buyers know you are interested</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 22px; right: 22px;"></button>
+                </div>
+                <div class="modal-body">
+        
+                <!-- Input fields in one line -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                    </div>
+                    <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Enter your phone number">
+                    </div>
+                </div>
+        
+                <!-- Input fields in one line -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                    </div>
+                    <div class="col-md-6">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" placeholder="Enter your city">
+                    </div>
+                </div>
+        
+                <!-- Textarea -->
+                <div class="mb-3">
+                    <label for="specialNotes" class="form-label">Any special notes</label>
+                    <textarea class="form-control" id="specialNotes" rows="3" placeholder="Enter any special notes"></textarea>
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="submitBtn3">Submit Request</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
         <!-- Toast Message -->
         <div id="toastContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
             <div id="toastMessage" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -322,6 +374,16 @@
         document.getElementById('submitBtn').addEventListener('click', function() {
             // Hide modal
             var modalElement = document.getElementById('lockItModal');
+            var modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide();
+
+            // Show toast message
+            var toastElement = new bootstrap.Toast(document.getElementById('toastMessage'));
+            toastElement.show();
+        });
+        document.getElementById('submitBtn3').addEventListener('click', function() {
+            // Hide modal
+            var modalElement = document.getElementById('sellItModal');
             var modalInstance = bootstrap.Modal.getInstance(modalElement);
             modalInstance.hide();
 
