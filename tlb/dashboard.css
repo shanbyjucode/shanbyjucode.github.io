@@ -308,3 +308,11 @@ a.dropdown-item{
     border-radius: 20px;
     padding: 30px;
 }
+
+
+@media (min-width: 768px) {
+    .search-container{
+        width: 100%;
+        padding: 20px;
+    }
+}
