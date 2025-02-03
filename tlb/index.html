@@ -444,6 +444,7 @@
                 button.innerHTML = originalContent;
                 button.innerHTML = originalContent;
                 button.disabled = false; // Re-enable button
+                button.style.cursor = "pointer";
             }, 3000);
         }
 
@@ -464,7 +465,7 @@
             setTimeout(() => {
                 button.innerHTML = originalContent;
                 button.disabled = false; // Re-enable button
-                button.style.cursor = ""; // Restore default cursor
+                button.style.cursor = "pointer";
             }, 3000);
         }
     </script>
