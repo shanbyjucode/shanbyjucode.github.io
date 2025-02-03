@@ -296,3 +296,15 @@ a.dropdown-item{
     margin-left: 5px;
     font-size: 14px;
 }
+
+.accordion-button:focus{
+    border-color: transparent !important;
+}
+
+.search-container{
+    width: 800px;
+    margin: auto;
+    background-color: #f3f7fa;
+    border-radius: 20px;
+    padding: 30px;
+}
