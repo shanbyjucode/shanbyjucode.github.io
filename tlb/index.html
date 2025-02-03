@@ -55,112 +55,114 @@
 
         <!-- Page Content -->
         <div class="content">
-            <h5 style="font-size: 18px; padding-bottom: 10px;">Do you know the plot / khata number</h5>
-            <div class="col-md-9 ">
-                <!-- Radio Button Options -->
-                <div class="btn-group mb-3" role="group" aria-label="Land Search Options" style="padding-bottom: 20px;">
-                    <input type="radio" class="btn-check" name="landOption" id="option-details" autocomplete="off" value="details" checked>
-                    <label class="btn btn-outline-primary" for="option-details">Yes, I know the details</label>
-            
-                    <input type="radio" class="btn-check" name="landOption" id="option-location" autocomplete="off" value="location">
-                    <label class="btn btn-outline-primary" for="option-location">No, but I know the land location</label>
-            
-                    <input type="radio" class="btn-check" name="landOption" id="option-noidea" autocomplete="off" value="noidea">
-                    <label class="btn btn-outline-primary" for="option-noidea">No, I have no idea</label>
-                </div>
-            
-                <!-- Section: If user knows land details -->
-                <div id="detailsSection">
-                    <div class="d-flex mb-3">
-                        <select class="form-select me-1" style="flex: 1;">
-                            <option selected>Select a State</option>
-                            <option>State 1</option>
-                            <option>State 2</option>
-                        </select>
-            
-                        <select class="form-select me-1" style="flex: 1;">
-                            <option selected>Select a District</option>
-                            <option>District 1</option>
-                            <option>District 2</option>
-                        </select>
-            
-                        <select class="form-select me-1" style="flex: 1;">
-                            <option selected>Select a Tehsil</option>
-                            <option>Tehsil 1</option>
-                            <option>Tehsil 2</option>
-                        </select>
-            
-                        <select class="form-select" style="flex: 1;">
-                            <option selected>Select a Village</option>
-                            <option>Village 1</option>
-                            <option>Village 2</option>
-                        </select>
+            <div class="search-container">
+                <h5 style="font-size: 18px; padding-bottom: 10px;">Do you know the plot / khata number</h5>
+                <div class="col-md-12 ">
+                    <!-- Radio Button Options -->
+                    <div class="btn-group mb-3" role="group" aria-label="Land Search Options" style="padding-bottom: 20px;">
+                        <input type="radio" class="btn-check" name="landOption" id="option-details" autocomplete="off" value="details" checked>
+                        <label class="btn btn-outline-primary" for="option-details">Yes, I know the details</label>
+                
+                        <input type="radio" class="btn-check" name="landOption" id="option-location" autocomplete="off" value="location">
+                        <label class="btn btn-outline-primary" for="option-location">No, but I know the land location</label>
+                
+                        <input type="radio" class="btn-check" name="landOption" id="option-noidea" autocomplete="off" value="noidea">
+                        <label class="btn btn-outline-primary" for="option-noidea">No, I have no idea</label>
                     </div>
-            
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input me-2" type="radio" name="landIdentifier" id="plotNumber" checked>
-                            <label class="form-check-label me-3" for="plotNumber">Plot Number</label>
-            
-                            <input class="form-check-input me-2" type="radio" name="landIdentifier" id="khataNumber">
-                            <label class="form-check-label" for="khataNumber">Khata Number</label>
+                
+                    <!-- Section: If user knows land details -->
+                    <div id="detailsSection">
+                        <div class="d-flex mb-3">
+                            <select class="form-select me-1" style="flex: 1;">
+                                <option selected>Select a State</option>
+                                <option>State 1</option>
+                                <option>State 2</option>
+                            </select>
+                
+                            <select class="form-select me-1" style="flex: 1;">
+                                <option selected>Select a District</option>
+                                <option>District 1</option>
+                                <option>District 2</option>
+                            </select>
+                
+                            <select class="form-select me-1" style="flex: 1;">
+                                <option selected>Select a Tehsil</option>
+                                <option>Tehsil 1</option>
+                                <option>Tehsil 2</option>
+                            </select>
+                
+                            <select class="form-select" style="flex: 1;">
+                                <option selected>Select a Village</option>
+                                <option>Village 1</option>
+                                <option>Village 2</option>
+                            </select>
+                        </div>
+                
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-2" type="radio" name="landIdentifier" id="plotNumber" checked>
+                                <label class="form-check-label me-3" for="plotNumber">Plot Number</label>
+                
+                                <input class="form-check-input me-2" type="radio" name="landIdentifier" id="khataNumber">
+                                <label class="form-check-label" for="khataNumber">Khata Number</label>
+                            </div>
+                        </div>
+                
+                        <div class="mb-3 col-4" >
+                            <input type="text" id="landInput" class="form-control" placeholder="Enter Plot Number">
                         </div>
                     </div>
-            
-                    <div class="mb-3 col-4" >
-                        <input type="text" id="landInput" class="form-control" placeholder="Enter Plot Number">
-                    </div>
-                </div>
-            
-                <!-- Section: If user knows land location -->
-                <div id="locationSection" style="display: none;">
-                    <div class="mb-3 col-3">
-                        <select class="form-select">
-                            <option selected>Select a State</option>
-                            <option>State 1</option>
-                            <option>State 2</option>
-                        </select>
-                    </div>
-            
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <input class="form-check-input me-2" type="radio" name="locationMethod" id="googleMap" checked>
-                            <label class="form-check-label me-3" for="googleMap">Google Map Link</label>
-            
-                            <input class="form-check-input me-2" type="radio" name="locationMethod" id="latLong">
-                            <label class="form-check-label" for="latLong">Latitude & Longitude</label>
+                
+                    <!-- Section: If user knows land location -->
+                    <div id="locationSection" style="display: none;">
+                        <div class="mb-3 col-3">
+                            <select class="form-select">
+                                <option selected>Select a State</option>
+                                <option>State 1</option>
+                                <option>State 2</option>
+                            </select>
+                        </div>
+                
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-2" type="radio" name="locationMethod" id="googleMap" checked>
+                                <label class="form-check-label me-3" for="googleMap">Google Map Link</label>
+                
+                                <input class="form-check-input me-2" type="radio" name="locationMethod" id="latLong">
+                                <label class="form-check-label" for="latLong">Latitude & Longitude</label>
+                            </div>
+                        </div>
+                
+                        <div class="mb-3 col-10">
+                            <input type="text" id="locationInput" class="form-control" placeholder="Enter Google Map Link here">
                         </div>
                     </div>
-            
-                    <div class="mb-3 col-10">
-                        <input type="text" id="locationInput" class="form-control" placeholder="Enter Google Map Link here">
+                
+                    <!-- Section: If user has no idea -->
+                    <div id="noIdeaSection" style="display: none;">
+                        <div class="d-flex mb-3 gap-3">
+                            <input type="text" class="form-control me-1" placeholder="Name of the Landowner">
+                            <input type="text" class="form-control" placeholder="Father's Name">
+                        </div>
+                
+                        <div class="d-flex mb-3 gap-3">
+                            <input type="text" class="form-control me-1" placeholder="District of Land Location">
+                            <input type="text" class="form-control" placeholder="Village of Land Location">
+                        </div>
+                        <br/>
+                        <p>Share your details, and we'll notify you as soon as we find the information.</p>
+                
+                        <div class="d-flex mb-3 gap-3">
+                            <input type="text" class="form-control me-1" placeholder="Your Name">
+                            <input type="email" class="form-control" placeholder="Your Email ID">
+                        </div>
                     </div>
+                
+                    <!-- Submit Button -->
+                    <button id="findLandBtn" type="submit" class="btn btn-primary btn-lg" style="font-size: 16px;" onclick="showLoading()">
+                        <i class="bi bi-search me-2"></i> <span>Find My Land</span>
+                    </button>
                 </div>
-            
-                <!-- Section: If user has no idea -->
-                <div id="noIdeaSection" style="display: none;">
-                    <div class="d-flex mb-3 gap-3">
-                        <input type="text" class="form-control me-1" placeholder="Name of the Landowner">
-                        <input type="text" class="form-control" placeholder="Father's Name">
-                    </div>
-            
-                    <div class="d-flex mb-3 gap-3">
-                        <input type="text" class="form-control me-1" placeholder="District of Land Location">
-                        <input type="text" class="form-control" placeholder="Village of Land Location">
-                    </div>
-                    <br/>
-                    <p>Share your details, and we'll notify you as soon as we find the information.</p>
-            
-                    <div class="d-flex mb-3 gap-3">
-                        <input type="text" class="form-control me-1" placeholder="Your Name">
-                        <input type="email" class="form-control" placeholder="Your Email ID">
-                    </div>
-                </div>
-            
-                <!-- Submit Button -->
-                <button id="findLandBtn" type="submit" class="btn btn-primary btn-lg" style="font-size: 16px;" onclick="showLoading()">
-                    <i class="bi bi-search me-2"></i> <span>Find My Land</span>
-                </button>
             </div>
         </div>
         <!-- Skeleton Loader -->
