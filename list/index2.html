@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting List View with Popup</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'CircularXXTT';
+            src: url('https://asset.goodmeetings.ai/fonts/CircularXXTT-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'CircularXXTT';
+            src: url('https://asset.goodmeetings.ai/fonts/CircularXXTT-Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        body {
+            font-family: 'CircularXXTT', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            font-size: 14px;
+            color: #484848;
+        }
+        .table-container {
+            display: block;
+            overflow-x: scroll; /* Always show horizontal scrollbar */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            position: relative;
+            scrollbar-width: auto; /* Firefox: keep scrollbar visible */
+            scrollbar-gutter: stable; /* Ensures scrollbar space remains */
+        }
+
+        /* Webkit Browsers (Chrome, Edge, Safari) */
+        .table-container::-webkit-scrollbar {
+            height: 8px; /* Increase visibility */
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888; /* Make scrollbar more visible */
+            border-radius: 6px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f4f4f4;
+        }
+        img.company-logo{
+            width: 28px;
+            height: 28px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-header, .table-row {
+            display: table-row;
+        }
+        .table-header {
+            font-weight: 500;
+            font-size: 14px;
+            background: #f4f4f4;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            color: #111111;
+        }
+        .table-cell {
+            display: table-cell;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            min-width: 150px;
+            vertical-align: middle;
+        }
+        .fixed-column {
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 2;
+            width: 200px;
+        }
+        .fixed-action {
+            position: sticky;
+            right: 0;
+            background: #fff;
+            z-index: 2;
+            width: 150px;
+        }
+        .table-row:hover .quick-view span{
+            display: inline-block;
+            border-color: #4671F0;
+            transition: all 0.3s;
+        }
+        .table-row .quick-view span{
+            display: inline-block;
+            border: 1px solid #ffffff;
+            background-color: #ffffff;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            width: 100%; /* Ensures the container takes up the full width of the table cell */
+        }
+        .progress-bar {
+            height: 8px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+            position: relative;
+        }
+        .progress {
+            height: 8px;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .participants {
+            display: flex;
+            justify-content: flex-start;
+            gap: 0;
+            padding-left: 10px;
+            position: relative;
+        }
+        .participant-avatar {
+            width: 25px;
+            height: 25px;
+            background: #999999;
+            color: white;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-left: -9px;
+        }
+        .quick-view {
+            cursor: pointer;
+            color: #4671F0;
+        }
+        /* Popup styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            box-sizing: border-box;
+            display: block;
+        }
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 33px;
+            color: #484844;
+            cursor: pointer;
+        }
+        .popup-close:hover {
+            color:#4671F0;
+        }
+        .popup-icons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .popup-icons i {
+            font-size: 24px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .popup-content {
+            background: url(./assets/images/content.jpg) no-repeat center center;
+            background-size: 100% 80%; /* Ensures the image stretches to fit the div */
+            height: 80vh;
+        }
+        .popup-video {
+            width: 100%;
+            height: 300px;
+        }
+        .popup-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .popup-list li {
+            margin: 10px 0;
+        }
+        .left-navigation{
+            width: 260px;
+            background-color: #ffffff;
+            border-right: 1px solid #E6E6E6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            background: url(./assets/images/nav.jpg) no-repeat;
+            background-size: contain;
+        }
+        .right-side{
+            padding-top: 10px;
+            padding-left: 280px;
+            padding-right: 20px;
+        }
+        .top-nav{
+            height: 100px;
+            background: url(./assets/images/top-nav.jpg) no-repeat center center;
+            background-size: cover;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Dropdown container positioned outside the table */
+        .dropdown-menu-container {
+            position: absolute;
+            display: none;
+            background: white;
+            border: 1px solid #ddd;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            min-width: 150px;
+        }
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
+        .dropdown-menu a:hover {
+            background-color: #f4f4f4;
+        }
+        .dropdown-button{
+            width: 20px;
+            height: 20px;
+        }
+        .dropdown-button:hover{
+            background-color: #fafafa;
+        }
+        .pagination{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            margin-bottom: 40px;
+        }
+        .pagination img{
+            width: 340px;
+        }
+        span.callendar{
+            display: inline-block;
+            background-color: #dfffe8;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #3e3e3e;
+            line-height: 14px;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        span.ad-hoc{
+            display: inline-block;
+            background-color: #cbd8ff;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #3e3e3e;
+            line-height: 14px;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            background-color: black;
+            color: white;
+            text-align: left;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: nowrap;
+            bottom: -20px; /* Show above the avatars */
+            left: 90%;
+            transform: translateX(-50%);
+            z-index: 999;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .participants:hover .tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="left-navigation">
+    </div>
+    <div class="right-side">
+        <div class="top-nav"></div>
+        <div class="table-container">
+            <div class="table">
+                <div class="table-header">
+                    <div class="table-cell fixed-column" style="min-width: 200px; background-color: #f4f4f4; border-right: 1px solid #ddd;">Client</div>
+                    <div class="table-cell">Meeting Title & Date</div>
+                    <div class="table-cell">Sale Probability Score</div>
+                    <div class="table-cell">Overall Pitch Score</div>
+                    <div class="table-cell">Duration</div>
+                    <div class="table-cell">Recorded by</div>
+                    <div class="table-cell">Participants</div>
+                    <div class="table-cell">Meeting Source</div>
+                    <div class="table-cell fixed-action" style="background-color: #f4f4f4;">Actions</div>
+                </div>
+                <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 200px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=devrev.ai" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>DevRev</div>
+                                <div style="font-size: 13px; color: gray;">devrev.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Goodmeetings x Grow: Onboarding Check-in</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">02 Feb 2025 | 11:12 AM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 85%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 60%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">60%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">23:35</div>
+                    <div class="table-cell">Alok Mishra</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">B</div>
+                            <div class="participant-avatar">C</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">6</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=superleap.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Superleap</div>
+                                <div style="font-size: 13px; color: gray;">superleap.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Goodmeetings + Superleap Integration</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">03 Feb 2025 | 9:12 AM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 75%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">75%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 60%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">60%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">18:20</div>
+                    <div class="table-cell">Rajarshee Maiti</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">R</div>
+                            <div class="participant-avatar">B</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">4</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=descope.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Descope</div>
+                                <div style="font-size: 13px; color: gray;">descope.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Shane Poyar - Goodmeetings
+
+                        </span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">31 Jan 2025 | 09:27 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 85%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 40%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">40%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">01:06</div>
+                    <div class="table-cell">Rajarshee Maiti</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">R</div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">2</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=expertia.ai" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Expertia</div>
+                                <div style="font-size: 13px; color: gray;">expertia.ai</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Rajat Joshi <> Goodmeetings
+                        </span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">30 Jan 2025 | 06:42 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 75%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">75%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 80%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">80%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">30:11</div>
+                    <div class="table-cell">Alok Mishra</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">B</div>
+                            <div class="participant-avatar">C</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">6</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="./assets/images/audio.png" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Audio Call</div>
+                                <div style="font-size: 13px; color: gray;">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Upload test 2025_01_28 12_06_pm</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">28 Jan 2025 | 12:07 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 85%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 60%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">60%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">10:16</div>
+                    <div class="table-cell">V Arun Kumar</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">R</div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">6</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="ad-hoc">Ad-hoc</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=mathco.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Mathco</div>
+                                <div style="font-size: 13px; color: gray;">mathco.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Discussion on next steps</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">28 Jan 2025 | 02:01 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 70%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">70%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 20%; background: red;"></div>
+                            </div>
+                            <span class="progress-percentage">20%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">35:11</div>
+                    <div class="table-cell">SR Mohapatra</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">T</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">8</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=upgrad.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Upgrad</div>
+                                <div style="font-size: 13px; color: gray;">upgrad.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">UpGrad Check-In</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">16 Dec 2024 | 06:14 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 85%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 60%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">60%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">07:08</div>
+                    <div class="table-cell">Rajarshee Maiti</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar">R</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">5</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 218px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=cerebraix.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Cerebraix</div>
+                                <div style="font-size: 13px; color: gray;">cerebraix.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Goodmeetings<>Cerebraix</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">16 Jan 2025 | 8:11 AM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 70%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">70%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 40%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">40%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">41:52</div>
+                    <div class="table-cell">Srinivasan Narayan</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">S</div>
+                            <div class="participant-avatar">D</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">2</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="ad-hoc">Ad-hoc</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 200px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=pixee.ai" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Pixee</div>
+                                <div style="font-size: 13px; color: gray;">pixee.ai</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Pixee + Goodmeetings Feedback</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">14 Jan 2025 | 10:01 AM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 65%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">65%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 50%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">50%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">18:09</div>
+                    <div class="table-cell">Alok Mishra</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">B</div>
+                            <div class="participant-avatar">C</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">4</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+                  <!-- list -->
+                <div class="table-row">
+                    <div class="table-cell fixed-column"  style="min-width: 200px;">
+                        <div style="display: flex; align-items: flex-start;">
+                            <img src="https://www.google.com/s2/favicons?sz=64&domain=eucloid.com" alt="Company Logo" class="company-logo" style="padding-right: 6px;">
+                            <div>
+                                <div>Eucloid</div>
+                                <div style="font-size: 13px; color: gray;">eucloid.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-cell" style="min-width: 300px; max-width: 300px; overflow: hidden; white-space: nowrap;">
+                        <span style="font-size: 15px; font-weight: 500; display: block; text-overflow: ellipsis; overflow: hidden;">Goodmeetings x Grow: Onboarding Check-in</span>
+                        <div style="font-size: 14px; color: gray; padding-top: 3px;">13 Jan 2025 | 8:15 PM</div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 85%; background: green;"></div>
+                            </div>
+                            <span class="progress-percentage">85%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">
+                        <div class="progress-container">
+                            <div class="progress-bar" style="margin-right: 4px;">
+                                <div class="progress" style="width: 60%; background: orange;"></div>
+                            </div>
+                            <span class="progress-percentage">60%</span>
+                        </div>
+                    </div>
+                    <div class="table-cell">12:05</div>
+                    <div class="table-cell">Alok Mishra</div>
+                    <div class="table-cell">
+                        <div class="participants">
+                            <div class="tooltip">
+                                Alok Mishra<br>
+                                Ashwin Bharath<br>
+                                Rasika Vinayagam<br>
+                                Varun Rangarajan
+                            </div>
+                            <div class="participant-avatar">A</div>
+                            <div class="participant-avatar">B</div>
+                            <div class="participant-avatar">C</div>
+                            <div class="participant-avatar" style="background-color: #ffffff; color: #111111; border-color: #999999; font-weight: 500;">6</div>
+                        </div>
+                    </div>
+                    <div class="table-cell"><span class="callendar">Calendar</span></div>
+                    <div class="table-cell fixed-action">
+                        <div style="display: flex; justify-content: space-between; align-items:center">
+                            <div class="quick-view" data-popup="popup1">
+                                <div>
+                                    <span>Quick View</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-button" style="cursor: pointer;" >
+                                <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- list -->
+            </div>
+        </div>
+        <!-- pagination -->
+         <div class="pagination">
+            <div style="font-size: 14px; color: #727272;">1 – 10 (120 total)</div>
+            <div>
+                <img src="./assets/images/pagination.jpg" alt="">
+            </div>
+         </div>
+    </div>
+
+     <!-- Dropdown Menu (Placed Outside the Table Container) -->
+     <div class="dropdown-menu-container">
+        <div class="dropdown-menu">
+            <a href="#">Update details</a>
+            <a href="#">Delete this record</a>
+        </div>
+    </div>
+
+    <!-- Popups -->
+    <div class="popup-overlay"></div>
+    <div class="popup" id="popup1">
+        <span class="popup-close">&times;</span>
+        <div class="popup-content"></div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            // Initially, the popup is hidden
+            $(".popup, .popup-overlay").hide();
+            
+            // Open Popup when Quick View button is clicked
+            $(".quick-view").click(function(){
+                var popupId = $(this).data("popup");
+                $("#" + popupId).fadeIn();
+                $(".popup-overlay").fadeIn();
+            });
+
+            // Close Popup when the close button or overlay is clicked
+            $(".popup-close, .popup-overlay").click(function(){
+                $(".popup, .popup-overlay").fadeOut();
+            });
+        });
+
+        $(document).ready(function () {
+            $(".dropdown-button").click(function (event) {
+                event.stopPropagation(); // Prevents document click from closing immediately
+
+                let button = $(this);
+                let menu = $(".dropdown-menu-container");
+
+                // Get button position relative to the document
+                let buttonOffset = button.offset();
+                let buttonHeight = button.outerHeight();
+
+                // Position the dropdown menu outside the scrollable container
+                menu.css({
+                    top: buttonOffset.top + buttonHeight + "px",
+                    left: buttonOffset.left + -120 + "px", // Add 20px to move right
+                    display: "block"
+                });
+            });
+
+            // Hide dropdown when clicking anywhere else
+            $(document).click(function () {
+                $(".dropdown-menu-container").hide();
+            });
+        });
+    </script>
+</body>
+</html>

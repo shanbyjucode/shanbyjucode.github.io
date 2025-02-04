@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting List View</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .table-container {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            position: relative;
+            scrollbar-width: auto;
+            scrollbar-gutter: stable;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 12px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 6px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #f4f4f4;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-header, .table-row {
+            display: table-row;
+        }
+        .table-header {
+            font-weight: bold;
+            background: #f4f4f4;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+        }
+        .table-cell {
+            display: table-cell;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            min-width: 150px;
+        }
+        .fixed-column {
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 2;
+            width: 200px;
+        }
+        .fixed-action {
+            position: sticky;
+            right: 0;
+            background: #fff;
+            z-index: 2;
+            width: 150px;
+        }
+        .progress-bar {
+            height: 10px;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+            position: relative;
+        }
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .participants {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .participant-avatar {
+            width: 30px;
+            height: 30px;
+            background: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .quick-view {
+            background: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .quick-view-content {
+            display: none;
+            width: 100%;
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 16px;
+            color: #888;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <div class="table">
+            <div class="table-header">
+                <div class="table-cell fixed-column">Company</div>
+                <div class="table-cell">Date</div>
+                <div class="table-cell">Meeting Title</div>
+                <div class="table-cell">Sale Probability Score</div>
+                <div class="table-cell">Overall Pitch Score</div>
+                <div class="table-cell">Duration</div>
+                <div class="table-cell">Recorded by</div>
+                <div class="table-cell">Participants</div>
+                <div class="table-cell">Meeting Source</div>
+                <div class="table-cell fixed-action">Actions</div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell fixed-column">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" style="border-radius: 50%;">
+                    <div>ABC Corp</div>
+                    <div style="font-size: 12px; color: gray;">abc@corporation.com</div>
+                </div>
+                <div class="table-cell">30 Jan 2025 | 11:12 AM</div>
+                <div class="table-cell">Discussion on next steps</div>
+                <div class="table-cell">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 85%; background: green;"></div>
+                    </div>
+                    85%
+                </div>
+                <div class="table-cell">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 60%; background: orange;"></div>
+                    </div>
+                    60%
+                </div>
+                <div class="table-cell">23:35</div>
+                <div class="table-cell">Alok Mishra</div>
+                <div class="table-cell">
+                    <div class="participants">
+                        <div class="participant-avatar">A</div>
+                        <div class="participant-avatar">B</div>
+                        <div class="participant-avatar">C</div>
+                        <div class="participant-avatar">D</div>
+                    </div>
+                </div>
+                <div class="table-cell">Calendar</div>
+                <div class="table-cell fixed-action">
+                    <div class="quick-view">Quick View</div>
+                </div>
+            </div>
+            <!-- Quick View Content (Moved out of table structure) -->
+            <div class="quick-view-content">
+                <span class="close-btn">&times;</span>
+                <p>This is additional information for the ABC Corp meeting.</p>
+            </div>
+            <div class="table-row">
+                <div class="table-cell fixed-column">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" style="border-radius: 50%;">
+                    <div>XYZ Ltd</div>
+                    <div style="font-size: 12px; color: gray;">xyz@company.com</div>
+                </div>
+                <div class="table-cell">01 Feb 2025 | 10:00 AM</div>
+                <div class="table-cell">Project Kickoff Meeting</div>
+                <div class="table-cell">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 75%; background: blue;"></div>
+                    </div>
+                    75%
+                </div>
+                <div class="table-cell">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 50%; background: red;"></div>
+                    </div>
+                    50%
+                </div>
+                <div class="table-cell">45:20</div>
+                <div class="table-cell">John Doe</div>
+                <div class="table-cell">
+                    <div class="participants">
+                        <div class="participant-avatar">X</div>
+                        <div class="participant-avatar">Y</div>
+                        <div class="participant-avatar">Z</div>
+                        <div class="participant-avatar">M</div>
+                    </div>
+                </div>
+                <div class="table-cell">Zoom</div>
+                <div class="table-cell fixed-action">
+                    <div class="quick-view">Quick View</div>
+                </div>
+            </div>
+            <!-- Quick View Content (Moved out of table structure) -->
+            <div class="quick-view-content">
+                <span class="close-btn">&times;</span>
+                <p>This is additional information for the XYZ Ltd meeting.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $(".quick-view").click(function(){
+                // Close all quick-view-content divs first
+                $(".quick-view-content").slideUp();
+
+                // Open the clicked one's associated quick-view-content
+                $(this).closest(".table-row").next(".quick-view-content").slideToggle();
+            });
+
+            // Close the content when close icon is clicked
+            $(".close-btn").click(function(){
+                $(this).closest(".quick-view-content").slideUp();
+            });
+        });
+    </script>
+</body>
+</html>
