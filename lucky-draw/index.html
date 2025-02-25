@@ -11,10 +11,6 @@
       margin: 0;
       padding: 20px;
     }
-    h1 {
-      margin-bottom: 20px;
-      color: #fff;
-    }
     h4 {
       margin-bottom: 20px;
       color: #fff;
@@ -51,11 +47,6 @@
       top: -20px;
       left: 50%;
       transform: translateX(-50%);
-      /* width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 30px solid #333; */
       z-index: 10;
     }
     /* Each label is positioned relative to the wheel’s center */
@@ -66,8 +57,7 @@
       font-size: 18px;
       font-weight: bold;
       color: #fff;
-      /* The transform places the label at the proper angle and distance from the center.
-         Remove the counter rotation so the label rotates with the wheel. */
+      /* Each label's transform positions it along the wheel's radius */
     }
     .spin-button {
       margin-top: 20px;
@@ -75,18 +65,42 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    /* Responsive styles for mobile devices */
+    @media (max-width: 480px) {
+      .wheel-container {
+        width: 300px;
+        height: 300px;
+        margin-top: 20px;
+      }
+      .label {
+        font-size: 16px;
+      }
+      /* Adjust the radial distance for labels on a smaller wheel */
+      .label:nth-child(1) { transform: rotate(25.71deg) translateY(-100px); }
+      .label:nth-child(2) { transform: rotate(77.14deg) translateY(-100px); }
+      .label:nth-child(3) { transform: rotate(128.57deg) translateY(-100px); }
+      .label:nth-child(4) { transform: rotate(180deg) translateY(-100px); }
+      .label:nth-child(5) { transform: rotate(231.43deg) translateY(-100px); }
+      .label:nth-child(6) { transform: rotate(282.86deg) translateY(-100px); }
+      .label:nth-child(7) { transform: rotate(334.29deg) translateY(-100px); }
+      .spin-button {
+        padding: 15px 30px;
+        font-size: 14px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h4>Join our Lucky Draw & stand a chance to will a Free Subscription!</h4>
+  <h4>Join our Lucky Draw & stand a chance to win a Free Subscription!</h4>
   <div class="wheel-container">
     <!-- Pointer -->
     <div class="pointer">
-        <img src="./logo.svg" alt="">
+      <img src="./logo.svg" alt="Pointer" />
     </div>
     <!-- The wheel with labels as its children -->
     <div id="wheel" class="wheel">
-      <!-- The mid-angle for each segment is approximately:
+      <!-- For 7 segments: mid-angle for each segment is approximately:
            (segment index * 360/7) + (360/7)/2.
            For 7 segments, 360/7 ≈ 51.43° and half is about 25.71°. -->
       <div class="label" style="transform: rotate(25.71deg) translateY(-130px);">0</div>
