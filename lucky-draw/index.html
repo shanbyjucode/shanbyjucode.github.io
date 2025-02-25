@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lucky Spin Wheel</title>
   <style>
     body {
@@ -14,7 +15,7 @@
     h4 {
       margin-bottom: 20px;
       color: #fff;
-      font-weight: normal;
+      font-weight: normal; 
     }
     .wheel-container {
       position: relative;
@@ -23,7 +24,7 @@
       margin: 0 auto;
       margin-top: 40px;
     }
-    /* The spinning wheel as a circle with a conic-gradient background */
+    /* The spinning wheel with a conic-gradient background */
     .wheel {
       position: relative;
       width: 100%;
@@ -57,7 +58,6 @@
       font-size: 18px;
       font-weight: bold;
       color: #fff;
-      /* Each label's transform positions it along the wheel's radius */
     }
     .spin-button {
       margin-top: 20px;
@@ -65,7 +65,22 @@
       font-size: 16px;
       cursor: pointer;
     }
-
+    /* Success message (hidden by default) */
+    /* Animation for success message */
+    .success{
+        display: none;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+        width: 300px;
+    }
+    .success img{
+        width: 100%;
+    }
+    .success.animate{
+        display: block;
+    }
     /* Responsive styles for mobile devices */
     @media (max-width: 480px) {
       .wheel-container {
@@ -76,7 +91,6 @@
       .label {
         font-size: 16px;
       }
-      /* Adjust the radial distance for labels on a smaller wheel */
       .label:nth-child(1) { transform: rotate(25.71deg) translateY(-100px); }
       .label:nth-child(2) { transform: rotate(77.14deg) translateY(-100px); }
       .label:nth-child(3) { transform: rotate(128.57deg) translateY(-100px); }
@@ -98,11 +112,14 @@
     <div class="pointer">
       <img src="./logo.svg" alt="Pointer" />
     </div>
+    <!-- Success message element -->
+    <div id="success" class="success">
+        <img src="./celebrate1.gif" alt="">
+    </div>
     <!-- The wheel with labels as its children -->
     <div id="wheel" class="wheel">
-      <!-- For 7 segments: mid-angle for each segment is approximately:
-           (segment index * 360/7) + (360/7)/2.
-           For 7 segments, 360/7 ≈ 51.43° and half is about 25.71°. -->
+      <!-- For 7 segments, the mid-angle of each segment is roughly:
+           (segment index * 360/7) + (360/7)/2 -->
       <div class="label" style="transform: rotate(25.71deg) translateY(-130px);">0</div>
       <div class="label" style="transform: rotate(77.14deg) translateY(-130px);">1</div>
       <div class="label" style="transform: rotate(128.57deg) translateY(-130px);">2</div>
@@ -117,13 +134,34 @@
   <script>
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spin');
+    const successMsg = document.getElementById('success');
     let currentRotation = 0;
+    const numSegments = 7; // segments labeled 0 to 6
 
     spinButton.addEventListener('click', () => {
+      // Remove any previous success animation class
+      successMsg.classList.remove('animate');
+
       // Ensure at least one full rotation (360°) plus a random extra rotation.
       const extraRotation = Math.floor(Math.random() * 360) + 360;
       currentRotation += extraRotation;
       wheel.style.transform = `rotate(${currentRotation}deg)`;
+    });
+
+    // When the spin transition ends, calculate the winning segment.
+    wheel.addEventListener('transitionend', () => {
+      // Calculate the effective rotation (0 to 360)
+      const effectiveRotation = currentRotation % 360;
+      // The pointer is at the top (0°). We compute the angle at the pointer:
+      const winningAngle = (360 - effectiveRotation) % 360;
+      const segmentAngle = 360 / numSegments;
+      const winningIndex = Math.floor(winningAngle / segmentAngle);
+      console.log("Winning segment:", winningIndex);
+
+      // Trigger success animation if winning segment is not 0.
+      if (winningIndex !== 0) {
+        successMsg.classList.add('animate');
+      }
     });
   </script>
 </body>
