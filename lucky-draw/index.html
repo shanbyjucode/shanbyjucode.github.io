@@ -130,17 +130,20 @@
     </div>
   </div>
   <button id="spin" class="spin-button">Spin</button>
-
+  <audio id="spinAudio" src="./spin.mp3"></audio>
   <script>
     const wheel = document.getElementById('wheel');
     const spinButton = document.getElementById('spin');
     const successMsg = document.getElementById('success');
+    const spinAudio = document.getElementById('spinAudio');
     let currentRotation = 0;
     const numSegments = 7; // segments labeled 0 to 6
 
     spinButton.addEventListener('click', () => {
       // Remove any previous success animation class
       successMsg.classList.remove('animate');
+      spinAudio.currentTime = 0;
+      spinAudio.play();
 
       // Ensure at least one full rotation (360°) plus a random extra rotation.
       const extraRotation = Math.floor(Math.random() * 360) + 360;
