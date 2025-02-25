@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lucky Spin Wheel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #151515;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    h4 {
+      margin-bottom: 20px;
+      color: #fff;
+      font-weight: normal;
+    }
+    .wheel-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
+    /* The spinning wheel as a circle with a conic-gradient background */
+    .wheel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+      background: conic-gradient(
+        #e74c3c 0deg 51.43deg,
+        #f1c40f 51.43deg 102.86deg,
+        #2ecc71 102.86deg 154.29deg,
+        #3498db 154.29deg 205.72deg,
+        #9b59b6 205.72deg 257.15deg,
+        #e67e22 257.15deg 308.58deg,
+        #1abc9c 308.58deg 360deg
+      );
+    }
+    /* The pointer that indicates the winning segment */
+    .pointer {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      /* width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid #333; */
+      z-index: 10;
+    }
+    /* Each label is positioned relative to the wheel’s center */
+    .label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      /* The transform places the label at the proper angle and distance from the center.
+         Remove the counter rotation so the label rotates with the wheel. */
+    }
+    .spin-button {
+      margin-top: 20px;
+      padding: 20px 40px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h4>Join our Lucky Draw & stand a chance to will a Free Subscription!</h4>
+  <div class="wheel-container">
+    <!-- Pointer -->
+    <div class="pointer">
+        <img src="./logo.svg" alt="">
+    </div>
+    <!-- The wheel with labels as its children -->
+    <div id="wheel" class="wheel">
+      <!-- The mid-angle for each segment is approximately:
+           (segment index * 360/7) + (360/7)/2.
+           For 7 segments, 360/7 ≈ 51.43° and half is about 25.71°. -->
+      <div class="label" style="transform: rotate(25.71deg) translateY(-130px);">0</div>
+      <div class="label" style="transform: rotate(77.14deg) translateY(-130px);">1</div>
+      <div class="label" style="transform: rotate(128.57deg) translateY(-130px);">2</div>
+      <div class="label" style="transform: rotate(180deg) translateY(-130px);">3</div>
+      <div class="label" style="transform: rotate(231.43deg) translateY(-130px);">4</div>
+      <div class="label" style="transform: rotate(282.86deg) translateY(-130px);">5</div>
+      <div class="label" style="transform: rotate(334.29deg) translateY(-130px);">6</div>
+    </div>
+  </div>
+  <button id="spin" class="spin-button">Spin</button>
+
+  <script>
+    const wheel = document.getElementById('wheel');
+    const spinButton = document.getElementById('spin');
+    let currentRotation = 0;
+
+    spinButton.addEventListener('click', () => {
+      // Ensure at least one full rotation (360°) plus a random extra rotation.
+      const extraRotation = Math.floor(Math.random() * 360) + 360;
+      currentRotation += extraRotation;
+      wheel.style.transform = `rotate(${currentRotation}deg)`;
+    });
+  </script>
+</body>
+</html>
