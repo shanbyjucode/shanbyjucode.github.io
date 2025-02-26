@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lucky Spin Wheel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="heading">
+    Join our Lucky Draw & stand a chance to win a FREE Subscription!
+  </div>
+
+  <!-- gif elements -->
+  <div id="success-left" class="success">
+    <img src="./celebrate1.gif" alt="">
+  </div>
+  <div id="success-right" class="success">
+    <img src="./celebrate1.gif" alt="">
+  </div>
+
+  <div class="wheel-container">
+    <!-- Goodmeetings pointer -->
+    <div class="pointer">
+      <img src="./logo.svg" alt="Pointer" />
+    </div>
+
+    <div id="wheel" class="wheel">
+      <div class="label" style="transform: rotate(25.71deg) translate(0, -120px) rotate(-25.71deg);">6</div>
+      <div class="label" style="transform: rotate(77.14deg) translate(0, -120px) rotate(-77.14deg);">5</div>
+      <div class="label" style="transform: rotate(128.57deg) translate(0, -120px) rotate(-128.57deg);">4</div>
+      <div class="label" style="transform: rotate(180deg) translate(0, -120px) rotate(-180deg);">3</div>
+      <div class="label" style="transform: rotate(231.43deg) translate(0, -120px) rotate(-231.43deg);">0</div>
+      <div class="label" style="transform: rotate(282.86deg) translate(0, -120px) rotate(-282.86deg);">1</div>
+      <div class="label" style="transform: rotate(334.29deg) translate(0, -120px) rotate(-334.29deg);">2</div>
+    </div>
+  </div>
+
+  <button id="spin" class="spin-button">Spin</button>
+  <button id="refresh" class="refresh-button">Refresh</button>
+  <audio id="spinAudio" src="./spin.mp3"></audio>
+  <script src="./script.js" defer></script>
+
+</body>
+
+</html>
