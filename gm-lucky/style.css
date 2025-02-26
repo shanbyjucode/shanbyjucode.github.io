@@ -49,15 +49,16 @@ body {
 
   .label {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform-origin: center center;
+    left: 47%;
+    top: 40%;
+    transform-origin: center;
+    writing-mode: vertical-rl;
+    /* Makes text flow from center to edge */
     text-align: center;
     font-size: 18px;
     font-weight: bold;
     color: white;
   }
-
   .spin-button,
   .refresh-button {
     margin-top: 20px;
