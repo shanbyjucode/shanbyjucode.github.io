@@ -274,3 +274,58 @@ textarea:focus-visible{
   padding: 8px;
   transition: background 0.2s;
 }
+
+
+.chat-result {
+  display: none;
+}
+
+.chat-result-inner{
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #D3D3D3;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.loader {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  position: relative;
+}
+.loader img{
+  width: 80px;
+  height: 80px;
+  position: absolute;
+}
+
+.chat-result h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.chat-result p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.chat-result table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.chat-result th, .chat-result td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #D3D3D3;
+}
+
+.chat-result th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
