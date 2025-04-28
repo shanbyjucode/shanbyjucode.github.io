@@ -111,13 +111,13 @@ const results = [
       "February: Increased engagement by 15%, leading 6 meetings and driving strategic discussions.",
       "March: Demonstrated strong leadership, topping the team in talk-to-listen ratio and owning 10+ follow-ups."
     ],
-    graph: "./performance-graph.png" // Ensure this image exists
+    graph: "./performance-graph.png"
   },
   {
     type: "video",
     title: "Monthly Team Highlights Video",
     description: "Watch the highlights from this month's team meetings and key moments.",
-    videoUrl: "https://www.youtube.com/embed/Uls_jXy9RuU?si=zIuPfvRxgnrJ3QtA" // Replace with your actual video URL
+    videoUrl: "https://www.youtube.com/embed/xf1A0WaaMlk?si=8DdCpwRWoTiMxKWF" 
   }
 ];
 
@@ -297,4 +297,56 @@ document.querySelector('.download-icon').addEventListener('click', function () {
   // Clean up by removing the anchor and revoking the object URL
   document.body.removeChild(link);
   URL.revokeObjectURL(link.href);
+});
+
+
+// Sample list of apps
+const apps = [
+  { name: 'Gmail', icon: 'icons/gmail.png' },
+  { name: 'Slack', icon: 'icons/slack.png' },
+  { name: 'Salesforce Notes', icon: 'icons/salesforce.png' },
+  { name: 'Hubspot Notes', icon: 'icons/hubspot.png' },
+  { name: 'Custom Webhook API', icon: 'icons/webhook.png' },
+  // Add more apps as needed to reach 30
+];
+
+// Function to render apps in the grid
+function renderApps(filter = '') {
+  const appGrid = document.getElementById('appGrid');
+  appGrid.innerHTML = ''; // Clear existing apps
+
+  const filteredApps = apps.filter(app =>
+    app.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  filteredApps.forEach(app => {
+    const appItem = document.createElement('div');
+    appItem.className = 'app-item';
+    appItem.innerHTML = `
+      <img src="${app.icon}" alt="${app.name}">
+      <span>${app.name}</span>
+    `;
+    appGrid.appendChild(appItem);
+  });
+}
+
+// Event listeners
+document.getElementById('uploadIcon').addEventListener('click', () => {
+  document.getElementById('appModal').style.display = 'block';
+  renderApps(); // Initial render
+});
+
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('appModal').style.display = 'none';
+});
+
+window.addEventListener('click', event => {
+  const modal = document.getElementById('appModal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+document.getElementById('appSearch').addEventListener('input', event => {
+  renderApps(event.target.value);
 });
