@@ -190,8 +190,27 @@ document.querySelector('.send-btn').addEventListener('click', function() {
       shuffledResults = shuffleArray([...results]);
       currentIndex = 0;
     }
+
+    // Decrease credit balance by 100 with animation
+    let currentCredits = parseInt(document.getElementById('credit-balance').textContent);
+    let newCredits = currentCredits - 100;
+    let duration = 500; // Duration of the animation in milliseconds
+    let stepTime = 10; // Time between each step in milliseconds
+    let steps = duration / stepTime;
+    let stepValue = (currentCredits - newCredits) / steps;
+
+    let interval = setInterval(function() {
+      currentCredits -= stepValue;
+      document.getElementById('credit-balance').textContent = Math.round(currentCredits);
+      if (currentCredits <= newCredits) {
+        clearInterval(interval);
+        document.getElementById('credit-balance').textContent = newCredits;
+      }
+    }, stepTime);
+
   }, 1000); // Simulate 1 second loading time
 });
+
 
 
 
