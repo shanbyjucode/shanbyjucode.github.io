@@ -117,7 +117,7 @@ const results = [
     type: "video",
     title: "Monthly Team Highlights Video",
     description: "Watch the highlights from this month's team meetings and key moments.",
-    videoUrl: "https://www.youtube.com/watch?v=Uls_jXy9RuU" // Replace with your actual video URL
+    videoUrl: "https://www.youtube.com/embed/Uls_jXy9RuU?si=zIuPfvRxgnrJ3QtA" // Replace with your actual video URL
   }
 ];
 
