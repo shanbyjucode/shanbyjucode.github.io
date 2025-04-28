@@ -329,3 +329,16 @@ textarea:focus-visible{
   background-color: #f4f4f4;
   font-weight: bold;
 }
+
+.result-actions{
+  display: flex;
+  gap: 10px;
+  padding-top: 20px;
+}
+.result-actions img{
+  cursor: pointer;
+}
+
+#resultActions {
+  display: none;
+}
