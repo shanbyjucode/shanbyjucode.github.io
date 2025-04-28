@@ -156,7 +156,7 @@ document.querySelector('.send-btn').addEventListener('click', function() {
     let html = `<div class="chat-result-inner">`;
 
     if (result.type === "text-list") {
-      html += `<h2>${result.title}</h2><ol>`;
+      html += `<h3>${result.title}</h3><ol>`;
       result.list.forEach(item => {
         html += `<li>${item}</li>`;
       });
@@ -164,7 +164,7 @@ document.querySelector('.send-btn').addEventListener('click', function() {
     } else if (result.type === "table") {
       html += `<h3>${result.title}</h3><p>${result.description}</p>${result.table}`;
     } else if (result.type === "list-graph") {
-      html += `<h2>${result.title}</h2><ul>`;
+      html += `<h3>${result.title}</h3><ul>`;
       result.list.forEach(item => {
         html += `<li>${item}</li>`;
       });
