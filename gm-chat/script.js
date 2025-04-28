@@ -64,38 +64,43 @@ document.querySelector('.send-btn').addEventListener('click', function() {
     chatResult.innerHTML = `
       <div class="chat-result-inner">
         <h3>Weekly Meeting Summary (Apr 14–20, 2025)</h3>
-      <p>Over the past week, your team held a total of 12 meetings (8 by you, 4 by the team).</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Recorded By</th>
-            <th>Total No. of Meetings</th>
-            <th>Total Meeting Duration (mins)</th>
-            <th>Avg. Meeting Duration (mins)</th>
-            <th>Avg. Talk To Listen (%)</th>
-            <th>Avg. Longest Monologue (mins)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>You</td>
-            <td>8</td>
-            <td>480</td>
-            <td>60</td>
-            <td>70%</td>
-            <td>15</td>
-          </tr>
-          <tr>
-            <td>Team</td>
-            <td>4</td>
-            <td>240</td>
-            <td>60</td>
-            <td>65%</td>
-            <td>12</td>
-          </tr>
-        </tbody>
-      </table>
+        <p>Over the past week, your team held a total of 12 meetings (8 by you, 4 by the team).</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Recorded By</th>
+              <th>Total No. of Meetings</th>
+              <th>Total Meeting Duration (mins)</th>
+              <th>Avg. Meeting Duration (mins)</th>
+              <th>Avg. Talk To Listen (%)</th>
+              <th>Avg. Longest Monologue (mins)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>You</td>
+              <td>8</td>
+              <td>480</td>
+              <td>60</td>
+              <td>70%</td>
+              <td>15</td>
+            </tr>
+            <tr>
+              <td>Team</td>
+              <td>4</td>
+              <td>240</td>
+              <td>60</td>
+              <td>65%</td>
+              <td>12</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     `;
-  }, 1000); // Simulate 2 seconds loading time
+
+    // Show result actions
+    document.querySelector('.result-actions').style.display = 'flex';
+  }, 1000); // Simulate 1 second loading time
 });
+
+
