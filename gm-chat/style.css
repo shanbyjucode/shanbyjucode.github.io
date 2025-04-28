@@ -1,28 +1,24 @@
 body {
   margin: 0;
-  font-family: 'CircularXXTT', sans-serif;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   background: #f9f9fb;
   height: 100vh;
 }
 
-@font-face {
-  font-family: 'CircularXXTT';
-  src: url('https://asset.goodmeetings.ai/fonts/CircularXXTT-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'CircularXXTT';
-  src: url('https://asset.goodmeetings.ai/fonts/CircularXXTT-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
 
 /* Layout */
 .container {
   display: flex;
   height: 100vh;
+  font-weight: 400;
+  font-style: normal;
+}
+
+ol, ul, li {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
 }
 
 /* Sidebar - Icons */
@@ -280,14 +276,21 @@ textarea:focus-visible{
   display: none;
 }
 
+.chat-result-container{
+  width: 100%;
+}
+
 .chat-result-inner{
   margin-top: 20px;
   padding: 20px;
   background: #fff;
   border-radius: 8px;
   border: 1px solid #D3D3D3;
-  overflow-y: auto;
-  max-height: 400px;
+  display: inline-block;
+}
+
+.chat-result-inner li{
+  padding-bottom: 4px;
 }
 
 .loader {
