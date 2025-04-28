@@ -1,49 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lucky Spin Wheel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8">
+  <title>Meeting Insights</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="heading">
-    Join our Lucky Draw & stand a chance to win a FREE Subscription!
+
+<div class="container">
+
+  <!-- First Sidebar (80px) -->
+  <div class="sidebar-icons">
+    <div class="logo">
+      <div class="icon">
+        <img src="./logo.svg" alt="Logo">
+      </div>
+    </div>
+    <div class="other-icons">
+      <div class="icon" data-tooltip="Search">
+        <img src="./search.svg" alt="Search">
+      </div>
+      <div class="icon" data-tooltip="Library">
+        <img src="./library.svg" alt="Library">
+      </div>
+      <div class="icon" data-tooltip="Digital Worker">
+        <img src="./digital.svg" alt="Digital Worker">
+      </div>
+    </div>
+    <div class="bottom-icon">
+      <div class="icon">
+        <img src="./settings.svg" alt="Settings">
+      </div>
+      <img src="./profile.png" alt="Profile" class="profile-pic">
+    </div>
   </div>
 
-  <!-- gif elements -->
-  <div id="success-left" class="success">
-    <img src="./celebrate1.gif" alt="">
-  </div>
-  <div id="success-right" class="success">
-    <img src="./celebrate1.gif" alt="">
+  <!-- Second Sidebar (280px) -->
+  <div class="sidebar-info">
+    <div class="worker">
+      <span>Current Digital Worker</span>
+      <div class="worker-select">
+        <span class="worker-name">Alok Reporter</span>
+        <span class="arrow">&#9662;</span>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search conversations...">
+    </div>
   </div>
 
-  <div class="wheel-container">
-    <!-- Goodmeetings pointer -->
-    <div class="pointer">
-      <img src="./logo.svg" alt="Pointer" />
+  <!-- Main Content -->
+  <div class="main-panel">
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="credits">
+          <img src="./credit-icon.svg" alt="">
+          <span>15000 credits</span>
+        </div>
+        <div class="menu-icon">☰</div>
+      </div>
+
+      <div class="greeting">
+        <h1>Hey Alok,</h1>
+        <h2>What meeting insight can I provide for you?</h2>
+      </div>
+
+      <div class="suggestions">
+        <button>What were the team mostly concentrating on last quarter</button>
+        <button>What were my main action items from last month’s meetings</button>
+        <button>Which clients were discussed most frequently in the past 30 days</button>
+        <button>Summarize all sales-related conversations from this week</button>
+        <button>Show me decisions made in team syncs this quarter</button>
+        <button>Download a report of product feedback mentioned last month</button>
+      </div>
     </div>
 
-    <div id="wheel" class="wheel">
-      <div class="label" style="transform: rotate(25.72deg) translate(0, -80px);">6 months</div>
-      <div class="label" style="transform: rotate(77.15deg) translate(0, -80px);">5 months</div>
-      <div class="label" style="transform: rotate(128.58deg) translate(0, -80px);">4 months</div>
-      <div class="label" style="transform: rotate(180deg) translate(0, -80px);">3 months</div>
-      <div class="label" style="transform: rotate(231.43deg) translate(0, -80px);">0 month</div>
-      <div class="label" style="transform: rotate(282.86deg) translate(0, -80px);">1 month</div>
-      <div class="label" style="transform: rotate(334.29deg) translate(0, -80px);">2 months</div>
+    <!-- Chat Box -->
+    <div class="chat-container">
+      <div class="chat-input-area">
+        <textarea class="chat-input" placeholder="Ask about your meetings..."></textarea>
+        <div class="chat-buttons">
+          <button class="voice-btn">
+            <img src="voice-icon.svg" alt="Voice">
+          </button>
+          <button class="send-btn">
+            <img src="btn.svg" alt="Send">
+          </button>
+        </div>
+      </div>
     </div>
+
   </div>
 
-  <button id="spin" class="spin-button">Spin</button>
-  <button id="refresh" class="refresh-button">Refresh</button>
-  <audio id="spinAudio" src="./spin.mp3"></audio>
-  <script src="./script.js" defer></script>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
 
 </body>
-
 </html>
