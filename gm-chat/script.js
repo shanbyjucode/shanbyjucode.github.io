@@ -192,7 +192,11 @@ document.querySelector('.send-btn').addEventListener('click', function() {
       currentIndex = 0;
     }
 
-    // Decrease credit balance by 100 with animation
+    // Decrease credit balance by 100 with animation and play sound
+    const coinSound = new Audio('coin.mp3');
+    coinSound.loop = true; // Optional: Loop sound while animating
+    coinSound.play();
+
     let currentCredits = parseInt(document.getElementById('credit-balance').textContent);
     let newCredits = currentCredits - 100;
     let duration = 500; // Duration of the animation in milliseconds
@@ -206,11 +210,15 @@ document.querySelector('.send-btn').addEventListener('click', function() {
       if (currentCredits <= newCredits) {
         clearInterval(interval);
         document.getElementById('credit-balance').textContent = newCredits;
+        // Stop and reset sound after animation completes
+        coinSound.pause();
+        coinSound.currentTime = 0;
       }
     }, stepTime);
 
   }, 1000); // Simulate 1 second loading time
 });
+
 
 
 function getUSEnglishFemaleVoice() {
