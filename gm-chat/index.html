@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meeting Insights</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- First Sidebar (80px) -->
+  <div class="sidebar-icons">
+    <div class="logo">
+      <div class="icon">
+        <img src="./logo.svg" alt="Logo">
+      </div>
+    </div>
+    <div class="other-icons">
+      <div class="icon">
+        <img src="./search.svg" alt="Search">
+      </div>
+      <div class="icon">
+        <img src="./library.svg" alt="Library">
+      </div>
+      <div class="icon">
+        <img src="./digital.svg" alt="Digital Worker">
+      </div>
+    </div>
+    <div class="bottom-icon">
+      <div class="icon">
+        <img src="./settings.svg" alt="Settings">
+      </div>
+      <img src="./profile.png" alt="Profile" class="profile-pic">
+    </div>
+  </div>
+
+  <!-- Second Sidebar (280px) -->
+  <div class="sidebar-info">
+    <div class="worker">
+      <span>Current Digital Worker</span>
+      <div class="worker-select">
+        <span class="worker-name">Alok Reporter</span>
+        <span class="arrow">&#9662;</span>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search conversations...">
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-panel">
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="credits">
+          <img src="./credit-icon.svg" alt="">
+          <span>15000 credits</span>
+        </div>
+        <div class="menu-icon">☰</div>
+      </div>
+
+      <div class="greeting">
+        <h1>Hey Alok,</h1>
+        <h2>What meeting insight can I provide for you?</h2>
+      </div>
+
+      <div class="suggestions">
+        <button>What were the team mostly concentrating on last quarter</button>
+        <button>What were my main action items from last month’s meetings</button>
+        <button>Which clients were discussed most frequently in the past 30 days</button>
+        <button>Summarize all sales-related conversations from this week</button>
+        <button>Show me decisions made in team syncs this quarter</button>
+        <button>Download a report of product feedback mentioned last month</button>
+      </div>
+    </div>
+
+    <!-- Chat Box -->
+    <div class="chat-container">
+      <div class="chat-input-area">
+        <textarea class="chat-input" placeholder="Ask about your meetings..."></textarea>
+        <div class="chat-buttons">
+          <button class="voice-btn">
+            <img src="voice-icon.svg" alt="Voice">
+          </button>
+          <button class="send-btn">
+            <img src="btn.svg" alt="Send">
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
