@@ -50,57 +50,149 @@ document.querySelector('.send-btn').addEventListener('click', function() {
 
 
 
+// Array of result objects
+const results = [
+  {
+    type: "text-list",
+    title: "Here are the key action items and insights:",
+    list: [
+      "Summarize key decisions made in this week's meetings.",
+      "List all open follow-ups assigned to Anjali.",
+      "What were the main blockers discussed in product syncs?",
+      "Give me all action items from last month’s leadership reviews.",
+      "What next steps were discussed in our sales pipeline review?",
+      "Highlight customer concerns raised in the last 5 support calls.",
+      "Pull all feedback points shared by clients in Q1 meetings.",
+      "What were the hiring updates discussed in the HR weekly?"
+    ]
+  },
+  {
+    type: "table",
+    title: "Weekly Meeting Summary (Apr 14–20, 2025)",
+    description: "Over the past week, your team held a total of 12 meetings (8 by you, 4 by the team).",
+    table: `
+      <table>
+        <thead>
+          <tr>
+            <th>Recorded By</th>
+            <th>Total Meetings</th>
+            <th>Total Duration (mins)</th>
+            <th>Avg. Meeting Duration</th>
+            <th>Avg. Talk/Listen (%)</th>
+            <th>Longest Monologue (mins)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You</td>
+            <td>8</td>
+            <td>480</td>
+            <td>60</td>
+            <td>70%</td>
+            <td>15</td>
+          </tr>
+          <tr>
+            <td>Team</td>
+            <td>4</td>
+            <td>240</td>
+            <td>60</td>
+            <td>65%</td>
+            <td>12</td>
+          </tr>
+        </tbody>
+      </table>
+    `
+  },
+  {
+    type: "list-graph",
+    title: "Anoop's Quarterly Performance Overview",
+    list: [
+      "January: Initiated 5 meetings with a 70% participation rate and contributed to 8 action items.",
+      "February: Increased engagement by 15%, leading 6 meetings and driving strategic discussions.",
+      "March: Demonstrated strong leadership, topping the team in talk-to-listen ratio and owning 10+ follow-ups."
+    ],
+    graph: "./performance-graph.png" // Ensure this image exists
+  },
+  {
+    type: "video",
+    title: "Monthly Team Highlights Video",
+    description: "Watch the highlights from this month's team meetings and key moments.",
+    videoUrl: "https://www.youtube.com/watch?v=Uls_jXy9RuU" // Replace with your actual video URL
+  }
+];
+
+// Function to shuffle the results array
+function shuffleArray(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+// Initialize shuffled results and index
+let shuffledResults = shuffleArray([...results]);
+let currentIndex = 0;
+
+// Event listener for the send button
 document.querySelector('.send-btn').addEventListener('click', function() {
   // Hide greeting and suggestions
   document.querySelector('.greeting').style.display = 'none';
   document.querySelector('.suggestions').style.display = 'none';
 
-  // Show loader
   const chatResult = document.querySelector('.chat-result');
+  const resultActions = document.querySelector('.result-actions');
+
+  // Show loader
   chatResult.style.display = 'block';
+  chatResult.innerHTML = `
+    <div class="loader">
+      <img src="./gm-animated-loading.gif" alt="Loading...">
+    </div>
+  `;
+
+  // Hide result actions during loading
+  resultActions.style.display = 'none';
 
   // Simulate loading and then display result
   setTimeout(function() {
-    chatResult.innerHTML = `
-      <div class="chat-result-inner">
-        <h3>Weekly Meeting Summary (Apr 14–20, 2025)</h3>
-        <p>Over the past week, your team held a total of 12 meetings (8 by you, 4 by the team).</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Recorded By</th>
-              <th>Total No. of Meetings</th>
-              <th>Total Meeting Duration (mins)</th>
-              <th>Avg. Meeting Duration (mins)</th>
-              <th>Avg. Talk To Listen (%)</th>
-              <th>Avg. Longest Monologue (mins)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>You</td>
-              <td>8</td>
-              <td>480</td>
-              <td>60</td>
-              <td>70%</td>
-              <td>15</td>
-            </tr>
-            <tr>
-              <td>Team</td>
-              <td>4</td>
-              <td>240</td>
-              <td>60</td>
-              <td>65%</td>
-              <td>12</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    `;
+    const result = shuffledResults[currentIndex];
+    let html = `<div class="chat-result-inner">`;
 
-    // Show result actions
-    document.querySelector('.result-actions').style.display = 'flex';
+    if (result.type === "text-list") {
+      html += `<h2>${result.title}</h2><ol>`;
+      result.list.forEach(item => {
+        html += `<li>${item}</li>`;
+      });
+      html += `</ol>`;
+    } else if (result.type === "table") {
+      html += `<h3>${result.title}</h3><p>${result.description}</p>${result.table}`;
+    } else if (result.type === "list-graph") {
+      html += `<h2>${result.title}</h2><ul>`;
+      result.list.forEach(item => {
+        html += `<li>${item}</li>`;
+      });
+      html += `</ul><img src="${result.graph}" alt="Performance Graph" style="margin-top:20px; max-width:100%;">`;
+    } else if (result.type === "video") {
+      html += `<h3>${result.title}</h3><p>${result.description}</p>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+        <iframe src="${result.videoUrl}" frameborder="0" allowfullscreen 
+        style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+      </div>`;
+    }
+
+    html += `</div>`;
+
+    chatResult.innerHTML = html;
+
+    // Show result actions after displaying the result
+    resultActions.style.display = 'flex';
+
+    // Update index and reshuffle if at the end
+    currentIndex++;
+    if (currentIndex >= shuffledResults.length) {
+      shuffledResults = shuffleArray([...results]);
+      currentIndex = 0;
+    }
   }, 1000); // Simulate 1 second loading time
 });
+
+
 
 
