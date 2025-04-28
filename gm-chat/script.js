@@ -135,6 +135,7 @@ document.querySelector('.send-btn').addEventListener('click', function() {
   // Hide greeting and suggestions
   document.querySelector('.greeting').style.display = 'none';
   document.querySelector('.suggestions').style.display = 'none';
+  window.speechSynthesis.cancel();
 
   const chatResult = document.querySelector('.chat-result');
   const resultActions = document.querySelector('.result-actions');
@@ -212,6 +213,80 @@ document.querySelector('.send-btn').addEventListener('click', function() {
 });
 
 
+function getUSEnglishFemaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  // Filter voices for US English
+  const usVoices = voices.filter(voice => voice.lang === 'en-US');
+  // Attempt to find a female voice by common female voice names
+  const femaleVoiceNames = ['Google US English', 'Samantha', 'Karen', 'Moira', 'Tessa', 'Victoria'];
+  for (let name of femaleVoiceNames) {
+    const voice = usVoices.find(voice => voice.name === name);
+    if (voice) return voice;
+  }
+  // Fallback to the first US English voice if no match is found
+  return usVoices[0];
+}
+
+document.querySelector('img[alt="Voice"]').addEventListener('click', function () {
+  const textElement = document.querySelector('.chat-result-inner');
+  if (!textElement) return;
+
+  const text = textElement.innerText.trim();
+  if (!text) return;
+
+  // Stop any ongoing speech synthesis
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.voice = getUSEnglishFemaleVoice();
+  utterance.rate = 1; // Adjust speaking rate (0.1 to 10)
+  utterance.pitch = 1; // Adjust pitch (0 to 2)
+
+  window.speechSynthesis.speak(utterance);
+});
 
 
 
+document.querySelector('.copy-icon').addEventListener('click', function () {
+  const textElement = document.querySelector('.chat-result-inner');
+  if (!textElement) return;
+
+  const text = textElement.innerText.trim();
+  if (!text) return;
+
+  // Use the Clipboard API to copy text
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Text copied to clipboard')
+    console.log('Text copied to clipboard');
+    // Optionally, provide user feedback here
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+  });
+});
+
+document.querySelector('.download-icon').addEventListener('click', function () {
+  const textElement = document.querySelector('.chat-result-inner');
+  if (!textElement) return;
+
+  const text = textElement.innerText.trim();
+  if (!text) return;
+
+  // Create a Blob with the text content
+  const blob = new Blob([text], { type: 'text/plain' });
+
+  // Create a temporary anchor element
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'chat-result.txt';
+
+  // Append the anchor to the body
+  document.body.appendChild(link);
+
+  // Programmatically click the anchor to trigger the download
+  link.click();
+
+  // Clean up by removing the anchor and revoking the object URL
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+});
