@@ -88,7 +88,17 @@
           <img src="icon1.svg" alt="Voice">
           <img src="icon2.svg" alt="Copy" class="copy-icon" />
           <img src="icon3.svg" alt="Download" class="download-icon" />
-          <img src="icon4.svg" alt="Upload">
+          <img src="icon4.svg" alt="Upload" class="upload-icon" id="uploadIcon">
+        </div>
+        <!-- Modal Overlay -->
+        <div id="appModal" class="modal">
+          <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <input type="text" id="appSearch" placeholder="Search apps..." class="search-input">
+            <div class="app-grid" id="appGrid">
+              <!-- App items will be injected here -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
