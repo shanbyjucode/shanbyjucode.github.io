@@ -130,7 +130,6 @@ function shuffleArray(array) {
 let shuffledResults = shuffleArray([...results]);
 let currentIndex = 0;
 
-// Event listener for the send button
 document.querySelector('.send-btn').addEventListener('click', function() {
   // Hide greeting and suggestions
   document.querySelector('.greeting').style.display = 'none';
@@ -144,12 +143,29 @@ document.querySelector('.send-btn').addEventListener('click', function() {
   chatResult.style.display = 'block';
   chatResult.innerHTML = `
     <div class="loader">
-      <img src="./gm-animated-loading.gif" alt="Loading...">
+      <p id="loading-message">Thinking...</p>
     </div>
   `;
 
   // Hide result actions during loading
   resultActions.style.display = 'none';
+
+  // Define loading messages and their display times
+  const loadingMessages = [
+    { text: "Thinking...", delay: 0 },
+    { text: "You have 28 meetings where product feedback was mentioned last month.", delay: 2000 },
+    { text: "Generating report...", delay: 4000 }
+  ];
+
+  // Display each message at the specified time
+  loadingMessages.forEach((message, index) => {
+    setTimeout(() => {
+      const loadingMessageElement = document.getElementById('loading-message');
+      if (loadingMessageElement) {
+        loadingMessageElement.textContent = message.text;
+      }
+    }, message.delay);
+  });
 
   // Simulate loading and then display result
   setTimeout(function() {
@@ -197,6 +213,7 @@ document.querySelector('.send-btn').addEventListener('click', function() {
     coinSound.loop = true; // Optional: Loop sound while animating
     coinSound.play();
 
+    // Decrease credit balance by 100 with animation
     let currentCredits = parseInt(document.getElementById('credit-balance').textContent);
     let newCredits = currentCredits - 100;
     let duration = 500; // Duration of the animation in milliseconds
@@ -216,7 +233,7 @@ document.querySelector('.send-btn').addEventListener('click', function() {
       }
     }, stepTime);
 
-  }, 1000); // Simulate 1 second loading time
+  }, 6000); // Total delay before showing the result
 });
 
 
