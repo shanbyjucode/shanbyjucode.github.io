@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    background: url(./bg.jpeg) no-repeat;
+  }
+  
+  .coin {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg);
+    transition: transform 2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  
+  .logo {
+    width: 120px;
+    margin-bottom: 30px;
+  }
+  
+  .coin-main {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    perspective: 1000px;
+  }
+  
+  .coin {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg);
+    transition: transform 2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .coin__face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 4px solid white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 12px;
+  }
+  
+  .coin__face--front {
+    background-color: #000; /* HEADS - Blue */
+  }
+  
+  .coin__face--back {
+    background-color: #673ab7; /* TAILS - Red */
+    transform: rotateX(180deg);
+  }
+  
+  .coin__inner{
+    width: 100%;
+    height: 100%;
+    border: 2px dotted #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    text-transform: uppercase;
+  }
