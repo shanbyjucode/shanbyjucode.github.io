@@ -14,7 +14,8 @@
     align-items: center;
     padding: 1rem;
     text-align: center;
-    background: url(./bg.jpeg) no-repeat;
+    background: url(./bg.jpeg) no-repeat center center;
+    background-size: cover;
   }
   
   .coin {
