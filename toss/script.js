@@ -10,19 +10,24 @@ coin.addEventListener("click", () => {
   sound.currentTime = 0;
   sound.play();
 
-  // Randomize result
+  // Random result
   const isHeads = Math.random() < 0.5;
-  const rotationX = isHeads ? 1800 : 1980; // 10 or 11 flips
+  const endRotation = isHeads ? 0 : 180;
 
-  // Apply animation
-  coin.style.transition = "transform 2s ease-in-out";
-  coin.style.transform = `rotateX(${rotationX}deg)`;
+  // Remove any previous inline transform or animation class
+  coin.classList.remove("animate");
+  coin.style.transform = `rotateX(${endRotation}deg) scale(1)`;
 
-  // Reset after animation
+  // Force reflow to restart animation
+  void coin.offsetWidth;
+
+  // Add animation class
+  coin.classList.add("animate");
+
   setTimeout(() => {
+    // Set final transform based on result
+    coin.classList.remove("animate");
+    coin.style.transform = `rotateX(${endRotation}deg) scale(1)`;
     isFlipping = false;
-    // Reset transform to prevent overflow
-    coin.style.transition = "none";
-    coin.style.transform = `rotateX(${isHeads ? 0 : 180}deg)`;
   }, 2000);
 });
