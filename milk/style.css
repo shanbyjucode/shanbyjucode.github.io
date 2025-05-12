@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f2f4f8;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .container {
+    max-width: 500px;
+    width: 100%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+  
+  .day, .date {
+    font-weight: bold;
+    padding: 10px;
+    background: #e4e6eb;
+    border-radius: 6px;
+  }
+  
+  .date {
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+  }
+  
+  .date.marked {
+    background: #c8e6c9;
+    color: #2e7d32;
+  }
+  
+  .date::after {
+    content: "✓";
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 14px;
+    display: none;
+  }
+  
+  .date.marked::after {
+    display: inline;
+  }
+  
+  .summary {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  
+  .date.today {
+    border: 2px solid green;
+  }
