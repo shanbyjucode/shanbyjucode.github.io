@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weekly Gym Alarm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      margin-top: 20px;
+      font-size: 24px;
+    }
+    .date-display {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #ddd;
+    }
+    input[type="time"] {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: none;
+      background-color: #222;
+      color: #fff;
+      width: 60%;
+      margin-top: 5px;
+    }
+    .day-select {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .day-select input[type="checkbox"] {
+      display: none;
+    }
+    .day-select label {
+      background-color: #222;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: 0.3s;
+    }
+    .day-select input:checked + label {
+      background-color: #00e676;
+      color: #000;
+      font-weight: bold;
+    }
+    button {
+      background-color: #00c853;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #stopAlarmBtn {
+      background-color: #ff3d00;
+      display: none;
+    }
+    p#status {
+      margin-top: 20px;
+      color: #aaa;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🕑 Weekly Gym Alarm</h2>
+  <div class="date-display" id="dateDisplay"></div>
+
+  <label for="alarmTime">Select Alarm Time:</label>
+  <input type="time" id="alarmTime" value="05:00">
+
+  <div class="day-select">
+    <input type="checkbox" id="day0" value="0"><label for="day0">Sun</label>
+    <input type="checkbox" id="day1" value="1" checked><label for="day1">Mon</label>
+    <input type="checkbox" id="day2" value="2" checked><label for="day2">Tue</label>
+    <input type="checkbox" id="day3" value="3" checked><label for="day3">Wed</label>
+    <input type="checkbox" id="day4" value="4" checked><label for="day4">Thu</label>
+    <input type="checkbox" id="day5" value="5" checked><label for="day5">Fri</label>
+    <input type="checkbox" id="day6" value="6"><label for="day6">Sat</label>
+  </div>
+
+  <button onclick="setAlarm()">Set Alarm</button>
+  <button id="stopAlarmBtn" onclick="stopAlarm()" style="display: none;">Turn Off Alarm</button>
+
+  <p id="status">No alarm set</p>
+
+  <audio id="alarmSound" src="./music/alarm.mp3" preload="auto"></audio>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="material-icons">fitness_center</span>
+      <span class="nav-label">Workout</span>
+    </a>
+    <a href="music.html" class="nav-item">
+      <span class="material-icons">library_music</span>
+      <span class="nav-label">Music</span>
+    </a>
+    <a href="alarm.html" class="nav-item active">
+      <span class="material-icons">alarm</span>
+      <span class="nav-label">Alarm</span>
+    </a>
+  </div>
+
+  <script>
+    const dateDisplay = document.getElementById('dateDisplay');
+    const now = new Date();
+    dateDisplay.textContent = now.toLocaleDateString('default', { month: 'long', year: 'numeric' });
+  
+    let alarmTime = null;
+    let alarmDays = [];
+    let lastTriggeredDate = null;
+  
+    const alarmSound = document.getElementById('alarmSound');
+    const stopAlarmBtn = document.getElementById('stopAlarmBtn');
+    const setAlarmBtn = document.querySelector('button[onclick="setAlarm()"]');
+  
+    function setAlarm() {
+      alarmTime = document.getElementById('alarmTime').value;
+      alarmDays = Array.from(document.querySelectorAll('.day-select input:checked')).map(el => parseInt(el.value));
+      lastTriggeredDate = null;
+  
+      if (!alarmTime || alarmDays.length === 0) {
+        alert("Please select a time and at least one day.");
+        return;
+      }
+  
+      const daysText = alarmDays.map(day => ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][day]).join(", ");
+      document.getElementById('status').textContent = `Alarm set for ${alarmTime} on ${daysText}`;
+  
+      stopAlarmBtn.style.display = "none";
+      setAlarmBtn.style.display = "inline-block";
+    }
+  
+    function stopAlarm() {
+      alarmSound.pause();
+      alarmSound.currentTime = 0;
+      document.getElementById('status').textContent = "Alarm turned off.";
+      stopAlarmBtn.style.display = "none";
+      setAlarmBtn.style.display = "inline-block";
+    }
+  
+    setInterval(() => {
+      if (!alarmTime) return;
+  
+      const now = new Date();
+      const currentDay = now.getDay();
+      const currentTime = now.toTimeString().slice(0, 5); // "HH:MM"
+      const todayStr = now.toDateString();
+  
+      if (
+        alarmDays.includes(currentDay) &&
+        currentTime === alarmTime &&
+        lastTriggeredDate !== todayStr
+      ) {
+        // Play alarm
+        alarmSound.play().catch((e) => console.error("Play error:", e));
+        document.getElementById('status').textContent = "⏰ Wake up! Alarm ringing!";
+        stopAlarmBtn.style.display = "inline-block";
+        setAlarmBtn.style.display = "none";
+  
+        // Mark this alarm as triggered for today
+        lastTriggeredDate = todayStr;
+      }
+    }, 1000);
+  </script>  
+  
+
+</body>
+</html>
