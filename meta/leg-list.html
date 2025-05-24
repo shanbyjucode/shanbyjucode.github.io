@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1B1B1B" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Leg Workouts</title>
+</head>
+<body>
+  <header class="details-header">
+    <div class="back-btn" onclick="window.history.back();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24px" viewBox="0 0 512 512"><polyline points="244 400 100 256 244 112" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/><line x1="120" y1="256" x2="412" y2="256" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+    </div>
+    <h1>Leg Workouts</h1>
+  </header>
+
+  <div class="details-content">
+    <ul class="workout-list">
+      <li onclick="window.location.href='leg-seated-calf.html'">Seated Calf</li>
+      <li onclick="window.location.href='leg-abduction.html'">Abduction</li>
+      <li onclick="window.location.href='leg-adduction.html'">Adduction</li>
+      <li onclick="window.location.href='walking-lunges.html'">Walking Lunges</li>
+      <li onclick="window.location.href='hack-squats.html'">Hack Squats</li>
+      <li onclick="window.location.href='leg-press.html'">Leg Press</li>
+      <li onclick="window.location.href=''">Leg Extension</li>
+      <li onclick="window.location.href=''">Leg Curl</li>
+      <li onclick="window.location.href=''">Barbell Squats</li>
+      <li onclick="window.location.href=''">Sumo Squats</li>
+      <li onclick="window.location.href=''">Bulgarian Split Squats</li>
+      <li onclick="window.location.href=''">Statics Lunges (Smith)</li>
+      <li onclick="window.location.href=''">Standing Lunges (Dumbbell)</li>
+      <li onclick="window.location.href=''">Standing Calf</li>
+      <li onclick="window.location.href=''">Calf press</li>
+      <li onclick="window.location.href=''">Walking Calf Raises</li>
+      <li onclick="window.location.href=''">Stiff Leg</li>
+      <li onclick="window.location.href=''">Good Morning Bend</li>
+      <li onclick="window.location.href=''">Glute Kick</li>
+    </ul>
+  </div>
+  <script>
+    if (localStorage.getItem("meta_access") !== "granted") {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
