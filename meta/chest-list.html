@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1B1B1B" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Chest Workouts</title>
+</head>
+<body>
+  <header class="details-header">
+    <div class="back-btn" onclick="window.history.back();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24px" viewBox="0 0 512 512"><polyline points="244 400 100 256 244 112" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/><line x1="120" y1="256" x2="412" y2="256" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+    </div>
+    <h1>Chest Workouts</h1>
+  </header>
+
+  <div class="details-content">
+    <ul class="workout-list">
+      <li onclick="window.location.href='chest-cable-cross-over.html'">Cable Crossovers</li>
+      <li onclick="window.location.href='chest-flat-bench-press-bar.html'">Flat bench press</li>
+      <li onclick="window.location.href=''">Flat dumbbell press</li>
+      <li onclick="window.location.href=''">Flat dumbbell fly</li>
+      <li onclick="window.location.href=''">Flat cable fly</li>
+      <li onclick="window.location.href=''">Seated cable fly</li>
+      <li onclick="window.location.href=''">Pec fly</li>
+      <li onclick="window.location.href=''">Incline Machine press</li>
+      <li onclick="window.location.href=''">Incline bench press</li>
+      <li onclick="window.location.href=''">Incline dumbbell press</li>
+      <li onclick="window.location.href=''">Incline dumbbell fly</li>
+      <li onclick="window.location.href=''">Incline cable fly</li>
+      <li onclick="window.location.href=''">Lower cable Cross over fly</li>
+      <li onclick="window.location.href=''">Decline bench press</li>
+      <li onclick="window.location.href=''">Decline dumbbell press</li>
+      <li onclick="window.location.href=''">Decline dumbbell fly</li>
+    </ul>
+  </div>
+  <script>
+    if (localStorage.getItem("meta_access") !== "granted") {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
