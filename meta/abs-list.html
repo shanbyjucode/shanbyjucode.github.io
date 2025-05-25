@@ -6,27 +6,6 @@
   <meta name="theme-color" content="#1B1B1B" />
   <link rel="stylesheet" href="styles.css" />
   <title>Abs Workouts</title>
-  <style>
-    .workout-list li[draggable="true"] {
-    cursor: grab;
-    user-select: none;
-    }
-.workout-list li:active {
-opacity: 0.6;
-}
-    .workout-list li {
-      padding: 12px;
-      background-color: #333;
-      color: white;
-      margin: 8px 0;
-      border-radius: 6px;
-      cursor: grab;
-      user-select: none;
-    }
-    .workout-list li.dragging {
-      opacity: 0.5;
-    }
-  </style>
 </head>
 <body>
   <header class="details-header">
@@ -38,82 +17,14 @@ opacity: 0.6;
 
   <div class="details-content">
     <ul class="workout-list" id="workoutList"></ul>
+    <ul class="workout-list">
+      <li onclick="window.location.href='abs-seated-cable-crunch.html'">Seated Cable Crunch</li>
+      <li onclick="window.location.href='abs-abs-roller.html'">Abs Roller</li>
+      <li onclick="window.location.href='abs-cable-crunch.html'">Kneeling Cable Crunch</li>
+      <li onclick="window.location.href='abs-abdominal-crunch-bord.html'">Abdominal Crunch Bord</li>
+    </ul>
   </div>
-
   <script>
-    const defaultWorkouts = [
-      { name: "Seated Cable Crunch", link: "abs-seated-cable-crunch.html" },
-      { name: "Abs Roller", link: "abs-abs-roller.html" },
-      { name: "Kneeling Cable Crunch", link: "abs-cable-crunch.html" },
-      { name: "Abdominal Crunch Bord", link: "abs-abdominal-crunch-bord.html" }
-    ];
-
-    const list = document.getElementById("workoutList");
-    let dragSrcEl = null;
-
-    function loadWorkouts() {
-      const stored = localStorage.getItem("absWorkoutOrder");
-      return stored ? JSON.parse(stored) : defaultWorkouts;
-    }
-
-    function saveWorkouts() {
-      const data = Array.from(list.children).map(li => ({
-        name: li.innerText,
-        link: li.getAttribute("data-link")
-      }));
-      localStorage.setItem("absWorkoutOrder", JSON.stringify(data));
-    }
-
-    function handleDragStart(e) {
-      dragSrcEl = this;
-      this.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    }
-
-    function handleDragOver(e) {
-      e.preventDefault();
-      return false;
-    }
-
-    function handleDrop(e) {
-      e.preventDefault();
-      if (dragSrcEl !== this) {
-        const srcIndex = Array.from(list.children).indexOf(dragSrcEl);
-        const targetIndex = Array.from(list.children).indexOf(this);
-
-        if (srcIndex < targetIndex) {
-          list.insertBefore(dragSrcEl, this.nextSibling);
-        } else {
-          list.insertBefore(dragSrcEl, this);
-        }
-        saveWorkouts();
-      }
-      return false;
-    }
-
-    function handleDragEnd() {
-      this.classList.remove('dragging');
-    }
-
-    function renderWorkouts() {
-      list.innerHTML = "";
-      const workouts = loadWorkouts();
-      workouts.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item.name;
-        li.setAttribute("data-link", item.link);
-        li.setAttribute("draggable", true);
-        li.addEventListener("click", () => window.location.href = item.link);
-        li.addEventListener("dragstart", handleDragStart);
-        li.addEventListener("dragover", handleDragOver);
-        li.addEventListener("drop", handleDrop);
-        li.addEventListener("dragend", handleDragEnd);
-        list.appendChild(li);
-      });
-    }
-
-    renderWorkouts();
-
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
