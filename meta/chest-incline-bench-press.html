@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1B1B1B">
     <link rel="stylesheet" href="styles.css">
-    <title>Incline Bench Press </title>
+    <title>Incline Bench Press</title>
 </head>
+<style>
+    body{
+        top: 0 !important;
+    }
+</style>
 <body>
     <header class="details-header">
         <div class="back-btn" onclick="window.history.back();">
@@ -14,7 +19,6 @@
         </div>
         <h1>Incline Bench Press </h1>
     </header>
-
     <div class="details-content">
         <div class="video-container">
             <div style="position:relative;width:100%;padding-top:177.78%;overflow:hidden;">
@@ -81,10 +85,26 @@
             <img src="./images/chest/incline-bench-press/chest3.jpg" alt="Incline Bench Press Muscles">
           </section>
     </div>
+    <div class="language">
+        <div id="google_translate_element"></div>
+    </div>
+
     <script>
+        function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            {
+            pageLanguage: 'en',
+            includedLanguages: 'en,ml,ta,hi',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            },
+            'google_translate_element'
+        );
+        }
       if (localStorage.getItem("meta_access") !== "granted") {
         window.location.href = "login.html";
       }
     </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
