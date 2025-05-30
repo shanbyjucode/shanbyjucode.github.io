@@ -81,7 +81,23 @@
               <li><strong>Better Stretch & Contraction:</strong> Excellent for hypertrophy and shaping the inner chest.</li>
             </ul>
           </section>
-        
+          <div class="language-wrapper">
+            <p>Do you want to change the language of this page?</p>
+            <div class="language">
+              <div class="custom-select-wrapper">
+                <select class="notranslate" onchange="translateLanguage(this.value)">
+                  <option value="en">English</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="ta">Tamil</option>
+                  <option value="hi">Hindi</option>
+                </select>
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+              </div>
+            </div>
+            <div id="google_translate_element" style="display:none;"></div>
+          </div>
     </div>
     <script>
       function googleTranslateElementInit() {
