@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1B1B1B">
+    <meta name="google" content="notranslate">
     <link rel="stylesheet" href="styles.css">
     <title>Cable Cross Over</title>
 </head>
+<style>
+  .goog-te-banner-frame.skiptranslate, 
+  body > .skiptranslate {
+    display: none !important;
+  }
+
+  body {
+    top: 0px !important;
+  }
+</style>
 <body>
     <header class="details-header">
         <div class="back-btn" onclick="window.history.back();">
@@ -84,11 +95,44 @@
             <img src="./images/chest/cable-cross-over/chest-cable-crossovers3.jpg" alt="Chest Muscle Engagement">
           </section>                   
           <!-- content -->
+          <div class="language-wrapper">
+            <p>Do you want to change the language of this page?</p>
+            <div class="language">
+              <div class="custom-select-wrapper">
+                <select class="notranslate" onchange="translateLanguage(this.value)">
+                  <option value="en">English</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="ta">Tamil</option>
+                  <option value="hi">Hindi</option>
+                </select>
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+              </div>
+            </div>
+            <div id="google_translate_element" style="display:none;"></div>
     </div>
     <script>
-      if (localStorage.getItem("meta_access") !== "granted") {
-        window.location.href = "login.html";
+      function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ml,ta,hi',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function translateLanguage(lang) {
+      const selectField = document.querySelector('.goog-te-combo');
+      if (selectField) {
+        selectField.value = lang;
+        selectField.dispatchEvent(new Event('change'));
       }
-    </script>
+    }
+
+    if (localStorage.getItem("meta_access") !== "granted") {
+      window.location.href = "login.html";
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
