@@ -143,47 +143,43 @@
       color: #00c853;
     }
     /* Food Cards */
-  .food-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-    gap: 16px;
-  }
-  .food-card {
-    background: #262626;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-    overflow: hidden;
-    color: white;
-    display: flex;
-    flex-direction: column;
-  }
-  .food-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-bottom: 1px solid #00c853;
-  }
-  .food-card-content {
-    padding: 15px;
-    flex-grow: 1;
-  }
-  .food-name {
-    font-weight: 700;
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #00c853;
-  }
-  .nutrition-info {
-    font-size: 14px;
-    color: #ccc;
-    line-height: 1.5;
-  }
-  .loading {
-    text-align: center;
-    font-size: 20px;
-    margin-top: 30px;
-    color: #00c853;
-  }
+    #searchInput {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .food-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .food-card {
+      background: #3a3a3a;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+    }
+    .food-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .food-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+    .nutrition-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
@@ -212,10 +208,99 @@
     </div>
 
     <div id="foodTab" class="tab-content" role="tabpanel" aria-labelledby="foodTabBtn" style="display:none;">
+      <input type="text" id="searchInput" placeholder="Search for food (e.g. rice, banana, oats)..." />
       <section aria-label="Food Nutrition Information">
-        <h2>🍽️ Nutritious Foods (100g servings)</h2>
-        <div id="foodCards" class="food-cards"></div>
-        <div id="loading" class="loading">Loading food data...</div>
+        <div class="food-list">
+          <div class="food-card" data-name="egg white">
+            <img src="./images/other/egg-white.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Egg White (1)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>3.6 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>17</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>0.1 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>0.2 g</span></div>
+          </div>
+          <div class="food-card" data-name="boiled egg">
+            <img src="./images/other/boiled-egg.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Boiled Egg (1)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>6.3 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>77</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>5.3 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>0.6 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="chicken">
+            <img src="./images/other/chicken.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Chicken (100g)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>27 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>165</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>3.6 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>0 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="milk">
+            <img src="./images/other/milk.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Milk (1 cup)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>8 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>103</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>2.4 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>12 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="almonds">
+            <img src="./images/other/almond.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Almonds (10 pcs)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>2.5 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>70</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>6.1 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>2.5 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="oats">
+            <img src="./images/other/oats.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Oats (30g)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>3.6 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>117</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>2.4 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>20 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="kerala banana">
+            <img src="./images/other/kerala-banana.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Kerala Banana (1)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>1.1 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>150</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>0.3 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>35 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="orange">
+            <img src="./images/other/orange.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Orange (1)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>1.2 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>62</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>15.4 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="rice">
+            <img src="./images/other/rice.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Rice (100g cooked)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>2.7 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>130</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>0.3 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>28 g</span></div>
+          </div>
+      
+          <div class="food-card" data-name="vegetable salad">
+            <img src="./images/other/salad.png" alt="Egg White" class="food-image" />
+            <div class="food-name">Vegetable Salad (150g)</div>
+            <div class="nutrition-row"><span>Protein:</span><span>2.0 g</span></div>
+            <div class="nutrition-row"><span>Calories:</span><span>45</span></div>
+            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
+            <div class="nutrition-row"><span>Carbs:</span><span>9 g</span></div>
+          </div>
+          <br><br><br>
+        </div>
       </section>
     </div>
   </div>
@@ -285,65 +370,20 @@
       `;
     }
 
-    // Mock food data array
-    // Food nutrition part using TheMealDB API & mock nutrition info for 100g fixed
-  const apiURL = 'https://www.themealdb.com/api/json/v1/1/search.php?f=c';
-
-const nutritionMock = {
-  'Chicken Handi': { calories: 190, protein: 27, carbs: 3, fat: 7 },
-  'Chicken Congee': { calories: 150, protein: 20, carbs: 15, fat: 2 },
-  'Chicken Couscous': { calories: 210, protein: 25, carbs: 30, fat: 5 },
-  'Chicken Fajita Mac and Cheese': { calories: 350, protein: 22, carbs: 40, fat: 12 },
-  'Chocolate Gateau': { calories: 430, protein: 6, carbs: 50, fat: 25 },
-  'Chow Mein': { calories: 290, protein: 15, carbs: 40, fat: 8 },
-  'Clam Chowder': { calories: 180, protein: 10, carbs: 20, fat: 7 },
-  'Ceviche': { calories: 130, protein: 23, carbs: 10, fat: 3 }
-};
-
-const foodCardsContainer = document.getElementById('foodCards');
-const loadingDiv = document.getElementById('loading');
-
-fetch(apiURL)
-  .then(res => res.json())
-  .then(data => {
-    loadingDiv.style.display = 'none';
-
-    if (!data.meals || data.meals.length === 0) {
-      foodCardsContainer.innerHTML = '<p>No food data found.</p>';
-      return;
-    }
-
-    data.meals.forEach(meal => {
-      const mealName = meal.strMeal;
-      const mealThumb = meal.strMealThumb;
-
-      const nutrition = nutritionMock[mealName] || { calories: '-', protein: '-', carbs: '-', fat: '-' };
-
-      const card = document.createElement('div');
-      card.className = 'food-card';
-      card.innerHTML = `
-        <img src="${mealThumb}" alt="${mealName}" />
-        <div class="food-card-content">
-          <div class="food-name">${mealName}</div>
-          <div class="nutrition-info">
-            <strong>Nutrition per 100g:</strong><br>
-            Calories: ${nutrition.calories} kcal<br>
-            Protein: ${nutrition.protein} g<br>
-            Carbs: ${nutrition.carbs} g<br>
-            Fat: ${nutrition.fat} g
-          </div>
-        </div>
-      `;
-      foodCardsContainer.appendChild(card);
-    });
-  })
-  .catch(err => {
-    loadingDiv.innerText = 'Failed to load food data.';
-    console.error(err);
-  });
   if (localStorage.getItem("meta_access") !== "granted") {
     window.location.href = "login.html";
   }
+
+  const searchInput = document.getElementById("searchInput");
+    const foodCards = document.querySelectorAll(".food-card");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase();
+      foodCards.forEach(card => {
+        const foodName = card.getAttribute("data-name");
+        card.style.display = foodName.includes(query) ? "block" : "none";
+      });
+    });
   </script>
 
 </body>
