@@ -11,6 +11,12 @@ body, html {
     height: 100vh;
     /* overflow: hidden; */
 }
+
+body, html {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+}
+
 section img{
     display: block;
     width: 100%;
