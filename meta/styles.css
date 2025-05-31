@@ -126,6 +126,10 @@ section ul li{
     z-index: 100;
 }
 
+.details-header h1{
+  color: #00c853;
+}
+
 .back-btn {
     cursor: pointer;
     padding: 0.3rem;
