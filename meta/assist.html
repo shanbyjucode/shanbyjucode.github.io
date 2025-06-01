@@ -26,7 +26,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
       overflow: hidden;
-      margin-bottom: 100px;
+      margin-bottom: 10px;
     }
     /* Tab headers */
     .tab-buttons {
@@ -179,6 +179,19 @@
       justify-content: space-between;
       margin: 4px 0;
       font-size: 0.95rem;
+    }
+    .tip-box {
+      background-color: #e0f7fa;
+      color: #00695c;
+      border-left: 5px solid #00bfa5;
+      padding: 12px 16px;
+      margin: 20px auto;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 8px;
+      max-width: 90%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 100px;
     }
   </style>
 </head>
@@ -372,6 +385,9 @@
       </section>
     </div>
   </div>
+  <div class="tip-box" id="healthTip">
+    🧠 Tip: Stay active!
+  </div>
 
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
@@ -452,6 +468,29 @@
         card.style.display = foodName.includes(query) ? "block" : "none";
       });
     });
+
+    // tips
+      const tips = [
+      "🧠 Tip: Drink at least 2–3L of water a day to boost metabolism.",
+      "🍽️ Tip: Don't skip breakfast – it kickstarts your metabolism.",
+      "💤 Tip: Get 7–8 hours of quality sleep to aid recovery and hormone balance.",
+      "🏃 Tip: Aim for 30 minutes of physical activity daily.",
+      "🍎 Tip: Include more fruits and vegetables in your diet.",
+      "🚶 Tip: Take short walks after meals to improve digestion.",
+      "🧘 Tip: Practice deep breathing or meditation to reduce stress.",
+      "🧂 Tip: Limit processed foods and added sugars for better energy.",
+      "🥗 Tip: Add protein to every meal to stay fuller longer.",
+      "☕ Tip: Black coffee boosts alertness and has zero calories!"
+    ];
+
+    function getRandomTip() {
+      const tipBox = document.getElementById('healthTip');
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      tipBox.innerText = randomTip;
+    }
+
+    // Show a new tip on load
+    window.addEventListener('DOMContentLoaded', getRandomTip);
   </script>
 
 </body>
