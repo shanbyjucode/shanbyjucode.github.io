@@ -22,7 +22,6 @@
       max-width: 400px;
       margin: 20px auto;
       background: #1a1a1a;
-      border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
       box-sizing: border-box;
       overflow: hidden;
@@ -31,14 +30,20 @@
     /* Tab headers */
     .tab-buttons {
       display: flex;
+      overflow-x: auto; /* Enables horizontal scrolling */
+      white-space: nowrap; /* Prevents tabs from wrapping to next line */
       background: #262626;
       border-bottom: 2px solid #00c853;
+      scrollbar-width: none; /* Optional: hide scrollbar in Firefox */
+    }
+    .tab-buttons::-webkit-scrollbar {
+      display: none; /* Optional: hide scrollbar in Chrome/Safari */
     }
     .tab-buttons button {
-      flex: 1;
+      flex: 0 0 auto; /* Prevent buttons from shrinking */
       background: none;
       border: none;
-      padding: 12px;
+      padding: 12px 20px; /* Add more padding for better touch targets */
       color: white;
       font-size: 16px;
       cursor: pointer;
@@ -193,6 +198,29 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin-bottom: 100px;
     }
+
+    .mood-options button {
+      background-color: #333;
+      color: white;
+      border: 1px solid #00c853;
+      padding: 10px 16px;
+      margin: 8px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .mood-options button:hover {
+      background-color: #00c853;
+      color: #000;
+    }
+    #moodMessage {
+      color: #f1f1f1;
+      font-size: 16px;
+    }
+    #mood-log ul li{
+      text-transform: capitalize;
+    }
   </style>
 </head>
 <body>
@@ -203,6 +231,7 @@
     <div class="tab-buttons">
       <button role="tab" aria-selected="true" aria-controls="bmiTab" id="bmiTabBtn" class="active" onclick="showTab('bmiTab')">📊 BMI Calculator</button>
       <button role="tab" aria-selected="false" aria-controls="foodTab" id="foodTabBtn" onclick="showTab('foodTab')">🍎 Food</button>
+      <button role="tab" aria-selected="false" aria-controls="moodTab" id="moodTabBtn" onclick="showTab('moodTab')">💡 Mood</button>
     </div>
 
     <div id="bmiTab" class="tab-content" role="tabpanel" aria-labelledby="bmiTabBtn">
@@ -218,6 +247,23 @@
       <button class="calc-btn" onclick="calculateBMI()">Calculate BMI</button>
 
       <div id="bmiResult" class="bmi-result"></div>
+      <div class="tip-box" id="healthTip">
+        🧠 Tip: Stay active!
+      </div>
+    </div>
+
+    <div id="moodTab" class="tab-content" role="tabpanel" aria-labelledby="moodTabBtn" style="display:none;">
+      <h2>🧠 Track Your Mood</h2>
+      <p>How are you feeling today?</p>
+      <div class="mood-options">
+        <button onclick="setMood('happy')">😊 Happy</button>
+        <button onclick="setMood('neutral')">😐 Neutral</button>
+        <button onclick="setMood('sad')">😔 Sad</button>
+      </div>
+      <div id="moodMessage" style="margin-top: 1rem;"></div>
+      <br>
+      <h3>Your Mood History</h3>
+      <div id="mood-log"></div>
     </div>
 
     <div id="foodTab" class="tab-content" role="tabpanel" aria-labelledby="foodTabBtn" style="display:none;">
@@ -385,9 +431,6 @@
       </section>
     </div>
   </div>
-  <div class="tip-box" id="healthTip">
-    🧠 Tip: Stay active!
-  </div>
 
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
@@ -408,7 +451,7 @@
   <script>
     // Tab switching
     function showTab(tabId) {
-      const tabs = ['bmiTab', 'foodTab'];
+      const tabs = ['bmiTab', 'foodTab', 'moodTab'];
       tabs.forEach(id => {
         document.getElementById(id).style.display = (id === tabId) ? 'block' : 'none';
         document.getElementById(id + 'Btn').classList.toggle('active', id === tabId);
@@ -491,6 +534,88 @@
 
     // Show a new tip on load
     window.addEventListener('DOMContentLoaded', getRandomTip);
+
+    // mode tab
+    function setMood(mood) {
+    // Save to cookie for 7 days
+    document.cookie = `mood=${mood}; path=/; max-age=${60 * 60 * 24 * 7}`;
+    const message = document.getElementById("moodMessage");
+
+    if (mood === "happy") {
+      message.innerHTML = "Awesome! Keep spreading the good vibes! 💪";
+    } else if (mood === "neutral") {
+      message.innerHTML = "Let’s turn that neutral into positive today! 🚀";
+    } else if (mood === "sad") {
+      message.innerHTML = `
+        Sorry to hear that. Here are 3 things you can do:
+        <ul>
+          <li>🧘 Try 5-min breathing meditation</li>
+          <li>🚶 Take a 10-min walk</li>
+          <li>💬 Talk to a friend or loved one</li>
+        </ul>
+        You’ve got this! ❤️
+      `;
+    }
+  }
+
+  // moode
+    const MOOD_STORAGE_KEY = "moodHistory";
+    let moodHistory = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
+
+    // Get today's date in YYYY-MM-DD format
+    function getTodayDate() {
+      const now = new Date();
+      return now.toISOString().split("T")[0];
+    }
+
+    function setMood(mood) {
+      const moodMessage = document.getElementById("moodMessage");
+      const now = new Date();
+      const timestamp = now.toLocaleString();
+      const today = getTodayDate();
+
+      // Message to user
+      let message = "";
+      if (mood === "happy") {
+        message = "Great to hear you're feeling happy! 😊";
+      } else if (mood === "neutral") {
+        message = "Hope your day gets even better! 😐";
+      } else if (mood === "sad") {
+        message = "Sending you good vibes. 💪😔";
+      }
+      moodMessage.textContent = message;
+
+      // Remove today's existing mood (if any)
+      moodHistory = moodHistory.filter(entry => entry.date !== today);
+
+      // Add today's mood
+      moodHistory.unshift({ mood, time: timestamp, date: today });
+
+      // Save updated history
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
+
+      renderMoodHistory();
+    }
+
+    function renderMoodHistory() {
+      const logDiv = document.getElementById("mood-log");
+
+      if (!moodHistory.length) {
+        logDiv.innerHTML = "<p>No mood tracked yet.</p>";
+        return;
+      }
+
+      logDiv.innerHTML = "<ul style='padding-left: 20px'>";
+      moodHistory.forEach(entry => {
+        const moodIcon = entry.mood === 'happy' ? '😊' :
+                        entry.mood === 'neutral' ? '😐' : '😔';
+        logDiv.innerHTML += `<li>${moodIcon} <strong>${entry.mood}</strong> - <em>${entry.time}</em></li>`;
+      });
+      logDiv.innerHTML += "</ul>";
+    }
+
+    // On load
+    renderMoodHistory();
   </script>
 
 </body>
