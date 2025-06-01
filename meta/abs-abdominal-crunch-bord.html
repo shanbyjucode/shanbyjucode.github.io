@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1B1B1B">
+    <meta name="google" content="notranslate">
     <link rel="stylesheet" href="styles.css">
     <title>Abdominal Crunch Board</title>
 </head>
+<style>
+  .goog-te-banner-frame.skiptranslate, 
+  body > .skiptranslate {
+    display: none !important;
+  }
+
+  body {
+    top: 0px !important;
+  }
+</style>
 <body>
     <header class="details-header">
         <div class="back-btn" onclick="window.history.back();">
@@ -18,14 +29,14 @@
     <div class="details-content">
         <div class="video-container">
                 <div style="position:relative;width:100%;padding-top:177.78%;overflow:hidden;">
-                    <iframe 
-                        src="https://www.youtube.com/embed/6DKAYuIhhOw?rel=0&modestbranding=1&autoplay=0&controls=1&playsinline=1" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
-                        allowfullscreen 
-                        style="position:absolute;top:0;left:0;width:100%;height:100%;" 
-                        title="YouTube Shorts Video">
-                    </iframe>
+                  <iframe 
+                      src="https://www.youtube.com/embed/CHf4VqF1dtU?rel=0&modestbranding=1&autoplay=0&controls=1&playsinline=1" 
+                      frameborder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" 
+                      allowfullscreen 
+                      style="position:absolute;top:0;left:0;width:100%;height:100%;" 
+                      title="YouTube Video">
+                  </iframe>
               </div>
           </div>
           <br>
@@ -68,11 +79,45 @@
             </ul>
           </section>              
           <!-- content -->
+          <div class="language-wrapper">
+            <p>Do you want to change the language of this page?</p>
+            <div class="language">
+              <div class="custom-select-wrapper">
+                <select class="notranslate" onchange="translateLanguage(this.value)">
+                  <option value="en">English</option>
+                  <option value="ml">Malayalam</option>
+                  <option value="ta">Tamil</option>
+                  <option value="hi">Hindi</option>
+                </select>
+                <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M7 10l5 5 5-5z"/>
+                </svg>
+              </div>
+            </div>
+            <div id="google_translate_element" style="display:none;"></div>
+          </div>
     </div>
     <script>
-      if (localStorage.getItem("meta_access") !== "granted") {
-        window.location.href = "login.html";
+      function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ml,ta,hi',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function translateLanguage(lang) {
+      const selectField = document.querySelector('.goog-te-combo');
+      if (selectField) {
+        selectField.value = lang;
+        selectField.dispatchEvent(new Event('change'));
       }
-    </script>
+    }
+
+    if (localStorage.getItem("meta_access") !== "granted") {
+      window.location.href = "login.html";
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
