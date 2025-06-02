@@ -62,6 +62,66 @@
       font-weight: 500;
       border-radius: 8px;
     }
+    .bmi-card {
+        background-color: #1c1c1c;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        margin-bottom: 60px;
+        text-align: center;
+        }
+
+        .bmi-card h2 {
+        margin: 0 0 10px;
+        color: #00c853;
+        }
+
+        .bmi-bar {
+            position: relative;
+            display: flex;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .range {
+            flex: 1;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+
+        .underweight { background: #81d4fa; }
+        .normal { background: #a5d6a7; }
+        .overweight { background: #ffe082; }
+        .obese { background: #ef9a9a; }
+
+        .bmi-pointer {
+            position: absolute;
+            top: -10px;
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 10px solid #00c853;
+        }
+        .bmi-category {
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.underweight-text { background-color: #81d4fa; color: #003c8f; }
+.normal-text { background-color: #a5d6a7; color: #1b5e20; }
+.overweight-text { background-color: #ffe082; color: #ff6f00; }
+.obese-text { background-color: #ef9a9a; color: #b71c1c; }
+
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -154,11 +214,28 @@
         advice = "Consider a structured weight loss program and consult a health expert.";
       }
 
-      resultDiv.innerHTML = `
-        <strong>Your BMI:</strong> ${bmi.toFixed(1)}<br>
-        <strong>Category:</strong> ${category}<br><br>
-        <em>${advice}</em>
-      `;
+      const position = Math.min(100, Math.max(0, ((bmi - 10) / 30) * 100)); // Map BMI (10–40) to 0–100%
+      let categoryClass = "";
+        if (category === "Underweight") categoryClass = "underweight-text";
+        else if (category === "Normal weight") categoryClass = "normal-text";
+        else if (category === "Overweight") categoryClass = "overweight-text";
+        else categoryClass = "obese-text";
+
+        resultDiv.innerHTML = `
+        <div class="bmi-card">
+            <h2>Your BMI</h2>
+            <div class="bmi-bar">
+            <div class="range underweight">Under</div>
+            <div class="range normal">Normal</div>
+            <div class="range overweight">Over</div>
+            <div class="range obese">Obese</div>
+            <div class="bmi-pointer" style="left: ${position}%;"></div>
+            </div>
+            <p><strong>BMI:</strong> ${bmi.toFixed(1)}</p>
+            <p class="bmi-category ${categoryClass}">${category}</p>
+            <p><em>${advice}</em></p>
+        </div>
+        `;
     }
   </script>
 </body>
