@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fitness Assistant - Mood Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+   body {
+      background-color: #0f0f0f;
+      color: white;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      margin: 0;
+    }
+    .container{
+        padding: 20px;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .mood-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .mood-options button {
+      background-color: #333;
+      color: white;
+      border: 1px solid #00c853;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .mood-options button:hover {
+      background-color: #00c853;
+      color: #000;
+    }
+    #moodMessage {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 16px;
+    }
+    #mood-log {
+      margin-top: 1.5rem;
+    }
+    #mood-log ul {
+      padding-left: 20px;
+    }
+    #mood-log ul li {
+      text-transform: capitalize;
+      margin-bottom: 6px;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #262626;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .nav-item {
+      color: white;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+    .nav-item .material-icons {
+      font-size: 24px;
+    }
+    .nav-item.active {
+      color: #00c853;
+    }
+  </style>
+</head>
+<body>
+
+    <header class="details-header">
+        <div class="back-btn" onclick="window.history.back();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24px" viewBox="0 0 512 512"><polyline points="244 400 100 256 244 112" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/><line x1="120" y1="256" x2="412" y2="256" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+        </div>
+        <h1>Mood Tracker</h1>
+    </header>
+    <div class="container">
+        <h2>How are you feeling today?</h2>
+        <div class="mood-options">
+            <button onclick="setMood('happy')">😊 Happy</button>
+            <button onclick="setMood('neutral')">😐 Neutral</button>
+            <button onclick="setMood('sad')">😔 Sad</button>
+        </div>
+        <div id="moodMessage"></div>
+
+        <h3>Your Mood History</h3>
+        <div id="mood-log"></div>
+    </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="material-icons">fitness_center</span>
+      <span class="nav-label">Workout</span>
+    </a>
+    <a href="music.html" class="nav-item">
+      <span class="material-icons">library_music</span>
+      <span class="nav-label">Music</span>
+    </a>
+    <a href="assist.html" class="nav-item active">
+      <span class="material-icons">support_agent</span>
+      <span class="nav-label">Assist</span>
+    </a>
+  </div>
+
+  <script>
+    const MOOD_STORAGE_KEY = "moodHistory";
+    let moodHistory = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
+
+    function getTodayDate() {
+      const now = new Date();
+      return now.toISOString().split("T")[0];
+    }
+
+    function setMood(mood) {
+      const moodMessage = document.getElementById("moodMessage");
+      const now = new Date();
+      const timestamp = now.toLocaleString();
+      const today = getTodayDate();
+
+      // Feedback
+      let message = "";
+      if (mood === "happy") {
+        message = "Great to hear you're feeling happy! 😊";
+      } else if (mood === "neutral") {
+        message = "Hope your day gets even better! 😐";
+      } else if (mood === "sad") {
+        message = "Sending you good vibes. 💪😔";
+      }
+      moodMessage.textContent = message;
+
+      // Remove today's mood entry
+      moodHistory = moodHistory.filter(entry => entry.date !== today);
+
+      // Add today's mood
+      moodHistory.unshift({ mood, time: timestamp, date: today });
+
+      // Save updated history
+      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
+
+      renderMoodHistory();
+    }
+
+    function renderMoodHistory() {
+      const logDiv = document.getElementById("mood-log");
+
+      if (!moodHistory.length) {
+        logDiv.innerHTML = "<p>No mood tracked yet.</p>";
+        return;
+      }
+
+      logDiv.innerHTML = "<ul>";
+      moodHistory.forEach(entry => {
+        const moodIcon = entry.mood === 'happy' ? '😊' :
+                         entry.mood === 'neutral' ? '😐' : '😔';
+        logDiv.innerHTML += `<li>${moodIcon} <strong>${entry.mood}</strong> - <em>${entry.time}</em></li>`;
+      });
+      logDiv.innerHTML += "</ul>";
+    }
+
+    // Load mood history on page load
+    window.addEventListener('DOMContentLoaded', renderMoodHistory);
+  </script>
+</body>
+</html>
