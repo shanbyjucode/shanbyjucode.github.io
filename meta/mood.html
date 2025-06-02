@@ -19,46 +19,108 @@
     .container{
         padding: 20px;
     }
-    h1, h2, h3 {
+    h2, h3 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
-    .mood-options {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-    .mood-options button {
-      background-color: #333;
-      color: white;
-      border: 1px solid #00c853;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .mood-options button:hover {
-      background-color: #00c853;
-      color: #000;
-    }
+    /* Tabs Container */
+.tab-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+.tab-button {
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.tab-button.active {
+  background-color: #00c853;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding-top: 20px;
+}
+.tab-content.active {
+  display: block;
+}
+
+.mood-options{
+    display: flex;
+    gap: 4px;
+}
+
+/* Mood Options */
+.mood-options button {
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 2px solid transparent;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 18px;
+  min-width: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.mood-options button:hover {
+  border-color: #00c853;
+  background-color: #00c853;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Mood Message */
     #moodMessage {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 16px;
+        margin-top: 3rem;
+        text-align: center;
+        font-size: 15px;
+        font-weight: 500;
+        color: #9cd4b9;
     }
-    #mood-log {
-      margin-top: 1.5rem;
+
+    /* Mood Log */
+    .mood-log-group {
+        margin-bottom: 20px;
     }
-    #mood-log ul {
-      padding-left: 20px;
+    .mood-log-group h3 {
+        border-left: 4px solid #00c853;
+        padding-left: 10px;
+        margin-bottom: 10px;
     }
-    #mood-log ul li {
-      text-transform: capitalize;
-      margin-bottom: 6px;
+    .mood-card {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin: 8px 0;
+        border-left: 3px solid #00c853;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
+    .mood-card small {
+        display: block;
+        font-size: 12px;
+        color: #aaa;
+    }
+    .mood-card strong {
+        display: block;
+        font-size: 16px;
+        margin-top: 4px;
+    }
+    .mood-image img{
+        display: block;
+        width: 100%;
+    }
+
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -94,16 +156,39 @@
         <h1>Mood Tracker</h1>
     </header>
     <div class="container">
+    <div class="tab-container">
+        <button class="tab-button active" onclick="showTab('moodTab')">Track Mood</button>
+        <button class="tab-button" onclick="showTab('logTab')">Mood History</button>
+    </div>
+    
+    <div id="moodTab" class="tab-content active">
         <h2>How are you feeling today?</h2>
         <div class="mood-options">
-            <button onclick="setMood('happy')">😊 Happy</button>
-            <button onclick="setMood('neutral')">😐 Neutral</button>
-            <button onclick="setMood('sad')">😔 Sad</button>
+        <button onclick="setMood('happy')">
+            <div class="mood-image">
+                <img src="./images/other/happy.png" alt="">
+            </div>
+            Happy
+        </button>
+        <button onclick="setMood('neutral')">
+            <div class="mood-image">
+                <img src="./images/other/neutral.png" alt="">
+            </div>
+            Neutral
+        </button>
+        <button onclick="setMood('sad')">
+            <div class="mood-image">
+                <img src="./images/other/sad.png" alt="">
+            </div>
+            Sad
+        </button>
         </div>
         <div id="moodMessage"></div>
-
-        <h3>Your Mood History</h3>
+    </div>
+    
+    <div id="logTab" class="tab-content">
         <div id="mood-log"></div>
+    </div>
     </div>
 
   <div class="bottom-nav">
@@ -126,54 +211,90 @@
     let moodHistory = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
 
     function getTodayDate() {
-      const now = new Date();
-      return now.toISOString().split("T")[0];
+        const now = new Date();
+        return now.toISOString().split("T")[0];
     }
 
     function setMood(mood) {
-      const moodMessage = document.getElementById("moodMessage");
-      const now = new Date();
-      const timestamp = now.toLocaleString();
-      const today = getTodayDate();
+        const moodMessage = document.getElementById("moodMessage");
+        const now = new Date();
+        const timestamp = now.toLocaleString();
+        const today = getTodayDate();
 
-      // Feedback
-      let message = "";
-      if (mood === "happy") {
+        // Feedback
+        let message = "";
+        if (mood === "happy") {
         message = "Great to hear you're feeling happy! 😊";
-      } else if (mood === "neutral") {
+        } else if (mood === "neutral") {
         message = "Hope your day gets even better! 😐";
-      } else if (mood === "sad") {
+        } else if (mood === "sad") {
         message = "Sending you good vibes. 💪😔";
-      }
-      moodMessage.textContent = message;
+        }
+        moodMessage.textContent = message;
 
-      // Remove today's mood entry
-      moodHistory = moodHistory.filter(entry => entry.date !== today);
+        // Remove today's mood entry
+        moodHistory = moodHistory.filter(entry => entry.date !== today);
 
-      // Add today's mood
-      moodHistory.unshift({ mood, time: timestamp, date: today });
+        // Add today's mood
+        moodHistory.unshift({ mood, time: timestamp, date: today });
 
-      // Save updated history
-      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
+        // Save updated history
+        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
 
-      renderMoodHistory();
+        renderMoodHistory();
     }
 
     function renderMoodHistory() {
-      const logDiv = document.getElementById("mood-log");
-
-      if (!moodHistory.length) {
+        const logDiv = document.getElementById("mood-log");
+        if (!moodHistory.length) {
         logDiv.innerHTML = "<p>No mood tracked yet.</p>";
         return;
-      }
+        }
 
-      logDiv.innerHTML = "<ul>";
-      moodHistory.forEach(entry => {
-        const moodIcon = entry.mood === 'happy' ? '😊' :
-                         entry.mood === 'neutral' ? '😐' : '😔';
-        logDiv.innerHTML += `<li>${moodIcon} <strong>${entry.mood}</strong> - <em>${entry.time}</em></li>`;
-      });
-      logDiv.innerHTML += "</ul>";
+        const grouped = {};
+
+        moodHistory.forEach(entry => {
+        const dateObj = new Date(entry.date);
+        const year = dateObj.getFullYear();
+        const month = dateObj.toLocaleString('default', { month: 'long' });
+
+        if (!grouped[year]) grouped[year] = {};
+        if (!grouped[year][month]) grouped[year][month] = [];
+        grouped[year][month].push(entry);
+        });
+
+        logDiv.innerHTML = "";
+
+        for (const year of Object.keys(grouped).sort((a, b) => b - a)) {
+        const yearDiv = document.createElement("div");
+        yearDiv.className = "mood-log-group";
+        yearDiv.innerHTML = `<h3>🗓️ ${year}</h3>`;
+
+        for (const month of Object.keys(grouped[year])) {
+            const monthEntries = grouped[year][month];
+            yearDiv.innerHTML += `<h4 style="margin-left:10px;">${month}</h4>`;
+            monthEntries.forEach(entry => {
+            const moodIcon = entry.mood === 'happy' ? '😊' :
+                            entry.mood === 'neutral' ? '😐' : '😔';
+            const card = `
+                <div class="mood-card">
+                <small>${entry.time}</small>
+                <strong>${moodIcon} ${entry.mood}</strong>
+                </div>
+            `;
+            yearDiv.innerHTML += card;
+            });
+        }
+
+        logDiv.appendChild(yearDiv);
+        }
+    }
+
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
     }
 
     // Load mood history on page load
