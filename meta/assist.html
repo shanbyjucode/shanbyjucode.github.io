@@ -2,124 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Fitness Assistant - BMI & Food</title>
+  <title>Meta Fitness - Assist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
   <style>
     body {
       background-color: #0f0f0f;
       color: white;
-      padding: 20px;
       margin: 0;
+      padding: 20px;
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 0;
-    }
-    /* Tabs container */
-    .tabs {
-      max-width: 400px;
-      margin: 20px auto;
-      background: #1a1a1a;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-      box-sizing: border-box;
-      overflow: hidden;
       margin-bottom: 10px;
     }
-    /* Tab headers */
-    .tab-buttons {
-      display: flex;
-      overflow-x: auto; /* Enables horizontal scrolling */
-      white-space: nowrap; /* Prevents tabs from wrapping to next line */
-      background: #262626;
-      border-bottom: 2px solid #00c853;
-      scrollbar-width: none; /* Optional: hide scrollbar in Firefox */
-    }
-    .tab-buttons::-webkit-scrollbar {
-      display: none; /* Optional: hide scrollbar in Chrome/Safari */
-    }
-    .tab-buttons button {
-      flex: 0 0 auto; /* Prevent buttons from shrinking */
-      background: none;
-      border: none;
-      padding: 12px 20px; /* Add more padding for better touch targets */
-      color: white;
+
+    .tip-box {
+      background-color: #1e1e1e;
+      color: #00c853;
+      border-left: 5px solid #00bfa5;
+      padding: 16px;
+      border-radius: 8px;
       font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      font-weight: 600;
-    }
-    .tab-buttons button.active {
-      background-color: #00c853;
-      color: #000;
-      font-weight: 700;
-    }
-    .tab-content {
-      padding: 20px;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      margin: 20px 0;
+      margin-top: 0;
     }
 
-    /* BMI styles */
-    label {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .card {
+        flex: 0 0 calc(50% - 10px);
+        height: 200px;
+        background-color: #1a1a1a;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+    .card:hover {
+      transform: scale(1.02);
+      background-color: #222;
+    }
+
+    .card img {
+      height: 70px;
+      margin-bottom: 12px;
+    }
+
+    .card strong {
       display: block;
-      margin: 15px 0 5px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
       font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #333;
-      color: white;
-      box-sizing: border-box;
-    }
-    button.calc-btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background-color: #00c853;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button.calc-btn:hover {
-      background-color: #00b347;
-    }
-    .bmi-result {
-      margin-top: 20px;
-      font-size: 16px;
-      background: #262626;
-      padding: 15px;
-      border-radius: 10px;
-      line-height: 1.5;
+      margin-top: 5px;
+      font-weight: 500;
     }
 
-    /* Food list styles */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      color: white;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #444;
-    }
-    th {
-      background-color: #00c853;
-      color: #000;
-      font-weight: 700;
-    }
-    tr:hover {
-      background-color: #333;
-    }
-
-    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -131,6 +83,7 @@
       padding: 10px 0;
       box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
     }
+
     .nav-item {
       color: white;
       text-decoration: none;
@@ -138,301 +91,42 @@
       flex-direction: column;
       align-items: center;
       font-size: 12px;
-      cursor: pointer;
     }
+
     .nav-item .material-icons {
       font-size: 24px;
-      margin-bottom: 2px;
     }
+
     .nav-item.active {
       color: #00c853;
     }
-    /* Food Cards */
-    #searchInput {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .food-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .food-card {
-      background: #3a3a3a;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      padding: 1rem;
-    }
-    .food-name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-    .food-image {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      object-fit: cover;
-    }
-    .nutrition-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 4px 0;
-      font-size: 0.95rem;
-    }
-    .tip-box {
-      background-color: #e0f7fa;
-      color: #00695c;
-      border-left: 5px solid #00bfa5;
-      padding: 12px 16px;
-      margin: 20px auto;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 8px;
-      max-width: 90%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-bottom: 100px;
-    }
-
-    .mood-options button {
-      background-color: #333;
-      color: white;
-      border: 1px solid #00c853;
-      padding: 10px 16px;
-      margin: 8px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .mood-options button:hover {
-      background-color: #00c853;
-      color: #000;
-    }
-    #moodMessage {
-      color: #f1f1f1;
-      font-size: 16px;
-    }
-    #mood-log ul li{
-      text-transform: capitalize;
+    .row img{
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-
-  <h1>🏋️ Fitness Assistant</h1>
-
-  <div class="tabs" role="tablist">
-    <div class="tab-buttons">
-      <button role="tab" aria-selected="true" aria-controls="bmiTab" id="bmiTabBtn" class="active" onclick="showTab('bmiTab')">📊 BMI Calculator</button>
-      <button role="tab" aria-selected="false" aria-controls="foodTab" id="foodTabBtn" onclick="showTab('foodTab')">🍎 Food</button>
-      <button role="tab" aria-selected="false" aria-controls="moodTab" id="moodTabBtn" onclick="showTab('moodTab')">💡 Mood</button>
-    </div>
-
-    <div id="bmiTab" class="tab-content" role="tabpanel" aria-labelledby="bmiTabBtn">
-      <label for="age">Age:</label>
-      <input type="number" id="age" placeholder="Enter your age" min="1" />
-
-      <label for="height">Height (cm):</label>
-      <input type="number" id="height" placeholder="Enter height in cm" min="50" />
-
-      <label for="weight">Weight (kg):</label>
-      <input type="number" id="weight" placeholder="Enter weight in kg" min="10" />
-
-      <button class="calc-btn" onclick="calculateBMI()">Calculate BMI</button>
-
-      <div id="bmiResult" class="bmi-result"></div>
-      <div class="tip-box" id="healthTip">
-        🧠 Tip: Stay active!
-      </div>
-    </div>
-
-    <div id="moodTab" class="tab-content" role="tabpanel" aria-labelledby="moodTabBtn" style="display:none;">
-      <h2>🧠 Track Your Mood</h2>
-      <p>How are you feeling today?</p>
-      <div class="mood-options">
-        <button onclick="setMood('happy')">😊 Happy</button>
-        <button onclick="setMood('neutral')">😐 Neutral</button>
-        <button onclick="setMood('sad')">😔 Sad</button>
-      </div>
-      <div id="moodMessage" style="margin-top: 1rem;"></div>
-      <br>
-      <h3>Your Mood History</h3>
-      <div id="mood-log"></div>
-    </div>
-
-    <div id="foodTab" class="tab-content" role="tabpanel" aria-labelledby="foodTabBtn" style="display:none;">
-      <input type="text" id="searchInput" placeholder="Search for food (e.g. rice, banana, oats)..." />
-      <section aria-label="Food Nutrition Information">
-        <div class="food-list">
-          <div class="food-card" data-name="egg white">
-            <img src="./images/other/egg-white.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Egg White (1)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>3.6 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>17</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.1 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0.2 g</span></div>
-          </div>
-          <div class="food-card" data-name="boiled egg">
-            <img src="./images/other/boiled-egg.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Boiled Egg (1)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>6.3 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>77</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>5.3 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0.6 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="chicken">
-            <img src="./images/other/chicken.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Chicken (100g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>27 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>165</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>3.6 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0 g</span></div>
-          </div>
-
-          <div class="food-card" data-name="beef">
-            <img src="./images/other/beef.png" alt="Cooked Beef" class="food-image" />
-            <div class="food-name">Cooked Beef (100g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>26.0 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>250</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>15.0 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0 g</span></div>
-          </div>
-
-          <div class="food-card" data-name="neymeen">
-            <img src="./images/other/neymeen.png" alt="Neymeen (Seer Fish)" class="food-image" />
-            <div class="food-name">Neymeen (100g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>24 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>130</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>4.5 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0 g</span></div>
-          </div>
-
-          <div class="food-card" data-name="mathi">
-            <img src="./images/other/mathi.png" alt="Mathi (Sardine)" class="food-image" />
-            <div class="food-name">Mathi (100g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>25 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>208</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>11.5 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>0 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="milk">
-            <img src="./images/other/milk.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Milk (1 cup)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>8 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>103</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>2.4 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>12 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="almonds">
-            <img src="./images/other/almond.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Almonds (10 pcs)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>2.5 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>70</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>6.1 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>2.5 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="oats">
-            <img src="./images/other/oats.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Oats (30g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>3.6 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>117</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>2.4 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>20 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="kerala banana">
-            <img src="./images/other/kerala-banana.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Kerala Banana (1)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>1.1 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>150</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.3 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>35 g</span></div>
-          </div>
-          <div class="food-card" data-name="apple">
-            <img src="./images/other/apple.png" alt="Apple" class="food-image" />
-            <div class="food-name">Apple (1 medium)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>0.5 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>95</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.3 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>25 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="orange">
-            <img src="./images/other/orange.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Orange (1)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>1.2 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>62</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>15.4 g</span></div>
-          </div>
-          <div class="food-card" data-name="boiled potato">
-            <img src="./images/other/boiled-potato.png" alt="Boiled Potato" class="food-image" />
-            <div class="food-name">Boiled Potato (1 medium)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>2.0 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>130</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>30 g</span></div>
-          </div>
-          <div class="food-card" data-name="tomato">
-            <img src="./images/other/tomato.png" alt="Tomato" class="food-image" />
-            <div class="food-name">Tomato (1 medium)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>1.0 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>22</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>5.0 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="rice">
-            <img src="./images/other/rice.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Rice (100g cooked)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>2.7 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>130</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.3 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>28 g</span></div>
-          </div>
-          <div class="food-card" data-name="dal">
-            <img src="./images/other/dal.png" alt="Dal" class="food-image" />
-            <div class="food-name">Cooked Dal (1 cup)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>9.0 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>198</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>6.0 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>25 g</span></div>
-          </div>
-
-          <div class="food-card" data-name="green-gram">
-            <img src="./images/other/green-gram.png" alt="Green Gram (100g)" class="food-image" />
-            <div class="food-name">Green Gram (100g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>24 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>347</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>1.2 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>63 g</span></div>
-          </div>
-      
-          <div class="food-card" data-name="vegetable salad">
-            <img src="./images/other/salad.png" alt="Egg White" class="food-image" />
-            <div class="food-name">Vegetable Salad (150g)</div>
-            <div class="nutrition-row"><span>Protein:</span><span>2.0 g</span></div>
-            <div class="nutrition-row"><span>Calories:</span><span>45</span></div>
-            <div class="nutrition-row"><span>Fat:</span><span>0.2 g</span></div>
-            <div class="nutrition-row"><span>Carbs:</span><span>9 g</span></div>
-          </div>
-          <br><br><br>
-        </div>
-      </section>
-    </div>
+  <div class="tip-box" id="healthTip">
+    🧠 Tip: Stay active!
   </div>
 
-  <!-- Bottom Navigation -->
+  <div class="row">
+    <a href="bmi.html" class="card">
+      <img src="./images/other/bmi.png" alt="BMI Icon" />
+      <strong>BMI Calculator</strong>
+    </a>
+  
+    <a href="food.html" class="card">
+      <img src="./images/other/food.png" alt="Food Icon" />
+      <strong>Nutrition</strong>
+    </a>
+  
+    <a href="mood.html" class="card">
+      <img src="./images/other/mood.png" alt="Mood Icon" />
+      <strong>Mindset</strong>
+    </a>
+  </div>
+
   <div class="bottom-nav">
     <a href="index.html" class="nav-item">
       <span class="material-icons">fitness_center</span>
@@ -449,71 +143,7 @@
   </div>
 
   <script>
-    // Tab switching
-    function showTab(tabId) {
-      const tabs = ['bmiTab', 'foodTab', 'moodTab'];
-      tabs.forEach(id => {
-        document.getElementById(id).style.display = (id === tabId) ? 'block' : 'none';
-        document.getElementById(id + 'Btn').classList.toggle('active', id === tabId);
-        document.getElementById(id + 'Btn').setAttribute('aria-selected', id === tabId ? 'true' : 'false');
-      });
-    }
-
-    // BMI calculator logic
-    function calculateBMI() {
-      const age = parseInt(document.getElementById('age').value);
-      const height = parseFloat(document.getElementById('height').value);
-      const weight = parseFloat(document.getElementById('weight').value);
-      const resultDiv = document.getElementById('bmiResult');
-
-      if (!age || !height || !weight) {
-        resultDiv.innerHTML = `<span style="color:red;">⚠️ Please fill in all fields.</span>`;
-        return;
-      }
-
-      const heightInMeters = height / 100;
-      const bmi = weight / (heightInMeters * heightInMeters);
-      let category = "";
-      let advice = "";
-
-      if (bmi < 18.5) {
-        category = "Underweight";
-        advice = "You should consider gaining healthy weight with strength training and a protein-rich diet.";
-      } else if (bmi < 24.9) {
-        category = "Normal weight";
-        advice = "Great job! Maintain this with regular exercise and a balanced diet.";
-      } else if (bmi < 29.9) {
-        category = "Overweight";
-        advice = "Try to include cardio and portion control in your routine to shed some extra weight.";
-      } else {
-        category = "Obese";
-        advice = "Consider a structured weight loss program with both diet and exercise, and consult a health expert.";
-      }
-
-      resultDiv.innerHTML = `
-        <strong>Your BMI:</strong> ${bmi.toFixed(1)}<br>
-        <strong>Category:</strong> ${category}<br><br>
-        <em>${advice}</em>
-      `;
-    }
-
-  if (localStorage.getItem("meta_access") !== "granted") {
-    window.location.href = "login.html";
-  }
-
-  const searchInput = document.getElementById("searchInput");
-    const foodCards = document.querySelectorAll(".food-card");
-
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase();
-      foodCards.forEach(card => {
-        const foodName = card.getAttribute("data-name");
-        card.style.display = foodName.includes(query) ? "block" : "none";
-      });
-    });
-
-    // tips
-      const tips = [
+    const tips = [
       "🧠 Tip: Drink at least 2–3L of water a day to boost metabolism.",
       "🍽️ Tip: Don't skip breakfast – it kickstarts your metabolism.",
       "💤 Tip: Get 7–8 hours of quality sleep to aid recovery and hormone balance.",
@@ -525,98 +155,12 @@
       "🥗 Tip: Add protein to every meal to stay fuller longer.",
       "☕ Tip: Black coffee boosts alertness and has zero calories!"
     ];
-
     function getRandomTip() {
       const tipBox = document.getElementById('healthTip');
       const randomTip = tips[Math.floor(Math.random() * tips.length)];
       tipBox.innerText = randomTip;
     }
-
-    // Show a new tip on load
     window.addEventListener('DOMContentLoaded', getRandomTip);
-
-    // mode tab
-    function setMood(mood) {
-    // Save to cookie for 7 days
-    document.cookie = `mood=${mood}; path=/; max-age=${60 * 60 * 24 * 7}`;
-    const message = document.getElementById("moodMessage");
-
-    if (mood === "happy") {
-      message.innerHTML = "Awesome! Keep spreading the good vibes! 💪";
-    } else if (mood === "neutral") {
-      message.innerHTML = "Let’s turn that neutral into positive today! 🚀";
-    } else if (mood === "sad") {
-      message.innerHTML = `
-        Sorry to hear that. Here are 3 things you can do:
-        <ul>
-          <li>🧘 Try 5-min breathing meditation</li>
-          <li>🚶 Take a 10-min walk</li>
-          <li>💬 Talk to a friend or loved one</li>
-        </ul>
-        You’ve got this! ❤️
-      `;
-    }
-  }
-
-  // moode
-    const MOOD_STORAGE_KEY = "moodHistory";
-    let moodHistory = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
-
-    // Get today's date in YYYY-MM-DD format
-    function getTodayDate() {
-      const now = new Date();
-      return now.toISOString().split("T")[0];
-    }
-
-    function setMood(mood) {
-      const moodMessage = document.getElementById("moodMessage");
-      const now = new Date();
-      const timestamp = now.toLocaleString();
-      const today = getTodayDate();
-
-      // Message to user
-      let message = "";
-      if (mood === "happy") {
-        message = "Great to hear you're feeling happy! 😊";
-      } else if (mood === "neutral") {
-        message = "Hope your day gets even better! 😐";
-      } else if (mood === "sad") {
-        message = "Sending you good vibes. 💪😔";
-      }
-      moodMessage.textContent = message;
-
-      // Remove today's existing mood (if any)
-      moodHistory = moodHistory.filter(entry => entry.date !== today);
-
-      // Add today's mood
-      moodHistory.unshift({ mood, time: timestamp, date: today });
-
-      // Save updated history
-      localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
-
-      renderMoodHistory();
-    }
-
-    function renderMoodHistory() {
-      const logDiv = document.getElementById("mood-log");
-
-      if (!moodHistory.length) {
-        logDiv.innerHTML = "<p>No mood tracked yet.</p>";
-        return;
-      }
-
-      logDiv.innerHTML = "<ul style='padding-left: 20px'>";
-      moodHistory.forEach(entry => {
-        const moodIcon = entry.mood === 'happy' ? '😊' :
-                        entry.mood === 'neutral' ? '😐' : '😔';
-        logDiv.innerHTML += `<li>${moodIcon} <strong>${entry.mood}</strong> - <em>${entry.time}</em></li>`;
-      });
-      logDiv.innerHTML += "</ul>";
-    }
-
-    // On load
-    renderMoodHistory();
   </script>
-
 </body>
 </html>
