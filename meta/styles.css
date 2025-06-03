@@ -14,7 +14,7 @@ body, html {
 
 body, html {
   -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
+  overflow-y: auto !important;
 }
 
 section img{
@@ -175,6 +175,7 @@ section ul li{
     justify-content: space-between;
     align-items: center;
     user-select: none;
+    touch-action: pan-y;
   }
 
   .workout-text {
