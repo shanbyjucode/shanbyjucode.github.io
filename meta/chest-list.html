@@ -46,6 +46,8 @@
 
     let dragStartIndex = null;
     let draggedItem = null;
+    let currentPlaceholder = null;
+    let touchStartY = 0;
 
     function renderWorkouts(workouts) {
       workoutList.innerHTML = '';
@@ -57,15 +59,17 @@
           <span class="drag-handle" title="Hold to drag">☰</span>
         `;
 
-        li.onclick = () => window.location.href = item.link;
+        // Only clicking text navigates (drag handle used for drag)
+        li.querySelector('.workout-text').onclick = () => window.location.href = item.link;
 
         const dragHandle = li.querySelector(".drag-handle");
         dragHandle.setAttribute("draggable", "true");
+
         dragHandle.addEventListener("dragstart", handleDragStart);
         li.addEventListener("dragover", handleDragOver);
         li.addEventListener("drop", handleDrop);
 
-        // Mobile Touch Events
+        // Touch Events
         dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
         dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
         dragHandle.addEventListener("touchend", handleTouchEnd);
@@ -79,31 +83,46 @@
     function handleDragStart(e) {
       const li = this.closest("li");
       dragStartIndex = +li.getAttribute("data-index");
+      draggedItem = li;
       li.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", "dragging"); // Required for Firefox
     }
 
     function handleDragOver(e) {
       e.preventDefault();
       const overItem = this;
-      const placeholder = document.querySelector(".placeholder");
+      const placeholder = workoutList.querySelector(".placeholder");
 
       if (!placeholder) {
         const temp = document.createElement("li");
         temp.className = "placeholder";
-        workoutList.insertBefore(temp, overItem.nextSibling);
+        workoutList.insertBefore(temp, overItem);
       } else {
-        workoutList.insertBefore(placeholder, overItem.nextSibling);
+        const rect = overItem.getBoundingClientRect();
+        const halfway = rect.top + rect.height / 2;
+        if (e.clientY < halfway) {
+          workoutList.insertBefore(placeholder, overItem);
+        } else {
+          workoutList.insertBefore(placeholder, overItem.nextSibling);
+        }
       }
     }
 
     function handleDrop(e) {
-      const placeholder = document.querySelector(".placeholder");
-      const dragEndIndex = [...workoutList.children].indexOf(placeholder);
+      e.preventDefault();
+      const placeholder = workoutList.querySelector(".placeholder");
+      if (!placeholder) return cleanupDragState();
+
+      const childrenArray = Array.from(workoutList.children);
+      const dragEndIndex = childrenArray.indexOf(placeholder);
+
       swapItems(dragStartIndex, dragEndIndex);
       cleanupDragState();
     }
 
     function swapItems(from, to) {
+      if (from === to) return;
       const workouts = getStoredWorkouts();
       const item = workouts.splice(from, 1)[0];
       workouts.splice(to, 0, item);
@@ -121,17 +140,23 @@
 
     function cleanupDragState() {
       document.querySelectorAll(".dragging").forEach(el => el.classList.remove("dragging"));
-      const placeholder = document.querySelector(".placeholder");
+      const placeholder = workoutList.querySelector(".placeholder");
       if (placeholder) placeholder.remove();
+      draggedItem = null;
+      currentPlaceholder = null;
     }
 
-    // Touch Support
-    let touchStartY = 0;
+    // Touch handlers
 
     function handleTouchStart(e) {
       draggedItem = e.currentTarget.closest("li");
       touchStartY = e.touches[0].clientY;
       draggedItem.classList.add("dragging");
+
+      // Create placeholder
+      currentPlaceholder = document.createElement("li");
+      currentPlaceholder.className = "placeholder";
+      workoutList.insertBefore(currentPlaceholder, draggedItem.nextSibling);
     }
 
     function handleTouchMove(e) {
@@ -139,34 +164,58 @@
       const currentY = e.touches[0].clientY;
       const deltaY = currentY - touchStartY;
       draggedItem.style.transform = `translateY(${deltaY}px)`;
+
+      // Move placeholder dynamically
+      const items = [...workoutList.children].filter(i => i !== draggedItem && i !== currentPlaceholder);
+
+      let closestItem = null;
+      let closestDistance = Infinity;
+
+      items.forEach(item => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - currentY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestItem = item;
+        }
+      });
+
+      if (closestItem) {
+        const rect = closestItem.getBoundingClientRect();
+        if (currentY < rect.top + rect.height / 2) {
+          workoutList.insertBefore(currentPlaceholder, closestItem);
+        } else {
+          workoutList.insertBefore(currentPlaceholder, closestItem.nextSibling);
+        }
+      }
     }
 
     function handleTouchEnd(e) {
       draggedItem.style.transform = '';
       draggedItem.classList.remove("dragging");
-      const touchEndY = e.changedTouches[0].clientY;
-      const items = [...workoutList.children];
-      const from = +draggedItem.getAttribute("data-index");
 
-      let closestIndex = from;
-      let closestDistance = Infinity;
+      const newIndex = Array.from(workoutList.children).indexOf(currentPlaceholder);
+      const oldIndex = +draggedItem.getAttribute("data-index");
 
-      items.forEach((item, index) => {
-        const box = item.getBoundingClientRect();
-        const midY = box.top + box.height / 2;
-        const distance = Math.abs(midY - touchEndY);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
+      if (newIndex !== -1 && newIndex !== oldIndex) {
+        swapItems(oldIndex, newIndex);
+      }
 
-      swapItems(from, closestIndex);
+      if (currentPlaceholder) {
+        currentPlaceholder.remove();
+        currentPlaceholder = null;
+      }
       draggedItem = null;
     }
 
-    // Initialize
+    // Initialize list
     renderWorkouts(getStoredWorkouts());
+
+    // Redirect if no meta_access granted
+    if (localStorage.getItem("meta_access") !== "granted") {
+      window.location.href = "login.html";
+    }
     // Drag function
 
     if (localStorage.getItem("meta_access") !== "granted") {
