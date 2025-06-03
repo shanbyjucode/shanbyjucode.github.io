@@ -16,26 +16,135 @@
   </header>
 
   <div class="details-content">
-    <ul class="workout-list">
-      <li onclick="window.location.href='shoulder-dumbbell-lateral-raises.html'">Dumbbell Lateral Raises</li>
-      <li onclick="window.location.href='shoulder-back-fly.html'">Back Fly</li>
-      <li onclick="window.location.href='shoulder-face-pull.html'">Rope Face Pull</li>
-      <li onclick="window.location.href='shoulder-machine-lateral-raises.html'">Machine Lateral Raises</li>
-      <li onclick="window.location.href='shoulder-press-dumbbell.html'">Dumbbell Shoulder Press</li>
-      <li onclick="window.location.href='shoulder-cable-front-raise.html'">Cable Front Raise</li>
-      <li onclick="window.location.href='shoulder-military-press.html'">Military Press</li>
-      <li onclick="window.location.href='shoulder-press-machine.html'">Shoulder Press Machine</li>
-      <li onclick="window.location.href='shoulder-dumbbell-front-raise.html'">Dumbbell Front Raise</li>
-      <li onclick="window.location.href='shoulder-up-right-row.html'">Up Right Row</li>
-      <li onclick="window.location.href='shoulder-barbell-shrug.html'">Barbell Shrug</li>
-      <li onclick="window.location.href='shoulder-dumbbell-shrug.html'">Dumbbell Shrug </li>
+    <ul class="workout-list" id="workoutList">
+      <!-- Shoulder workout items will be rendered by JavaScript -->
     </ul>
   </div>
   <script>
+    const STORAGE_KEY = "shoulderWorkoutOrder";
+    const workoutList = document.getElementById("workoutList");
+  
+    const defaultWorkouts = [
+      { text: "Dumbbell Lateral Raises", link: "shoulder-dumbbell-lateral-raises.html" },
+      { text: "Back Fly", link: "shoulder-back-fly.html" },
+      { text: "Rope Face Pull", link: "shoulder-face-pull.html" },
+      { text: "Machine Lateral Raises", link: "shoulder-machine-lateral-raises.html" },
+      { text: "Dumbbell Shoulder Press", link: "shoulder-press-dumbbell.html" },
+      { text: "Cable Front Raise", link: "shoulder-cable-front-raise.html" },
+      { text: "Military Press", link: "shoulder-military-press.html" },
+      { text: "Shoulder Press Machine", link: "shoulder-press-machine.html" },
+      { text: "Dumbbell Front Raise", link: "shoulder-dumbbell-front-raise.html" },
+      { text: "Up Right Row", link: "shoulder-up-right-row.html" },
+      { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" },
+      { text: "Dumbbell Shrug", link: "shoulder-dumbbell-shrug.html" }
+    ];
+  
+    function renderWorkouts(workouts) {
+      workoutList.innerHTML = '';
+      workouts.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.setAttribute("data-index", index);
+  
+        li.innerHTML = `
+          <span class="workout-text">${item.text}</span>
+          <span class="drag-handle" title="Hold to drag">☰</span>
+        `;
+  
+        li.onclick = () => window.location.href = item.link;
+  
+        const dragHandle = li.querySelector(".drag-handle");
+        dragHandle.setAttribute("draggable", "true");
+        dragHandle.addEventListener("dragstart", handleDragStart);
+        li.addEventListener("dragover", handleDragOver);
+        li.addEventListener("drop", handleDrop);
+  
+        // Mobile Touch Events
+        dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
+        dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
+        dragHandle.addEventListener("touchend", handleTouchEnd);
+  
+        workoutList.appendChild(li);
+      });
+    }
+  
+    let dragStartIndex;
+    function handleDragStart(e) {
+      dragStartIndex = +this.closest("li").getAttribute("data-index");
+    }
+  
+    function handleDragOver(e) {
+      e.preventDefault();
+    }
+  
+    function handleDrop(e) {
+      const dragEndIndex = +this.getAttribute("data-index");
+      swapItems(dragStartIndex, dragEndIndex);
+    }
+  
+    function swapItems(from, to) {
+      const workouts = getStoredWorkouts();
+      const item = workouts.splice(from, 1)[0];
+      workouts.splice(to, 0, item);
+      saveWorkouts(workouts);
+      renderWorkouts(workouts);
+    }
+  
+    function getStoredWorkouts() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+    }
+  
+    function saveWorkouts(workouts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+    }
+  
+    // Mobile Touch Logic
+    let touchStartY = 0;
+    let draggedItem = null;
+  
+    function handleTouchStart(e) {
+      draggedItem = e.currentTarget.closest("li");
+      touchStartY = e.touches[0].clientY;
+    }
+  
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      draggedItem.style.transform = `translateY(${deltaY}px)`;
+    }
+  
+    function handleTouchEnd(e) {
+      draggedItem.style.transform = '';
+      const touchEndY = e.changedTouches[0].clientY;
+      const items = [...workoutList.children];
+      const from = +draggedItem.getAttribute("data-index");
+  
+      let closestIndex = from;
+      let closestDistance = Infinity;
+  
+      items.forEach((item, index) => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - touchEndY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+  
+      swapItems(from, closestIndex);
+      draggedItem = null;
+    }
+  
+    // Init
+    renderWorkouts(getStoredWorkouts());
+  
+    // Access control
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
   </script>
+  
   
 </body>
 </html>
