@@ -16,19 +16,127 @@
   </header>
 
   <div class="details-content">
-    <ul class="workout-list" id="workoutList"></ul>
-    <ul class="workout-list">
-      <li onclick="window.location.href='abs-seated-cable-crunch.html'">Seated Cable Crunch</li>
-      <li onclick="window.location.href='abs-abs-roller.html'">Abs Roller</li>
-      <li onclick="window.location.href='abs-cable-crunch.html'">Kneeling Cable Crunch</li>
-      <li onclick="window.location.href='abs-abdominal-crunch-bord.html'">Abdominal Crunch Bord</li>
-      <li onclick="window.location.href='abs-russian-twist.html'">Russian Twist</li>
+    <ul class="workout-list" id="workoutList">
+      <!-- Populated by JavaScript -->
     </ul>
-  </div>
+  </div>  
   <script>
+    const STORAGE_KEY = "absWorkoutOrder";
+    const workoutList = document.getElementById("workoutList");
+  
+    const defaultWorkouts = [
+      { text: "Seated Cable Crunch", link: "abs-seated-cable-crunch.html" },
+      { text: "Abs Roller", link: "abs-abs-roller.html" },
+      { text: "Kneeling Cable Crunch", link: "abs-cable-crunch.html" },
+      { text: "Abdominal Crunch Bord", link: "abs-abdominal-crunch-bord.html" },
+      { text: "Russian Twist", link: "abs-russian-twist.html" }
+    ];
+  
+    function renderWorkouts(workouts) {
+      workoutList.innerHTML = '';
+      workouts.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.setAttribute("data-index", index);
+  
+        li.innerHTML = `
+          <span class="workout-text">${item.text}</span>
+          <span class="drag-handle" title="Hold to drag">☰</span>
+        `;
+  
+        li.onclick = () => window.location.href = item.link;
+  
+        const dragHandle = li.querySelector(".drag-handle");
+        dragHandle.setAttribute("draggable", "true");
+        dragHandle.addEventListener("dragstart", handleDragStart);
+        li.addEventListener("dragover", handleDragOver);
+        li.addEventListener("drop", handleDrop);
+  
+        // Mobile Touch Events
+        dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
+        dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
+        dragHandle.addEventListener("touchend", handleTouchEnd);
+  
+        workoutList.appendChild(li);
+      });
+    }
+  
+    let dragStartIndex;
+    function handleDragStart(e) {
+      dragStartIndex = +this.closest("li").getAttribute("data-index");
+    }
+  
+    function handleDragOver(e) {
+      e.preventDefault();
+    }
+  
+    function handleDrop(e) {
+      const dragEndIndex = +this.getAttribute("data-index");
+      swapItems(dragStartIndex, dragEndIndex);
+    }
+  
+    function swapItems(from, to) {
+      const workouts = getStoredWorkouts();
+      const item = workouts.splice(from, 1)[0];
+      workouts.splice(to, 0, item);
+      saveWorkouts(workouts);
+      renderWorkouts(workouts);
+    }
+  
+    function getStoredWorkouts() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+    }
+  
+    function saveWorkouts(workouts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+    }
+  
+    // Mobile Touch Logic
+    let touchStartY = 0;
+    let draggedItem = null;
+  
+    function handleTouchStart(e) {
+      draggedItem = e.currentTarget.closest("li");
+      touchStartY = e.touches[0].clientY;
+    }
+  
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      draggedItem.style.transform = `translateY(${deltaY}px)`;
+    }
+  
+    function handleTouchEnd(e) {
+      draggedItem.style.transform = '';
+      const touchEndY = e.changedTouches[0].clientY;
+      const items = [...workoutList.children];
+      const from = +draggedItem.getAttribute("data-index");
+  
+      let closestIndex = from;
+      let closestDistance = Infinity;
+  
+      items.forEach((item, index) => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - touchEndY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+  
+      swapItems(from, closestIndex);
+      draggedItem = null;
+    }
+  
+    // Init
+    renderWorkouts(getStoredWorkouts());
+  
+    // Access Protection
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
   </script>
+  
 </body>
 </html>
