@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Train Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    body {
+        padding-bottom: 100px;  /* Make space so content won't hide behind button */
+    }
+    .tab-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+    .tab-button {
+        padding: 10px 20px;
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        color: #fff;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .tab-button.active {
+        background-color: #00c853;
+        color: #000;
+        font-weight: bold;
+    }
+    .content {
+        max-width: 600px;
+        margin: 0 auto 40px;
+        padding: 0 15px;
+    }
+    .accordion {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+    .accordion-header {
+        padding: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        border-bottom: 1px solid #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .accordion-header:hover {
+        background-color: #333;
+    }
+    .accordion-content {
+        display: none;
+        padding: 0 15px 15px;
+    }
+    .workout-item {
+        margin: 10px 0;
+        background-color: #2a2a2a;
+        border-radius: 6px;
+    }
+    .workout-title {
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .workout-title:hover {
+        background-color: #3a3a3a;
+    }
+    .sets-container {
+        padding: 0 10px 10px 10px;
+        display: none;
+    }
+    .set-row {
+        margin: 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    label {
+        flex: 1 0 60px;
+    }
+    input[type="number"] {
+        flex: 1 0 80px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        border: none;
+        background-color: #0f0f0f;
+        color: #00c853;
+        font-weight: bold;
+        text-align: center;
+    }
+    .save-button {
+        margin-top: 10px;
+        background-color: #00c853;
+        color: #000;
+        font-weight: bold;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .save-button:hover {
+        background-color: #00e864;
+    }
+    /* Progress Log Styles */
+    .log-card {
+        background-color: #1e1e1e;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    .log-date {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .log-entry {
+        background-color: #2a2a2a;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+    .log-entry h4 {
+        margin: 0 0 6px 0;
+    }
+    .no-data {
+        text-align: center;
+        color: #555;
+        margin-top: 40px;
+    }
+    /* Toggle icons */
+    .arrow {
+        transition: transform 0.3s ease;
+    }
+    .arrow.down {
+        transform: rotate(180deg);
+    }
+
+    .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px;
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+
+    .arrow-svg {
+        transition: transform 0.3s ease;
+    }
+
+    .rotated .arrow-svg {
+        transform: rotate(180deg);
+    }
+
+    .arrow-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .accordion-header.active .arrow-icon {
+        transform: rotate(180deg);
+    }
+    .log-card {
+        background-color: #313131;
+        color: #fff;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+    .category-section {
+        margin-top: 10px;
+    }
+    .save-button {
+        position: fixed;       /* Fix it on screen */
+        bottom: 0;             /* Stick to the bottom */
+        left: 0;
+        width: 100%;           /* Full width */
+        padding: 15px 0;
+        background-color: #00c853;
+        color: #000;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        z-index: 1000;         /* On top of other elements */
+        border-radius: 0;
+        text-align: center;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+  </style>
+</head>
+<header class="details-header">
+    <div class="back-btn" onclick="window.history.back();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24px" viewBox="0 0 512 512"><polyline points="244 400 100 256 244 112" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/><line x1="120" y1="256" x2="412" y2="256" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"/></svg>
+    </div>
+    <h1>Train Tracker</h1>
+</header>
+<div class="tab-container">
+    <button class="tab-button active" data-tab="tracker">Train Tracker</button>
+    <button class="tab-button" data-tab="progress">Progress Log</button>
+  </div>
+  
+  <div class="content" id="tracker">
+  
+  </div>
+  
+  <div class="content" id="progress" style="display:none;">
+    <div id="progress-content"></div>
+  </div>
+  
+  <script>
+    // Your workout data by category
+    const workoutsByCategory = {
+      Chest: [
+        { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
+        { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
+        { text: "Cable Fly", link: "chest-cable-fly.html" },
+        { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+        { text: "Incline Dumbbell Fly", link: "chest-incline-dumbbell-fly.html" },
+        { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" },
+        { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
+        { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+        { text: "Incline Cable Fly", link: "chest-incline-cable-fly.html" },
+        { text: "Flat Dumbbell Fly", link: "chest-flat-dumbell-fly.html" },
+        { text: "Lower Cable Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" },
+        { text: "Decline Bench Press", link: "chest-decline-bench-press.html" },
+        { text: "Flat Cable Fly", link: "chest-flat-cable-fly.html" },
+        { text: "Pec Fly", link: "chest-pec-fly.html" },
+        { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
+        { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" }
+      ],
+      Shoulder: [
+        { text: "Dumbbell Lateral Raises", link: "shoulder-dumbbell-lateral-raises.html" },
+        { text: "Back Fly", link: "shoulder-back-fly.html" },
+        { text: "Rope Face Pull", link: "shoulder-face-pull.html" },
+        { text: "Machine Lateral Raises", link: "shoulder-machine-lateral-raises.html" },
+        { text: "Dumbbell Shoulder Press", link: "shoulder-press-dumbbell.html" },
+        { text: "Cable Front Raise", link: "shoulder-cable-front-raise.html" },
+        { text: "Military Press", link: "shoulder-military-press.html" },
+        { text: "Shoulder Press Machine", link: "shoulder-press-machine.html" },
+        { text: "Dumbbell Front Raise", link: "shoulder-dumbbell-front-raise.html" },
+        { text: "Up Right Row", link: "shoulder-up-right-row.html" },
+        { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" },
+        { text: "Dumbbell Shrug", link: "shoulder-dumbbell-shrug.html" }
+      ],
+      Triceps: [
+        { text: "Bar Push Down", link: "trice-bar-push-down.html" },
+        { text: "Reverse Grip Bar Push Down", link: "trice-reverse-grip-bar-push-down.html" },
+        { text: "Rope Push Down", link: "trice-rope-push-down.html" },
+        { text: "Double Arm Extension", link: "trice-double-arm-extension.html" },
+        { text: "Single Arm Triceps Extension", link: "trice-single-arm-extension.html" },
+        { text: "Bench Dips", link: "trice-bench-dips.html" },
+        { text: "D Handle Push Down", link: "trice-d-handle-pushdown.html" },
+        { text: "Chest Supported Kick Back", link: "trice-chest-supported-kickback.html" },
+        { text: "Rope Extension", link: "trice-rope-extension.html" },
+        { text: "Skull Crusher", link: "trice-skull-crusher.html" }
+      ],
+      Biceps: [
+        { text: "Cable Curl", link: "biceps-cable-curl.html" },
+        { text: "Preacher Curl", link: "biceps-preacher-curl.html" },
+        { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
+        { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
+        { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" },
+        { text: "Double Biceps Curl", link: "biceps-double-curl.html" },
+        { text: "Reverse Grip Barbell Curl", link: "biceps-reverse-curl.html" },
+        { text: "Concentration Curl", link: "biceps-concentration-curl.html" },
+        { text: "Single Arm Cable Curl", link: "biceps-single-arm-cable-curl.html" }
+      ],
+      Leg: [
+        { text: "Seated Calf", link: "leg-seated-calf.html" },
+        { text: "Abduction", link: "leg-abduction.html" },
+        { text: "Adduction", link: "leg-adduction.html" },
+        { text: "Walking Lunges", link: "walking-lunges.html" },
+        { text: "Hack Squats", link: "hack-squats.html" },
+        { text: "Super Squats", link: "leg-super-squats.html" },
+        { text: "Leg Press", link: "leg-press.html" },
+        { text: "Leg Extension", link: "leg-extension.html" },
+        { text: "Leg Curl", link: "leg-leg-curl.html" },
+        { text: "Calf Press", link: "leg-calf-press.html" },
+        { text: "Standing Calf", link: "leg-standing-calf.html" },
+        { text: "Static Lunges", link: "leg-statics-lunges-smith.html" },
+        { text: "Good Morning Bend", link: "leg-goodmorning-bend.html" },
+        { text: "Sumo Squat Dumbbell", link: "leg-sumo-squat-dumbell.html" },
+        { text: "Standing Lunges Dumbbell", link: "leg-standing-lunges-dumbbell.html" },
+        { text: "Barbell Squats", link: "leg-barbell-squats.html" },
+        { text: "Glute Kick", link: "leg-glute-kick.html" }
+      ]
+    };
+  
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.tab-button');
+    const trackerDiv = document.getElementById('tracker');
+    const progressDiv = document.getElementById('progress');
+    const progressContent = document.getElementById('progress-content');
+  
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        if (tab.dataset.tab === 'tracker') {
+          progressDiv.style.display = 'none';
+          trackerDiv.style.display = 'block';
+        } else {
+          trackerDiv.style.display = 'none';
+          progressDiv.style.display = 'block';
+          renderProgressLog();
+        }
+      });
+    });
+  
+    // Create the workout tracker UI
+    function createTracker() {
+      trackerDiv.innerHTML = '';
+      for (const [category, workouts] of Object.entries(workoutsByCategory)) {
+        const accordion = document.createElement('div');
+        accordion.className = 'accordion';
+  
+        const header = document.createElement('div');
+        header.className = 'accordion-header';
+        header.textContent = category;
+  
+        const arrow = document.createElement('span');
+        arrow.innerHTML = `
+        <svg class="arrow-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+        </svg>
+        `;
+        arrow.classList.add('arrow');
+        header.appendChild(arrow);
+  
+        accordion.appendChild(header);
+  
+        const content = document.createElement('div');
+        content.className = 'accordion-content';
+  
+        workouts.forEach((workout, idx) => {
+          const workoutItem = document.createElement('div');
+          workoutItem.className = 'workout-item';
+  
+          const workoutTitle = document.createElement('div');
+          workoutTitle.className = 'workout-title';
+          workoutTitle.textContent = workout.text;
+  
+          const workoutArrow = document.createElement('span');
+          workoutArrow.innerHTML = `
+            <svg class="arrow-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+            </svg>
+            `;
+          workoutArrow.classList.add('arrow');
+          workoutTitle.appendChild(workoutArrow);
+  
+          workoutItem.appendChild(workoutTitle);
+  
+          const setsContainer = document.createElement('div');
+          setsContainer.className = 'sets-container';
+  
+          // We will allow 4 sets per workout
+          for (let i = 1; i <= 4; i++) {
+            const setRow = document.createElement('div');
+            setRow.className = 'set-row';
+  
+            const setLabel = document.createElement('label');
+            setLabel.textContent = `Set ${i}:`;
+  
+            const weightInput = document.createElement('input');
+            weightInput.type = 'number';
+            weightInput.min = '0';
+            weightInput.placeholder = 'kg';
+            weightInput.dataset.set = i;
+            weightInput.className = 'weight-input';
+  
+            setRow.appendChild(setLabel);
+            setRow.appendChild(weightInput);
+            setsContainer.appendChild(setRow);
+          }
+  
+          workoutItem.appendChild(setsContainer);
+          content.appendChild(workoutItem);
+  
+          // Toggle sets container on workout title click
+          workoutTitle.addEventListener('click', () => {
+            const isVisible = setsContainer.style.display === 'block';
+            setsContainer.style.display = isVisible ? 'none' : 'block';
+            workoutArrow.classList.toggle('down', !isVisible);
+            workoutArrow.classList.toggle('down', !isVisible);
+          });
+        });
+  
+        accordion.appendChild(content);
+        trackerDiv.appendChild(accordion);
+  
+        // Toggle accordion content
+        header.addEventListener('click', () => {
+          const isVisible = content.style.display === 'block';
+          content.style.display = isVisible ? 'none' : 'block';
+          arrow.classList.toggle('down', !isVisible);
+        });
+      }
+  
+      // Add Save Button
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-button';
+      saveBtn.textContent = 'Save Workout';
+      saveBtn.addEventListener('click', saveWorkout);
+      trackerDiv.appendChild(saveBtn);
+    }
+  
+    // Save workout data to localStorage
+    function saveWorkout() {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const timestamp = new Date().toISOString();
+
+        let workoutLog = JSON.parse(localStorage.getItem('workoutLog')) || [];
+
+        // Check if there's already a log for today
+        let todayEntry = workoutLog.find(entry => entry.timestamp.startsWith(todayStr));
+
+        if (!todayEntry) {
+            // If not, create one
+            todayEntry = {
+            timestamp,
+            data: []
+            };
+            workoutLog.push(todayEntry);
+        } else {
+            // Optional: update timestamp to most recent save time
+            todayEntry.timestamp = timestamp;
+        }
+
+        // Get new data from input
+        const newData = [];
+        document.querySelectorAll('.accordion').forEach(accordion => {
+            const category = accordion.querySelector('.accordion-header').textContent.trim();
+            accordion.querySelectorAll('.workout-item').forEach(item => {
+            const workoutName = item.querySelector('.workout-title').childNodes[0].textContent.trim();
+            const sets = [];
+            item.querySelectorAll('.weight-input').forEach(input => {
+                const val = input.value.trim();
+                if (val !== '' && !isNaN(val) && Number(val) > 0) {
+                sets.push(Number(val));
+                }
+            });
+            if (sets.length > 0) {
+                newData.push({ category, workoutName, sets });
+            }
+            });
+        });
+
+        if (newData.length === 0) {
+            alert('Please enter at least one set weight before saving.');
+            return;
+        }
+
+        // Replace existing workouts for the same workoutName inside today’s data
+        newData.forEach(newWorkout => {
+            const existingIndex = todayEntry.data.findIndex(
+            entry => entry.workoutName === newWorkout.workoutName
+            );
+            if (existingIndex !== -1) {
+            // Replace existing workout data
+            todayEntry.data[existingIndex] = newWorkout;
+            } else {
+            // Add new workout
+            todayEntry.data.push(newWorkout);
+            }
+        });
+
+        localStorage.setItem('workoutLog', JSON.stringify(workoutLog));
+        alert('Workout saved!');
+
+        // Clear inputs
+        document.querySelectorAll('.weight-input').forEach(input => (input.value = ''));
+        }
+    // Render Progress Log grouped by date
+    function renderProgressLog() {
+  const log = JSON.parse(localStorage.getItem('workoutLog')) || [];
+  const progressContainer = document.getElementById('progress-content');
+  progressContainer.innerHTML = '';
+
+  if (log.length === 0) {
+    progressContainer.innerHTML = '<p style="color:#aaa;">No saved workouts yet.</p>';
+    return;
+  }
+
+  log
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)) // Latest first
+    .forEach(entry => {
+      const date = new Date(entry.timestamp);
+      const year = date.getFullYear();
+      const month = date.toLocaleString('default', { month: 'long' });
+      const day = date.getDate();
+      const time = date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+        });
+
+      // Group workouts by category
+      const grouped = {};
+      entry.data.forEach(workout => {
+        if (!grouped[workout.category]) grouped[workout.category] = [];
+        grouped[workout.category].push(workout);
+      });
+
+      const card = document.createElement('div');
+      card.className = 'log-card';
+      card.innerHTML = `
+        <h3>${day} ${month} ${year} - <span style="font-size: 0.9em; color: #888">${time}</span></h3>
+        ${Object.keys(grouped)
+          .map(cat => {
+            const workoutsHTML = grouped[cat]
+              .map(
+                w =>
+                  `<div style="margin-left: 15px; margin-bottom: 10px;">
+                    <strong>${w.workoutName}</strong>
+                    <ul style="margin: 5px 0 0 10px; padding: 0; list-style: none; color: #ccc;">
+                      ${w.sets.map((s, i) => `<li>Set ${i + 1}: ${s} kg</li>`).join('')}
+                    </ul>
+                  </div>`
+              )
+              .join('');
+
+            return `
+              <div class="category-section">
+                <h4 style="color: #00c853; margin: 15px 0 5px;">${cat}</h4>
+                ${workoutsHTML}
+              </div>
+            `;
+          })
+          .join('')}
+      `;
+      progressContainer.appendChild(card);
+    });
+}
+  
+    // Initialize
+    createTracker();
+  </script>
+  
+  </body>
+  </html>
