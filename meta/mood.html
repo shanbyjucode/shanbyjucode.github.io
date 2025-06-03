@@ -207,98 +207,109 @@
   </div>
 
   <script>
-    const MOOD_STORAGE_KEY = "moodHistory";
-    let moodHistory = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
+        const MOOD_STORAGE_KEY = "moodHistory";
+        let moodHistory = [];
 
-    function getTodayDate() {
-        const now = new Date();
-        return now.toISOString().split("T")[0];
-    }
-
-    function setMood(mood) {
-        const moodMessage = document.getElementById("moodMessage");
-        const now = new Date();
-        const timestamp = now.toLocaleString();
-        const today = getTodayDate();
-
-        // Feedback
-        let message = "";
-        if (mood === "happy") {
-        message = "Great to hear you're feeling happy! 😊";
-        } else if (mood === "neutral") {
-        message = "Hope your day gets even better! 😐";
-        } else if (mood === "sad") {
-        message = "Sending you good vibes. 💪😔";
-        }
-        moodMessage.textContent = message;
-
-        // Remove today's mood entry
-        moodHistory = moodHistory.filter(entry => entry.date !== today);
-
-        // Add today's mood
-        moodHistory.unshift({ mood, time: timestamp, date: today });
-
-        // Save updated history
-        localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(moodHistory));
-
-        renderMoodHistory();
-    }
-
-    function renderMoodHistory() {
-        const logDiv = document.getElementById("mood-log");
-        if (!moodHistory.length) {
-        logDiv.innerHTML = "<p>No mood tracked yet.</p>";
-        return;
+        function getTodayDate() {
+            const now = new Date();
+            return now.toISOString().split("T")[0];
         }
 
-        const grouped = {};
+        function setMood(mood) {
+            const moodMessage = document.getElementById("moodMessage");
+            const now = new Date();
+            const timestamp = now.toLocaleString();
+            const today = getTodayDate();
 
-        moodHistory.forEach(entry => {
-        const dateObj = new Date(entry.date);
-        const year = dateObj.getFullYear();
-        const month = dateObj.toLocaleString('default', { month: 'long' });
+            // Feedback
+            let message = "";
+            if (mood === "happy") {
+            message = "Great to hear you're feeling happy! 😊";
+            } else if (mood === "neutral") {
+            message = "Hope your day gets even better! 😐";
+            } else if (mood === "sad") {
+            message = "Sending you good vibes. 💪😔";
+            }
+            moodMessage.textContent = message;
 
-        if (!grouped[year]) grouped[year] = {};
-        if (!grouped[year][month]) grouped[year][month] = [];
-        grouped[year][month].push(entry);
-        });
+            // Reload stored data in case memory is out of sync
+            let stored = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
 
-        logDiv.innerHTML = "";
+            // Remove today's entry (overwrite mode)
+            stored = stored.filter(entry => entry.date !== today);
 
-        for (const year of Object.keys(grouped).sort((a, b) => b - a)) {
-        const yearDiv = document.createElement("div");
-        yearDiv.className = "mood-log-group";
-        yearDiv.innerHTML = `<h3>🗓️ ${year}</h3>`;
+            // Add new entry
+            stored.unshift({ mood, time: timestamp, date: today });
 
-        for (const month of Object.keys(grouped[year])) {
-            const monthEntries = grouped[year][month];
-            yearDiv.innerHTML += `<h4 style="margin-left:10px;">${month}</h4>`;
-            monthEntries.forEach(entry => {
-            const moodIcon = entry.mood === 'happy' ? '😊' :
-                            entry.mood === 'neutral' ? '😐' : '😔';
-            const card = `
-                <div class="mood-card">
-                <small>${entry.time}</small>
-                <strong>${moodIcon} ${entry.mood}</strong>
-                </div>
-            `;
-            yearDiv.innerHTML += card;
+            // Save to localStorage
+            localStorage.setItem(MOOD_STORAGE_KEY, JSON.stringify(stored));
+            moodHistory = stored;
+
+            console.log("Saved moodHistory:", moodHistory); // Debug
+
+            renderMoodHistory();
+        }
+
+        function renderMoodHistory() {
+            const logDiv = document.getElementById("mood-log");
+            if (!moodHistory.length) {
+            logDiv.innerHTML = "<p>No mood tracked yet.</p>";
+            return;
+            }
+
+            const grouped = {};
+
+            moodHistory.forEach(entry => {
+            const dateObj = new Date(entry.date);
+            const year = dateObj.getFullYear();
+            const month = dateObj.toLocaleString('default', { month: 'long' });
+
+            if (!grouped[year]) grouped[year] = {};
+            if (!grouped[year][month]) grouped[year][month] = [];
+            grouped[year][month].push(entry);
             });
+
+            logDiv.innerHTML = "";
+
+            for (const year of Object.keys(grouped).sort((a, b) => b - a)) {
+            const yearDiv = document.createElement("div");
+            yearDiv.className = "mood-log-group";
+            yearDiv.innerHTML = `<h3>🗓️ ${year}</h3>`;
+
+            for (const month of Object.keys(grouped[year])) {
+                const monthEntries = grouped[year][month];
+                yearDiv.innerHTML += `<h4 style="margin-left:10px;">${month}</h4>`;
+
+                monthEntries.forEach(entry => {
+                const moodIcon = entry.mood === 'happy' ? '😊' :
+                                entry.mood === 'neutral' ? '😐' : '😔';
+                const card = `
+                    <div class="mood-card">
+                    <small>${entry.time}</small>
+                    <strong>${moodIcon} ${entry.mood}</strong>
+                    </div>
+                `;
+                yearDiv.innerHTML += card;
+                });
+            }
+
+            logDiv.appendChild(yearDiv);
+            }
         }
 
-        logDiv.appendChild(yearDiv);
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
         }
-    }
 
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
-    }
-
-    // Load mood history on page load
-    window.addEventListener('DOMContentLoaded', renderMoodHistory);
+        // Load mood history on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const stored = JSON.parse(localStorage.getItem(MOOD_STORAGE_KEY)) || [];
+            moodHistory = stored;
+            renderMoodHistory();
+        });
   </script>
 </body>
 </html>
