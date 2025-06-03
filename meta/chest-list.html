@@ -127,12 +127,13 @@
       document.querySelectorAll(".dragging").forEach(el => {
         el.classList.remove("dragging");
         el.style.transform = '';
+        el.style.position = '';
+        el.style.zIndex = '';
       });
       const placeholder = document.querySelector(".placeholder");
       if (placeholder) placeholder.remove();
 
-      // Unlock scrolling in case it was blocked
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; // unlock scrolling
     }
 
     // Touch Support
@@ -159,17 +160,17 @@
       if (!isDragging) {
         if (Math.abs(deltaY) > 10 && deltaY > deltaX) {
           isDragging = true;
-          // Lock scrolling when drag starts
-          document.body.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden'; // Lock scroll
         } else {
-          // Not dragging yet, allow scroll
           return;
         }
       }
 
-      e.preventDefault(); // prevent scroll while dragging
+      e.preventDefault(); // prevent scroll
 
       draggedItem.style.transform = `translateY(${deltaY}px)`;
+      draggedItem.style.position = 'relative';
+      draggedItem.style.zIndex = '1000';
 
       const items = [...workoutList.children].filter(i => i !== draggedItem && i !== currentPlaceholder);
 
@@ -200,6 +201,8 @@
       if (!draggedItem) return;
 
       draggedItem.style.transform = '';
+      draggedItem.style.position = '';
+      draggedItem.style.zIndex = '';
       draggedItem.classList.remove("dragging");
 
       const touchEndY = e.changedTouches[0].clientY;
@@ -228,9 +231,7 @@
 
       draggedItem = null;
       isDragging = false;
-
-      // Unlock scrolling after drag
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; // Unlock scroll
     }
 
     // Initialize
@@ -239,6 +240,7 @@
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
+
   </script>
 </body>
 </html>
