@@ -23,219 +23,126 @@
   <script>
     // drag function
     const STORAGE_KEY = "chestWorkoutOrder";
-    const workoutList = document.getElementById("workoutList");
+  const workoutList = document.getElementById("workoutList");
 
-    const defaultWorkouts = [
-      { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
-      { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
-      { text: "Cable Fly", link: "chest-cable-fly.html" },
-      { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
-      { text: "Incline Dumbbell Fly", link: "chest-incline-dumbbell-fly.html" },
-      { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" },
-      { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
-      { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
-      { text: "Incline Cable Fly", link: "chest-incline-cable-fly.html" },
-      { text: "Flat Dumbbell Fly", link: "chest-flat-dumbell-fly.html" },
-      { text: "Lower Cable Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" },
-      { text: "Decline Bench Press", link: "chest-decline-bench-press.html" },
-      { text: "Flat Cable Fly", link: "chest-flat-cable-fly.html" },
-      { text: "Pec Fly", link: "chest-pec-fly.html" },
-      { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
-      { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" }
-    ];
+  const defaultWorkouts = [
+    { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
+    { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
+    { text: "Cable Fly", link: "chest-cable-fly.html" },
+    { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+    { text: "Incline Dumbbell Fly", link: "chest-incline-dumbbell-fly.html" },
+    { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" },
+    { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
+    { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+    { text: "Incline Cable Fly", link: "chest-incline-cable-fly.html" },
+    { text: "Flat Dumbbell Fly", link: "chest-flat-dumbell-fly.html" },
+    { text: "Lower Cable Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" },
+    { text: "Decline Bench Press", link: "chest-decline-bench-press.html" },
+    { text: "Flat Cable Fly", link: "chest-flat-cable-fly.html" },
+    { text: "Pec Fly", link: "chest-pec-fly.html" },
+    { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
+    { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" }
+  ];
 
-    let dragStartIndex = null;
-    let draggedItem = null;
-    let currentPlaceholder = null;
-    let isDragging = false;
-    let touchStartX = 0;
-    let touchStartY = 0;
+  function renderWorkouts(workouts) {
+    workoutList.innerHTML = '';
+    workouts.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.setAttribute("data-index", index);
 
-    function renderWorkouts(workouts) {
-      workoutList.innerHTML = '';
-      workouts.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.setAttribute("data-index", index);
-        li.innerHTML = `
-          <span class="workout-text">${item.text}</span>
-          <span class="drag-handle" title="Hold to drag">☰</span>
-        `;
+      li.innerHTML = `
+        <span class="workout-text">${item.text}</span>
+        <span class="drag-handle" title="Hold to drag">☰</span>
+      `;
 
-        li.onclick = () => window.location.href = item.link;
+      li.onclick = () => window.location.href = item.link;
 
-        const dragHandle = li.querySelector(".drag-handle");
-        dragHandle.setAttribute("draggable", "true");
-        dragHandle.addEventListener("dragstart", handleDragStart);
-        li.addEventListener("dragover", handleDragOver);
-        li.addEventListener("drop", handleDrop);
+      const dragHandle = li.querySelector(".drag-handle");
+      dragHandle.setAttribute("draggable", "true");
+      dragHandle.addEventListener("dragstart", handleDragStart);
+      li.addEventListener("dragover", handleDragOver);
+      li.addEventListener("drop", handleDrop);
 
-        // Mobile Touch Events
-        dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
-        dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
-        dragHandle.addEventListener("touchend", handleTouchEnd);
+      // Mobile Touch Events
+      dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
+      dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
+      dragHandle.addEventListener("touchend", handleTouchEnd);
 
-        workoutList.appendChild(li);
-      });
+      workoutList.appendChild(li);
+    });
+  }
 
-      document.addEventListener("dragend", cleanupDragState);
-    }
+  let dragStartIndex;
+  function handleDragStart(e) {
+    dragStartIndex = +this.closest("li").getAttribute("data-index");
+  }
 
-    function handleDragStart(e) {
-      const li = this.closest("li");
-      dragStartIndex = +li.getAttribute("data-index");
-      li.classList.add("dragging");
-    }
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
 
-    function handleDragOver(e) {
-      e.preventDefault();
-      const overItem = this;
-      const placeholder = document.querySelector(".placeholder");
+  function handleDrop(e) {
+    const dragEndIndex = +this.getAttribute("data-index");
+    swapItems(dragStartIndex, dragEndIndex);
+  }
 
-      if (!placeholder) {
-        const temp = document.createElement("li");
-        temp.className = "placeholder";
-        workoutList.insertBefore(temp, overItem.nextSibling);
-      } else {
-        workoutList.insertBefore(placeholder, overItem.nextSibling);
+  function swapItems(from, to) {
+    const workouts = getStoredWorkouts();
+    const item = workouts.splice(from, 1)[0];
+    workouts.splice(to, 0, item);
+    saveWorkouts(workouts);
+    renderWorkouts(workouts);
+  }
+
+  function getStoredWorkouts() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+  }
+
+  function saveWorkouts(workouts) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+  }
+
+  // Mobile Touch Logic
+  let touchStartY = 0;
+  let draggedItem = null;
+
+  function handleTouchStart(e) {
+    draggedItem = e.currentTarget.closest("li");
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    e.preventDefault();
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY;
+    draggedItem.style.transform = `translateY(${deltaY}px)`;
+  }
+
+  function handleTouchEnd(e) {
+    draggedItem.style.transform = '';
+    const touchEndY = e.changedTouches[0].clientY;
+    const items = [...workoutList.children];
+    const from = +draggedItem.getAttribute("data-index");
+
+    let closestIndex = from;
+    let closestDistance = Infinity;
+
+    items.forEach((item, index) => {
+      const box = item.getBoundingClientRect();
+      const midY = box.top + box.height / 2;
+      const distance = Math.abs(midY - touchEndY);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
       }
-    }
+    });
 
-    function handleDrop(e) {
-      const placeholder = document.querySelector(".placeholder");
-      const dragEndIndex = [...workoutList.children].indexOf(placeholder);
-      swapItems(dragStartIndex, dragEndIndex);
-      cleanupDragState();
-    }
+    swapItems(from, closestIndex);
+    draggedItem = null;
+  }
 
-    function swapItems(from, to) {
-      const workouts = getStoredWorkouts();
-      const item = workouts.splice(from, 1)[0];
-      workouts.splice(to, 0, item);
-      saveWorkouts(workouts);
-      renderWorkouts(workouts);
-    }
-
-    function getStoredWorkouts() {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
-    }
-
-    function saveWorkouts(workouts) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
-    }
-
-    function cleanupDragState() {
-      document.querySelectorAll(".dragging").forEach(el => {
-        el.classList.remove("dragging");
-        el.style.transform = '';
-        el.style.position = '';
-        el.style.zIndex = '';
-      });
-      const placeholder = document.querySelector(".placeholder");
-      if (placeholder) placeholder.remove();
-
-      document.body.style.overflow = ''; // unlock scrolling
-    }
-
-    // Touch Support
-    function handleTouchStart(e) {
-      draggedItem = e.currentTarget.closest("li");
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      isDragging = false;
-      draggedItem.classList.add("dragging");
-
-      // Add placeholder after draggedItem
-      currentPlaceholder = document.createElement("li");
-      currentPlaceholder.className = "placeholder";
-      workoutList.insertBefore(currentPlaceholder, draggedItem.nextSibling);
-    }
-
-    function handleTouchMove(e) {
-      const currentX = e.touches[0].clientX;
-      const currentY = e.touches[0].clientY;
-
-      const deltaX = Math.abs(currentX - touchStartX);
-      const deltaY = currentY - touchStartY;
-
-      if (!isDragging) {
-        if (Math.abs(deltaY) > 10 && deltaY > deltaX) {
-          isDragging = true;
-          document.body.style.overflow = 'hidden'; // Lock scroll
-        } else {
-          return;
-        }
-      }
-
-      e.preventDefault(); // prevent scroll
-
-      draggedItem.style.transform = `translateY(${deltaY}px)`;
-      draggedItem.style.position = 'relative';
-      draggedItem.style.zIndex = '1000';
-
-      const items = [...workoutList.children].filter(i => i !== draggedItem && i !== currentPlaceholder);
-
-      let closestItem = null;
-      let closestDistance = Infinity;
-
-      items.forEach(item => {
-        const box = item.getBoundingClientRect();
-        const midY = box.top + box.height / 2;
-        const distance = Math.abs(midY - currentY);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestItem = item;
-        }
-      });
-
-      if (closestItem) {
-        const rect = closestItem.getBoundingClientRect();
-        if (currentY < rect.top + rect.height / 2) {
-          workoutList.insertBefore(currentPlaceholder, closestItem);
-        } else {
-          workoutList.insertBefore(currentPlaceholder, closestItem.nextSibling);
-        }
-      }
-    }
-
-    function handleTouchEnd(e) {
-      if (!draggedItem) return;
-
-      draggedItem.style.transform = '';
-      draggedItem.style.position = '';
-      draggedItem.style.zIndex = '';
-      draggedItem.classList.remove("dragging");
-
-      const touchEndY = e.changedTouches[0].clientY;
-      const items = [...workoutList.children].filter(i => !i.classList.contains("placeholder"));
-      const from = +draggedItem.getAttribute("data-index");
-
-      let closestIndex = from;
-      let closestDistance = Infinity;
-
-      items.forEach((item, index) => {
-        const box = item.getBoundingClientRect();
-        const midY = box.top + box.height / 2;
-        const distance = Math.abs(midY - touchEndY);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      swapItems(from, closestIndex);
-
-      if (currentPlaceholder) {
-        currentPlaceholder.remove();
-        currentPlaceholder = null;
-      }
-
-      draggedItem = null;
-      isDragging = false;
-      document.body.style.overflow = ''; // Unlock scroll
-    }
-
-    // Initialize
-    renderWorkouts(getStoredWorkouts());
+  // Init
+  renderWorkouts(getStoredWorkouts());
 
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
