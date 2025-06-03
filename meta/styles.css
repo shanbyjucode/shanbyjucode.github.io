@@ -9,6 +9,7 @@ body, html {
     font-weight: 300;
     font-style: normal;
     height: 100vh;
+    overscroll-behavior: contain;
     /* overflow: hidden; */
 }
 
@@ -191,6 +192,9 @@ section ul li{
     cursor: grab;
     color: #888;
     padding: 6px;
+    cursor: grab;
+    touch-action: none;
+    pointer-events: auto;
   }
 
   .placeholder {
