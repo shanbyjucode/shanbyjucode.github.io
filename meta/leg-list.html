@@ -16,30 +16,139 @@
   </header>
 
   <div class="details-content">
-    <ul class="workout-list">
-      <li onclick="window.location.href='leg-seated-calf.html'">Seated Calf</li>
-      <li onclick="window.location.href='leg-abduction.html'">Abduction</li>
-      <li onclick="window.location.href='leg-adduction.html'">Adduction</li>
-      <li onclick="window.location.href='walking-lunges.html'">Walking Lunges</li>
-      <li onclick="window.location.href='hack-squats.html'">Hack Squats</li>
-      <li onclick="window.location.href='leg-super-squats.html'">Super Squats</li>
-      <li onclick="window.location.href='leg-press.html'">Leg Press</li>
-      <li onclick="window.location.href='leg-extension.html'">Leg Extension</li>
-      <li onclick="window.location.href='leg-leg-curl.html'">Leg Curl</li>
-      <li onclick="window.location.href='leg-calf-press.html'">Calf Press</li>
-      <li onclick="window.location.href='leg-standing-calf.html'">Standing Calf</li>
-      <li onclick="window.location.href='leg-statics-lunges-smith.html'">Static Lunges</li>
-      <li onclick="window.location.href='leg-goodmorning-bend.html'">Good Morning Bend</li>
-      <li onclick="window.location.href='leg-sumo-squat-dumbell.html'">Sumo Squat Dumbbell</li>
-      <li onclick="window.location.href='leg-standing-lunges-dumbbell.html'">Standing Lunges Dumbbell</li>
-      <li onclick="window.location.href='leg-barbell-squats.html'">Barbell Squats</li>
-      <li onclick="window.location.href='leg-glute-kick.html'">Glute Kick</li>
+    <ul class="workout-list" id="workoutList">
+      <!-- List items will be rendered by JavaScript -->
     </ul>
   </div>
   <script>
+    const STORAGE_KEY = "legWorkoutOrder";
+    const workoutList = document.getElementById("workoutList");
+  
+    const defaultWorkouts = [
+      { text: "Seated Calf", link: "leg-seated-calf.html" },
+      { text: "Abduction", link: "leg-abduction.html" },
+      { text: "Adduction", link: "leg-adduction.html" },
+      { text: "Walking Lunges", link: "walking-lunges.html" },
+      { text: "Hack Squats", link: "hack-squats.html" },
+      { text: "Super Squats", link: "leg-super-squats.html" },
+      { text: "Leg Press", link: "leg-press.html" },
+      { text: "Leg Extension", link: "leg-extension.html" },
+      { text: "Leg Curl", link: "leg-leg-curl.html" },
+      { text: "Calf Press", link: "leg-calf-press.html" },
+      { text: "Standing Calf", link: "leg-standing-calf.html" },
+      { text: "Static Lunges", link: "leg-statics-lunges-smith.html" },
+      { text: "Good Morning Bend", link: "leg-goodmorning-bend.html" },
+      { text: "Sumo Squat Dumbbell", link: "leg-sumo-squat-dumbell.html" },
+      { text: "Standing Lunges Dumbbell", link: "leg-standing-lunges-dumbbell.html" },
+      { text: "Barbell Squats", link: "leg-barbell-squats.html" },
+      { text: "Glute Kick", link: "leg-glute-kick.html" }
+    ];
+  
+    function renderWorkouts(workouts) {
+      workoutList.innerHTML = '';
+      workouts.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.setAttribute("data-index", index);
+  
+        li.innerHTML = `
+          <span class="workout-text">${item.text}</span>
+          <span class="drag-handle" title="Hold to drag">☰</span>
+        `;
+  
+        li.onclick = () => window.location.href = item.link;
+  
+        const dragHandle = li.querySelector(".drag-handle");
+        dragHandle.setAttribute("draggable", "true");
+        dragHandle.addEventListener("dragstart", handleDragStart);
+        li.addEventListener("dragover", handleDragOver);
+        li.addEventListener("drop", handleDrop);
+  
+        // Mobile Touch Events
+        dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
+        dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
+        dragHandle.addEventListener("touchend", handleTouchEnd);
+  
+        workoutList.appendChild(li);
+      });
+    }
+  
+    let dragStartIndex;
+    function handleDragStart(e) {
+      dragStartIndex = +this.closest("li").getAttribute("data-index");
+    }
+  
+    function handleDragOver(e) {
+      e.preventDefault();
+    }
+  
+    function handleDrop(e) {
+      const dragEndIndex = +this.getAttribute("data-index");
+      swapItems(dragStartIndex, dragEndIndex);
+    }
+  
+    function swapItems(from, to) {
+      const workouts = getStoredWorkouts();
+      const item = workouts.splice(from, 1)[0];
+      workouts.splice(to, 0, item);
+      saveWorkouts(workouts);
+      renderWorkouts(workouts);
+    }
+  
+    function getStoredWorkouts() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+    }
+  
+    function saveWorkouts(workouts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+    }
+  
+    // Mobile Touch Logic
+    let touchStartY = 0;
+    let draggedItem = null;
+  
+    function handleTouchStart(e) {
+      draggedItem = e.currentTarget.closest("li");
+      touchStartY = e.touches[0].clientY;
+    }
+  
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      draggedItem.style.transform = `translateY(${deltaY}px)`;
+    }
+  
+    function handleTouchEnd(e) {
+      draggedItem.style.transform = '';
+      const touchEndY = e.changedTouches[0].clientY;
+      const items = [...workoutList.children];
+      const from = +draggedItem.getAttribute("data-index");
+  
+      let closestIndex = from;
+      let closestDistance = Infinity;
+  
+      items.forEach((item, index) => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - touchEndY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+  
+      swapItems(from, closestIndex);
+      draggedItem = null;
+    }
+  
+    // Init
+    renderWorkouts(getStoredWorkouts());
+  
+    // Access check
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
   </script>
+  
 </body>
 </html>
