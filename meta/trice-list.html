@@ -16,24 +16,133 @@
   </header>
 
   <div class="details-content">
-    <ul class="workout-list">
-      <li onclick="window.location.href='trice-bar-push-down.html'">Bar Push Down</li>
-      <li onclick="window.location.href='trice-reverse-grip-bar-push-down.html'">Reverse Grip Bar Push Down</li>
-      <li onclick="window.location.href='trice-rope-push-down.html'">Rope Push Down</li>
-      <li onclick="window.location.href='trice-double-arm-extension.html'">Double Arm extension</li>
-      <li onclick="window.location.href='trice-single-arm-extension.html'">Single Arm Triceps Extension</li>
-      <li onclick="window.location.href='trice-bench-dips.html'">Bench Dips</li>
-      <li onclick="window.location.href='trice-d-handle-pushdown.html'">D Handle Push Down</li>
-      <li onclick="window.location.href='trice-chest-supported-kickback.html'">Chest Supported Kick Back</li>
-      <li onclick="window.location.href='trice-rope-extension.html'">Rope Extension</li>
-      <li onclick="window.location.href='trice-skull-crusher.html'">Skull Crusher</li>
+    <ul class="workout-list" id="workoutList">
+      <!-- Triceps workout items will be rendered by JavaScript -->
     </ul>
   </div>
   <script>
+    const STORAGE_KEY = "tricepsWorkoutOrder";
+    const workoutList = document.getElementById("workoutList");
+  
+    const defaultWorkouts = [
+      { text: "Bar Push Down", link: "trice-bar-push-down.html" },
+      { text: "Reverse Grip Bar Push Down", link: "trice-reverse-grip-bar-push-down.html" },
+      { text: "Rope Push Down", link: "trice-rope-push-down.html" },
+      { text: "Double Arm Extension", link: "trice-double-arm-extension.html" },
+      { text: "Single Arm Triceps Extension", link: "trice-single-arm-extension.html" },
+      { text: "Bench Dips", link: "trice-bench-dips.html" },
+      { text: "D Handle Push Down", link: "trice-d-handle-pushdown.html" },
+      { text: "Chest Supported Kick Back", link: "trice-chest-supported-kickback.html" },
+      { text: "Rope Extension", link: "trice-rope-extension.html" },
+      { text: "Skull Crusher", link: "trice-skull-crusher.html" }
+    ];
+  
+    function renderWorkouts(workouts) {
+      workoutList.innerHTML = '';
+      workouts.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.setAttribute("data-index", index);
+  
+        li.innerHTML = `
+          <span class="workout-text">${item.text}</span>
+          <span class="drag-handle" title="Hold to drag">☰</span>
+        `;
+  
+        li.onclick = () => window.location.href = item.link;
+  
+        const dragHandle = li.querySelector(".drag-handle");
+        dragHandle.setAttribute("draggable", "true");
+        dragHandle.addEventListener("dragstart", handleDragStart);
+        li.addEventListener("dragover", handleDragOver);
+        li.addEventListener("drop", handleDrop);
+  
+        // Mobile Touch Events
+        dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
+        dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
+        dragHandle.addEventListener("touchend", handleTouchEnd);
+  
+        workoutList.appendChild(li);
+      });
+    }
+  
+    let dragStartIndex;
+    function handleDragStart(e) {
+      dragStartIndex = +this.closest("li").getAttribute("data-index");
+    }
+  
+    function handleDragOver(e) {
+      e.preventDefault();
+    }
+  
+    function handleDrop(e) {
+      const dragEndIndex = +this.getAttribute("data-index");
+      swapItems(dragStartIndex, dragEndIndex);
+    }
+  
+    function swapItems(from, to) {
+      const workouts = getStoredWorkouts();
+      const item = workouts.splice(from, 1)[0];
+      workouts.splice(to, 0, item);
+      saveWorkouts(workouts);
+      renderWorkouts(workouts);
+    }
+  
+    function getStoredWorkouts() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+    }
+  
+    function saveWorkouts(workouts) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+    }
+  
+    // Mobile Touch Logic
+    let touchStartY = 0;
+    let draggedItem = null;
+  
+    function handleTouchStart(e) {
+      draggedItem = e.currentTarget.closest("li");
+      touchStartY = e.touches[0].clientY;
+    }
+  
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      draggedItem.style.transform = `translateY(${deltaY}px)`;
+    }
+  
+    function handleTouchEnd(e) {
+      draggedItem.style.transform = '';
+      const touchEndY = e.changedTouches[0].clientY;
+      const items = [...workoutList.children];
+      const from = +draggedItem.getAttribute("data-index");
+  
+      let closestIndex = from;
+      let closestDistance = Infinity;
+  
+      items.forEach((item, index) => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - touchEndY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+  
+      swapItems(from, closestIndex);
+      draggedItem = null;
+    }
+  
+    // Init
+    renderWorkouts(getStoredWorkouts());
+  
+    // Access control
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
   </script>
+  
   
 </body>
 </html>
