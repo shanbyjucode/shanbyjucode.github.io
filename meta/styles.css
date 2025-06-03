@@ -200,10 +200,70 @@ section ul li{
     background-color: #2e2e2e;
   }
 
+  /* new */
+
+  ul.workout-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ul.workout-list li {
+    background: #222;
+    margin: 6px 0;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px;
+    user-select: none;
+    transition: background-color 0.3s;
+    touch-action: none; /* prevent default scrolling on touch drag */
+  }
+  ul.workout-list li:hover {
+    background-color: #333;
+    cursor: pointer;
+  }
+  .workout-text {
+    flex: 1;
+    pointer-events: auto; /* clickable */
+  }
+  .drag-handle {
+    cursor: grab;
+    font-size: 18px;
+    user-select: none;
+    margin-left: 12px;
+    color: #aaa;
+  }
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+
+  /* Dragging item styles */
+  li.dragging {
+    border: 2px solid #4CAF50;
+    background-color: #e8f5e9;
+    color: #111;
+    opacity: 0.9;
+    z-index: 10;
+    position: relative;
+  }
+  /* Placeholder */
+  li.placeholder {
+    background: #c8e6c9;
+    height: 48px;
+    margin: 6px 0;
+    border: 2px dashed #4CAF50;
+    border-radius: 6px;
+  }
+  /* new */
+
   .skiptranslate iframe{
     display: none !important;
     height: 0px;
   }
+
+
+  
   .language{
     text-align: center;
     padding: 20px;
