@@ -16,26 +16,127 @@
   </header>
 
   <div class="details-content">
-    <ul class="workout-list">
-      <li onclick="window.location.href='chest-flat-bench-press-bar.html'">Flat Bench Press</li>
-      <li onclick="window.location.href='chest-incline-machine-press.html'">Incline Machine Press</li>
-      <li onclick="window.location.href='chest-cable-fly.html'">Cable Fly</li>
-      <li onclick="window.location.href='chest-incline-bench-press.html'">Incline Bench Press</li>
-      <li onclick="window.location.href='chest-incline-dumbbell-fly.html'">Incline Dumbbell Fly</li>
-      <li onclick="window.location.href='chest-seated-cable-fly.html'">Seated Cable Fly</li>
-      <li onclick="window.location.href='chest-decline-dumbbell-press.html'">Decline Dumbbell Press</li>
-      <li onclick="window.location.href='chest-flat-dumbbell-press.html'">Flat Dumbbell Press</li>
-      <li onclick="window.location.href='chest-incline-cable-fly.html'">Incline Cable Fly</li>
-      <li onclick="window.location.href='chest-flat-dumbell-fly.html'">Flat Dumbbell Fly</li>
-      <li onclick="window.location.href='chest-lower-cable-cross-over-fly.html'">Lower Cable Cross Over Fly</li>
-      <li onclick="window.location.href='chest-decline-bench-press.html'">Decline Bench Press</li>
-      <li onclick="window.location.href='chest-flat-cable-fly.html'">Flat Cable Fly</li>
-      <li onclick="window.location.href='chest-pec-fly.html'">Pec Fly</li>
-      <li onclick="window.location.href='chest-incline-dumbbell-press.html'">Incline Dumbbell Press</li>
-      <li onclick="window.location.href='chest-delcine-dumbbell-fly.html'">Decline Dumbbell Fly</li>
+    <ul class="workout-list" id="workoutList">
+      <!-- No need to change inner <li> content -->
     </ul>
   </div>
   <script>
+    // drag function
+    const STORAGE_KEY = "chestWorkoutOrder";
+
+  const workoutList = document.getElementById("workoutList");
+
+  // List of workout items with label and href
+  const defaultWorkouts = [
+    { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
+    { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
+    { text: "Cable Fly", link: "chest-cable-fly.html" },
+    { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+    { text: "Incline Dumbbell Fly", link: "chest-incline-dumbbell-fly.html" },
+    { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" },
+    { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
+    { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+    { text: "Incline Cable Fly", link: "chest-incline-cable-fly.html" },
+    { text: "Flat Dumbbell Fly", link: "chest-flat-dumbell-fly.html" },
+    { text: "Lower Cable Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" },
+    { text: "Decline Bench Press", link: "chest-decline-bench-press.html" },
+    { text: "Flat Cable Fly", link: "chest-flat-cable-fly.html" },
+    { text: "Pec Fly", link: "chest-pec-fly.html" },
+    { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
+    { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" }
+  ];
+
+  function renderWorkouts(workouts) {
+    workoutList.innerHTML = '';
+    workouts.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.textContent = item.text;
+      li.setAttribute("data-index", index);
+      li.setAttribute("draggable", "true");
+      li.onclick = () => window.location.href = item.link;
+      li.addEventListener("dragstart", handleDragStart);
+      li.addEventListener("dragover", handleDragOver);
+      li.addEventListener("drop", handleDrop);
+      li.addEventListener("touchstart", handleTouchStart, { passive: true });
+      li.addEventListener("touchmove", handleTouchMove, { passive: false });
+      li.addEventListener("touchend", handleTouchEnd);
+      workoutList.appendChild(li);
+    });
+  }
+
+  let dragStartIndex;
+  function handleDragStart(e) {
+    dragStartIndex = +this.getAttribute("data-index");
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e) {
+    const dragEndIndex = +this.getAttribute("data-index");
+    swapItems(dragStartIndex, dragEndIndex);
+  }
+
+  function swapItems(from, to) {
+    const workouts = getStoredWorkouts();
+    const item = workouts.splice(from, 1)[0];
+    workouts.splice(to, 0, item);
+    saveWorkouts(workouts);
+    renderWorkouts(workouts);
+  }
+
+  function getStoredWorkouts() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultWorkouts;
+  }
+
+  function saveWorkouts(workouts) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
+  }
+
+  // Mobile touch support
+  let touchStartY = 0;
+  let draggedItem = null;
+
+  function handleTouchStart(e) {
+    draggedItem = e.currentTarget;
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    e.preventDefault();
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - touchStartY;
+    draggedItem.style.transform = `translateY(${deltaY}px)`;
+  }
+
+  function handleTouchEnd(e) {
+    draggedItem.style.transform = '';
+    const touchEndY = e.changedTouches[0].clientY;
+    const items = [...workoutList.children];
+    const from = +draggedItem.getAttribute("data-index");
+
+    let closestIndex = from;
+    let closestDistance = Infinity;
+
+    items.forEach((item, index) => {
+      const box = item.getBoundingClientRect();
+      const midY = box.top + box.height / 2;
+      const distance = Math.abs(midY - touchEndY);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    swapItems(from, closestIndex);
+    draggedItem = null;
+  }
+
+  // Init
+  renderWorkouts(getStoredWorkouts());
+  // Drag function
+
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
