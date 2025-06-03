@@ -44,12 +44,14 @@
       { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" }
     ];
 
+    let dragStartIndex = null;
+    let draggedItem = null;
+
     function renderWorkouts(workouts) {
       workoutList.innerHTML = '';
       workouts.forEach((item, index) => {
         const li = document.createElement("li");
         li.setAttribute("data-index", index);
-
         li.innerHTML = `
           <span class="workout-text">${item.text}</span>
           <span class="drag-handle" title="Hold to drag">☰</span>
@@ -70,20 +72,35 @@
 
         workoutList.appendChild(li);
       });
+
+      document.addEventListener("dragend", cleanupDragState);
     }
 
-    let dragStartIndex;
     function handleDragStart(e) {
-      dragStartIndex = +this.closest("li").getAttribute("data-index");
+      const li = this.closest("li");
+      dragStartIndex = +li.getAttribute("data-index");
+      li.classList.add("dragging");
     }
 
     function handleDragOver(e) {
       e.preventDefault();
+      const overItem = this;
+      const placeholder = document.querySelector(".placeholder");
+
+      if (!placeholder) {
+        const temp = document.createElement("li");
+        temp.className = "placeholder";
+        workoutList.insertBefore(temp, overItem.nextSibling);
+      } else {
+        workoutList.insertBefore(placeholder, overItem.nextSibling);
+      }
     }
 
     function handleDrop(e) {
-      const dragEndIndex = +this.getAttribute("data-index");
+      const placeholder = document.querySelector(".placeholder");
+      const dragEndIndex = [...workoutList.children].indexOf(placeholder);
       swapItems(dragStartIndex, dragEndIndex);
+      cleanupDragState();
     }
 
     function swapItems(from, to) {
@@ -102,13 +119,19 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(workouts));
     }
 
-    // Mobile Touch Logic
+    function cleanupDragState() {
+      document.querySelectorAll(".dragging").forEach(el => el.classList.remove("dragging"));
+      const placeholder = document.querySelector(".placeholder");
+      if (placeholder) placeholder.remove();
+    }
+
+    // Touch Support
     let touchStartY = 0;
-    let draggedItem = null;
 
     function handleTouchStart(e) {
       draggedItem = e.currentTarget.closest("li");
       touchStartY = e.touches[0].clientY;
+      draggedItem.classList.add("dragging");
     }
 
     function handleTouchMove(e) {
@@ -120,6 +143,7 @@
 
     function handleTouchEnd(e) {
       draggedItem.style.transform = '';
+      draggedItem.classList.remove("dragging");
       const touchEndY = e.changedTouches[0].clientY;
       const items = [...workoutList.children];
       const from = +draggedItem.getAttribute("data-index");
@@ -141,7 +165,7 @@
       draggedItem = null;
     }
 
-    // Init
+    // Initialize
     renderWorkouts(getStoredWorkouts());
     // Drag function
 
