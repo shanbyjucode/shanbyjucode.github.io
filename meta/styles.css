@@ -168,16 +168,13 @@ section ul li{
     border-radius: 12px;
     font-size: 1.1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.1s ease;
-  }
-  
-  .workout-list li:hover {
-    background: #3B3B3B;
+    cursor: grab;
+    user-select: none;
+    transition: background 0.2s;
   }
   
   .workout-list li:active {
-    transform: scale(0.97);
+    background-color: #2e2e2e;
   }
 
   .skiptranslate iframe{
