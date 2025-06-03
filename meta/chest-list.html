@@ -47,6 +47,8 @@
     let dragStartIndex = null;
     let draggedItem = null;
     let currentPlaceholder = null;
+    let isDragging = false;
+    let touchStartX = 0;
     let touchStartY = 0;
 
     function renderWorkouts(workouts) {
@@ -59,17 +61,15 @@
           <span class="drag-handle" title="Hold to drag">☰</span>
         `;
 
-        // Only clicking text navigates (drag handle used for drag)
-        li.querySelector('.workout-text').onclick = () => window.location.href = item.link;
+        li.onclick = () => window.location.href = item.link;
 
         const dragHandle = li.querySelector(".drag-handle");
         dragHandle.setAttribute("draggable", "true");
-
         dragHandle.addEventListener("dragstart", handleDragStart);
         li.addEventListener("dragover", handleDragOver);
         li.addEventListener("drop", handleDrop);
 
-        // Touch Events
+        // Mobile Touch Events
         dragHandle.addEventListener("touchstart", handleTouchStart, { passive: true });
         dragHandle.addEventListener("touchmove", handleTouchMove, { passive: false });
         dragHandle.addEventListener("touchend", handleTouchEnd);
@@ -83,46 +83,31 @@
     function handleDragStart(e) {
       const li = this.closest("li");
       dragStartIndex = +li.getAttribute("data-index");
-      draggedItem = li;
       li.classList.add("dragging");
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("text/plain", "dragging"); // Required for Firefox
     }
 
     function handleDragOver(e) {
       e.preventDefault();
       const overItem = this;
-      const placeholder = workoutList.querySelector(".placeholder");
+      const placeholder = document.querySelector(".placeholder");
 
       if (!placeholder) {
         const temp = document.createElement("li");
         temp.className = "placeholder";
-        workoutList.insertBefore(temp, overItem);
+        workoutList.insertBefore(temp, overItem.nextSibling);
       } else {
-        const rect = overItem.getBoundingClientRect();
-        const halfway = rect.top + rect.height / 2;
-        if (e.clientY < halfway) {
-          workoutList.insertBefore(placeholder, overItem);
-        } else {
-          workoutList.insertBefore(placeholder, overItem.nextSibling);
-        }
+        workoutList.insertBefore(placeholder, overItem.nextSibling);
       }
     }
 
     function handleDrop(e) {
-      e.preventDefault();
-      const placeholder = workoutList.querySelector(".placeholder");
-      if (!placeholder) return cleanupDragState();
-
-      const childrenArray = Array.from(workoutList.children);
-      const dragEndIndex = childrenArray.indexOf(placeholder);
-
+      const placeholder = document.querySelector(".placeholder");
+      const dragEndIndex = [...workoutList.children].indexOf(placeholder);
       swapItems(dragStartIndex, dragEndIndex);
       cleanupDragState();
     }
 
     function swapItems(from, to) {
-      if (from === to) return;
       const workouts = getStoredWorkouts();
       const item = workouts.splice(from, 1)[0];
       workouts.splice(to, 0, item);
@@ -139,33 +124,53 @@
     }
 
     function cleanupDragState() {
-      document.querySelectorAll(".dragging").forEach(el => el.classList.remove("dragging"));
-      const placeholder = workoutList.querySelector(".placeholder");
+      document.querySelectorAll(".dragging").forEach(el => {
+        el.classList.remove("dragging");
+        el.style.transform = '';
+      });
+      const placeholder = document.querySelector(".placeholder");
       if (placeholder) placeholder.remove();
-      draggedItem = null;
-      currentPlaceholder = null;
+
+      // Unlock scrolling in case it was blocked
+      document.body.style.overflow = '';
     }
 
-    // Touch handlers
-
+    // Touch Support
     function handleTouchStart(e) {
       draggedItem = e.currentTarget.closest("li");
+      touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
+      isDragging = false;
       draggedItem.classList.add("dragging");
 
-      // Create placeholder
+      // Add placeholder after draggedItem
       currentPlaceholder = document.createElement("li");
       currentPlaceholder.className = "placeholder";
       workoutList.insertBefore(currentPlaceholder, draggedItem.nextSibling);
     }
 
     function handleTouchMove(e) {
-      e.preventDefault();
+      const currentX = e.touches[0].clientX;
       const currentY = e.touches[0].clientY;
+
+      const deltaX = Math.abs(currentX - touchStartX);
       const deltaY = currentY - touchStartY;
+
+      if (!isDragging) {
+        if (Math.abs(deltaY) > 10 && deltaY > deltaX) {
+          isDragging = true;
+          // Lock scrolling when drag starts
+          document.body.style.overflow = 'hidden';
+        } else {
+          // Not dragging yet, allow scroll
+          return;
+        }
+      }
+
+      e.preventDefault(); // prevent scroll while dragging
+
       draggedItem.style.transform = `translateY(${deltaY}px)`;
 
-      // Move placeholder dynamically
       const items = [...workoutList.children].filter(i => i !== draggedItem && i !== currentPlaceholder);
 
       let closestItem = null;
@@ -192,31 +197,44 @@
     }
 
     function handleTouchEnd(e) {
+      if (!draggedItem) return;
+
       draggedItem.style.transform = '';
       draggedItem.classList.remove("dragging");
 
-      const newIndex = Array.from(workoutList.children).indexOf(currentPlaceholder);
-      const oldIndex = +draggedItem.getAttribute("data-index");
+      const touchEndY = e.changedTouches[0].clientY;
+      const items = [...workoutList.children].filter(i => !i.classList.contains("placeholder"));
+      const from = +draggedItem.getAttribute("data-index");
 
-      if (newIndex !== -1 && newIndex !== oldIndex) {
-        swapItems(oldIndex, newIndex);
-      }
+      let closestIndex = from;
+      let closestDistance = Infinity;
+
+      items.forEach((item, index) => {
+        const box = item.getBoundingClientRect();
+        const midY = box.top + box.height / 2;
+        const distance = Math.abs(midY - touchEndY);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      swapItems(from, closestIndex);
 
       if (currentPlaceholder) {
         currentPlaceholder.remove();
         currentPlaceholder = null;
       }
+
       draggedItem = null;
+      isDragging = false;
+
+      // Unlock scrolling after drag
+      document.body.style.overflow = '';
     }
 
-    // Initialize list
+    // Initialize
     renderWorkouts(getStoredWorkouts());
-
-    // Redirect if no meta_access granted
-    if (localStorage.getItem("meta_access") !== "granted") {
-      window.location.href = "login.html";
-    }
-    // Drag function
 
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
