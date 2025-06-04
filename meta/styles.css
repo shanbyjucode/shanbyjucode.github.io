@@ -10,6 +10,7 @@ body, html {
     font-style: normal;
     height: 100vh;
     overscroll-behavior: contain;
+    padding-bottom: 100px !important;
     /* overflow: hidden; */
 }
 
