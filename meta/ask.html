@@ -161,6 +161,20 @@
       appendMessage("user", query);
       input.value = "";
 
+      // Trainer name logic (special responses)
+      const predefinedResponses = {
+        "vinu": "🏋️‍♂️ <strong>Vinu</strong> is your trainer and founder of Meta Fitness.",
+        "shilpa": "💪 <strong>Shilpa</strong> is a dedicated ladies' trainer at Meta Fitness.",
+        "leena": "🏋️‍♀️ <strong>Leena</strong> is a certified female trainer helping many achieve their fitness goals.",
+        "my trainer name": "🤝 Your trainers are <strong>Vinu</strong>, <strong>Shilpa</strong>, and <strong>Leena</strong>.",
+        "baiju": "🤝 Baiju is the visionary behind this app, designed to support every member of the Meta Fitness community."
+        };
+
+        if (predefinedResponses[query]) {
+            appendMessage("bot", predefinedResponses[query]);
+            return;
+        }
+
       const results = {};
       for (const category in workoutData) {
         const matches = workoutData[category].filter(item =>
