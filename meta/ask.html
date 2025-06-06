@@ -27,6 +27,7 @@
       display: flex;
       padding: 12px;
       background-color: #1e1e1e;
+      margin-bottom: 52px;
     }
     .chat-input input {
       flex: 1;
@@ -101,6 +102,36 @@
         text-align: center;
         z-index: 0;
     }
+    .bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1c1c1c;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #333;
+  padding: 6px 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  color: #aaa;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.nav-item .material-icons {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.nav-item.active {
+  color: #00c853;
+}
   </style>
 </head>
 <body>
@@ -111,6 +142,20 @@
       <input type="text" id="userQuery" placeholder="Ask about any workout..." onkeypress="handleKey(event)" />
       <button onclick="searchWorkout()">Ask</button>
     </div>
+  </div>
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="material-icons">fitness_center</span>
+      <span class="nav-label">Workout</span>
+    </a>
+    <a href="ask.html" class="nav-item active">
+      <span class="material-icons">manage_search</span>
+      <span class="nav-label">Search</span>
+    </a>
+    <a href="assist.html" class="nav-item">
+      <span class="material-icons">support_agent</span>
+      <span class="nav-label">Assist</span>
+    </a>
   </div>
 
   <script>
