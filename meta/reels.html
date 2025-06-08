@@ -24,9 +24,6 @@
       height: 100vh;
       width: 100%;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background: #000;
     }
 
@@ -41,22 +38,63 @@
 
   <div class="reels-container">
     <div class="reel">
-      <iframe 
-        src="https://www.youtube.com/embed/DVcVTPjz0Rk?rel=0&modestbranding=1&autoplay=1&controls=0&playsinline=1&mute=1&loop=1" 
-        allow="autoplay; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen 
+      <iframe
+        src="https://www.youtube.com/embed/DVcVTPjz0Rk?enablejsapi=1&autoplay=1&mute=1&controls=0&playsinline=1&loop=1&modestbranding=1"
+        allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
         title="Reel 1">
       </iframe>
     </div>
+
     <div class="reel">
-      <iframe 
-        src="https://www.youtube.com/embed/WQonT339Ev0?rel=0&modestbranding=1&autoplay=1&controls=0&playsinline=1&mute=1&loop=1" 
-        allow="autoplay; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen 
+      <iframe
+        src="https://www.youtube.com/embed/zchUh1zip6w?enablejsapi=1&autoplay=0&mute=1&controls=0&playsinline=1&loop=1&modestbranding=1"
+        allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
         title="Reel 2">
       </iframe>
     </div>
   </div>
+
+  <script>
+    // Load YouTube Iframe API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let players = [];
+
+    function onYouTubeIframeAPIReady() {
+      const iframes = document.querySelectorAll('iframe');
+      iframes.forEach((iframe, index) => {
+        const player = new YT.Player(iframe, {
+          events: {
+            onReady: (event) => {
+              if (index === 0) event.target.playVideo(); // First video auto-plays
+            }
+          }
+        });
+        players.push(player);
+      });
+
+      // Observer to play/pause based on visibility
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          const player = players[index];
+          if (!player || typeof player.playVideo !== "function") return;
+
+          if (entry.isIntersecting) {
+            player.playVideo();
+          } else {
+            player.pauseVideo();
+          }
+        });
+      }, { threshold: 0.6 }); // 60% visible
+
+      document.querySelectorAll('.reel').forEach(reel => observer.observe(reel));
+    }
+  </script>
 
 </body>
 </html>
