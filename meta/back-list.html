@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1B1B1B" />
   <link rel="stylesheet" href="styles.css" />
-  <title>Back Workouts - Meta</title>
+  <title>Back Workouts</title>
 </head>
 <body>
   <header class="details-header">
@@ -143,6 +143,30 @@
     if (localStorage.getItem("meta_access") !== "granted") {
       window.location.href = "login.html";
     }
+
+    // Swipe Down to Refresh (Mobile Only)
+      let startY = 0;
+      let isPulling = false;
+
+      window.addEventListener("touchstart", (e) => {
+        if (window.scrollY === 0) {
+          startY = e.touches[0].clientY;
+          isPulling = true;
+        }
+      });
+
+      window.addEventListener("touchmove", (e) => {
+        const currentY = e.touches[0].clientY;
+        if (isPulling && currentY - startY > 80) {
+          isPulling = false;
+          location.reload(); // Refresh the page
+        }
+      });
+
+      window.addEventListener("touchend", () => {
+        isPulling = false;
+      });
+    
   </script>
   
 </body>
