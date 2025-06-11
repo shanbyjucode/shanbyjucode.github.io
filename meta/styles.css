@@ -8,10 +8,6 @@ body, html {
     font-family: 'Noto Sans Malayalam', 'Noto Sans Tamil', 'Noto Sans Devanagari', 'Montserrat', sans-serif;
     font-weight: 300;
     font-style: normal;
-    min-height: 100vh;
-    padding-bottom: 100px !important;
-    overscroll-behavior: contain;
-    padding-bottom: 100px !important;
     -webkit-overflow-scrolling: touch;
     /* overflow: hidden; */
 }
@@ -142,8 +138,7 @@ section ul li{
 .details-content {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    max-height: 100vh;
-    padding-bottom: 100px !important;
+    padding-bottom: 150px !important;
     padding: 1rem;
 }
 
