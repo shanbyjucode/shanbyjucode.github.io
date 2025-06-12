@@ -17,6 +17,21 @@
     body {
       top: 0px !important;
     }
+
+    .share-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #00c853;
+      color: black;
+      border: none;
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
 </style>
 <body>
     <header class="details-header">
@@ -104,6 +119,9 @@
       </div>
       <div id="google_translate_element" style="display:none;"></div>
     </div>
+    <button id="shareBtn" style="display:none;" onclick="sharePage()" class="share-button">
+      🔗 Share
+    </button>
 
     <script>
         function googleTranslateElementInit() {
@@ -125,8 +143,35 @@
       if (localStorage.getItem("meta_access") !== "granted") {
         window.location.href = "login.html";
       }
+
+      const shareBtn = document.getElementById('shareBtn');
+
+      function sharePage() {
+        if (navigator.share) {
+          navigator.share({
+            title: document.title,
+            url: window.location.href
+          }).catch(console.error);
+        } else {
+          alert("Sharing not supported on this browser.");
+        }
+      }
+
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = scrollTop / scrollHeight;
+
+        const shareBtn = document.getElementById('shareBtn');
+        if (scrollPercent > 0.6) {
+          shareBtn.style.display = 'block';
+        } else {
+          shareBtn.style.display = 'none';
+        }
+      });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    
 
 </body>
 </html>
