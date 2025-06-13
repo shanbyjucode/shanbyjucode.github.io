@@ -150,25 +150,24 @@
         if (navigator.share) {
           navigator.share({
             title: document.title,
+            text: 'Check out this workout on Meta Fitness!',
             url: window.location.href
           }).catch(console.error);
         } else {
-          alert("Sharing not supported on this browser.");
+          // Fallback: Copy to clipboard
+          copyToClipboard(window.location.href);
+          alert("Share not supported. Link copied to clipboard.");
         }
       }
 
-      window.addEventListener('scroll', () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const scrollPercent = scrollTop / scrollHeight;
-
-        const shareBtn = document.getElementById('shareBtn');
-        if (scrollPercent > 0.6) {
-          shareBtn.style.display = 'block';
-        } else {
-          shareBtn.style.display = 'none';
-        }
-      });
+      function copyToClipboard(text) {
+        const tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+      }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     
