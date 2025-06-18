@@ -165,10 +165,10 @@
     <!-- TAB 1: STREAK -->
     <div id="streaks" class="tab-content">
       <div id="monthYear" class="month-year"></div>
-      <div class="stats">
+      <!-- <div class="stats">
         <div>🔥<br> Current Streak<span id="currentStreak" style="display: block; font-size: 20px; padding-top: 5px; font-weight: bold;">0</span></div>
         <div>🏆<br> Longest Streak<span id="longestStreak" style="display: block; font-size: 20px; padding-top: 5px; font-weight: bold;">0</span></div>
-      </div>
+      </div> -->
 
       <div id="calendar" class="calendar"></div>
       <button id="markToday">Mark Today as Done ✅</button>
@@ -179,7 +179,7 @@
       <div id="historyList"></div>
     </div>
   </div>
-  <div class="bottom-nav">
+  <!-- <div class="bottom-nav">
     <a href="index.html" class="nav-item">
       <span class="material-icons">fitness_center</span>
       <span class="nav-label">Workout</span>
@@ -192,45 +192,25 @@
       <span class="material-icons">support_agent</span>
       <span class="nav-label">Assist</span>
     </a>
-  </div>
+  </div> -->
 
   <script>
     const calendar = document.getElementById('calendar');
-    const currentStreakEl = document.getElementById('currentStreak');
-    const longestStreakEl = document.getElementById('longestStreak');
     const markTodayBtn = document.getElementById('markToday');
     const monthYearEl = document.getElementById('monthYear');
     const historyList = document.getElementById('historyList');
 
     let streakData = JSON.parse(localStorage.getItem('workoutStreak')) || {
-      dates: [],
-      longest: 0
+      dates: []
     };
 
-    // FIX: Use local date in YYYY-MM-DD format (no UTC shift!)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const todayStr = today.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
-
-    function animateCount(el, from, to) {
-      let start = null;
-      const duration = 500;
-      const step = timestamp => {
-        if (!start) start = timestamp;
-        const progress = Math.min((timestamp - start) / duration, 1);
-        const value = Math.floor(progress * (to - from) + from);
-        el.innerText = value;
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        }
-      };
-      el.classList.add('streak-animate');
-      setTimeout(() => el.classList.remove('streak-animate'), 400);
-      requestAnimationFrame(step);
-    }
+    const todayStr = today.toLocaleDateString('en-CA');
 
     function updateStreak() {
       const now = new Date();
+      now.setHours(0, 0, 0, 0);
       const thisMonth = now.getMonth();
       const thisYear = now.getFullYear();
       const monthName = now.toLocaleString('default', { month: 'long' });
@@ -239,36 +219,35 @@
       calendar.innerHTML = '';
 
       const daysInMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
-      let currentStreak = 0;
-      let tempStreak = 0;
 
       for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(thisYear, thisMonth, i);
-        date.setHours(0, 0, 0, 0); // ensure local date only
-        const isoDate = date.toLocaleDateString('en-CA'); // local YYYY-MM-DD
+        date.setHours(0, 0, 0, 0);
+        const isoDate = date.toLocaleDateString('en-CA');
 
         const dayDiv = document.createElement('div');
         dayDiv.className = 'day';
         dayDiv.innerText = i;
 
+        if (date <= now) {
+          dayDiv.style.cursor = 'pointer';
+          dayDiv.onclick = () => {
+            if (streakData.dates.includes(isoDate)) {
+              streakData.dates = streakData.dates.filter(d => d !== isoDate);
+            } else {
+              streakData.dates.push(isoDate);
+            }
+            localStorage.setItem('workoutStreak', JSON.stringify(streakData));
+            updateStreak();
+          };
+        }
+
         if (streakData.dates.includes(isoDate)) {
           dayDiv.classList.add('done');
-          tempStreak++;
-          if (isoDate === todayStr) currentStreak = tempStreak;
-        } else {
-          tempStreak = 0;
         }
 
         calendar.appendChild(dayDiv);
       }
-
-      if (currentStreak > streakData.longest) {
-        streakData.longest = currentStreak;
-        localStorage.setItem('workoutStreak', JSON.stringify(streakData));
-      }
-
-      animateCount(currentStreakEl, parseInt(currentStreakEl.innerText), currentStreak);
-      animateCount(longestStreakEl, parseInt(longestStreakEl.innerText), streakData.longest);
 
       updateHistory();
     }
@@ -276,11 +255,11 @@
     markTodayBtn.onclick = () => {
       if (!streakData.dates.includes(todayStr)) {
         streakData.dates.push(todayStr);
-        localStorage.setItem('workoutStreak', JSON.stringify(streakData));
-        updateStreak();
       } else {
         alert("✅ Already marked today!");
       }
+      localStorage.setItem('workoutStreak', JSON.stringify(streakData));
+      updateStreak();
     };
 
     function updateHistory() {
@@ -293,7 +272,14 @@
       });
 
       historyList.innerHTML = "";
-      for (let key of Object.keys(grouped).sort().reverse()) {
+
+      const keys = Object.keys(grouped).sort().reverse();
+      if (keys.length === 0) {
+        historyList.innerHTML = "<div style='text-align:center; padding:20px; color:#888;'>No workout history yet! Start marking days ✅</div>";
+        return;
+      }
+
+      for (let key of keys) {
         const [year, month] = key.split('-');
         const date = new Date(`${year}-${month}-01`);
         const monthName = date.toLocaleString('default', { month: 'long' });
@@ -306,11 +292,12 @@
     function showTab(tabId) {
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-      document.querySelector(`#${tabId}`).style.display = 'block';
       event.target.classList.add('active');
+      document.getElementById(tabId).style.display = 'block';
     }
 
     updateStreak();
   </script>
+  
 </body>
 </html>
