@@ -207,7 +207,10 @@
       longest: 0
     };
 
-    const today = new Date().toISOString().split('T')[0];
+    // FIX: Use local date in YYYY-MM-DD format (no UTC shift!)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
 
     function animateCount(el, from, to) {
       let start = null;
@@ -241,7 +244,9 @@
 
       for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(thisYear, thisMonth, i);
-        const isoDate = date.toISOString().split('T')[0];
+        date.setHours(0, 0, 0, 0); // ensure local date only
+        const isoDate = date.toLocaleDateString('en-CA'); // local YYYY-MM-DD
+
         const dayDiv = document.createElement('div');
         dayDiv.className = 'day';
         dayDiv.innerText = i;
@@ -249,7 +254,7 @@
         if (streakData.dates.includes(isoDate)) {
           dayDiv.classList.add('done');
           tempStreak++;
-          if (isoDate === today) currentStreak = tempStreak;
+          if (isoDate === todayStr) currentStreak = tempStreak;
         } else {
           tempStreak = 0;
         }
@@ -269,8 +274,8 @@
     }
 
     markTodayBtn.onclick = () => {
-      if (!streakData.dates.includes(today)) {
-        streakData.dates.push(today);
+      if (!streakData.dates.includes(todayStr)) {
+        streakData.dates.push(todayStr);
         localStorage.setItem('workoutStreak', JSON.stringify(streakData));
         updateStreak();
       } else {
