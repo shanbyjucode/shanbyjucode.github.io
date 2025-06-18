@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meta Fitness Counter</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .tab-button {
+      padding: 10px 20px;
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .tab-button.active {
+      background-color: #28a745;
+      color: #000;
+      font-weight: bold;
+    }
+    #countDisplay {
+      font-size: 25px;
+      margin: 40px 0;
+    }
+    #startBtn {
+      padding: 15px 30px;
+      font-size: 18px;
+      background: #28a745;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #startBtn:hover {
+      background: #1e7e34;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tab-container">
+    <button class="tab-button" onclick="selectCount(10)">10</button>
+    <button class="tab-button" onclick="selectCount(12)">12</button>
+    <button class="tab-button" onclick="selectCount(15)">15</button>
+    <button class="tab-button" onclick="selectCount(20)">20</button>
+  </div>
+
+  <div id="countDisplay">0</div>
+
+  <button id="startBtn" onclick="toggleWorkout()">Start Workout</button>
+
+  <script>
+    let selectedCount = 10;
+    let currentCount = 0;
+    let isRunning = false;
+
+    const countDisplay = document.getElementById('countDisplay');
+    const startBtn = document.getElementById('startBtn');
+
+    // Adjust gap between each count in ms
+    const countGap = 2000; // 2 sec
+
+    function selectCount(count) {
+      selectedCount = count;
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function toggleWorkout() {
+      if (isRunning) {
+        stopWorkout();
+      } else {
+        startWorkout();
+      }
+    }
+
+    function startWorkout() {
+      currentCount = 0;
+      updateDisplay("Get Ready...");
+      startBtn.textContent = "Stop Workout";
+      isRunning = true;
+
+      // Wait 5 sec before starting counts
+      setTimeout(() => {
+        runCounter();
+      }, 5000);
+    }
+
+    function runCounter() {
+      if (!isRunning) return;
+
+      currentCount++;
+      const color = getGradientColor(currentCount, selectedCount);
+      updateDisplay(currentCount, color);
+
+      if (currentCount === selectedCount - 1) {
+        playSound(currentCount);
+        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
+        setTimeout(() => {
+          playSound('comeon');
+          setTimeout(runCounter, 2000);
+        }, countGap);
+        return;
+
+      } else if (currentCount < selectedCount) {
+        playSound(currentCount);
+        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
+        setTimeout(runCounter, countGap);
+        return;
+
+      } else if (currentCount === selectedCount) {
+        playSound(currentCount);
+        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
+        setTimeout(() => {
+          playSound('wow');
+          updateDisplay("done");
+          isRunning = false;
+          startBtn.textContent = "Start Workout";
+        }, 2000);
+      }
+    }
+
+    function stopWorkout() {
+      isRunning = false;
+      startBtn.textContent = "Start Workout";
+      updateDisplay(0);
+    }
+
+    function playSound(name) {
+      const audio = new Audio(`./images/other/sounds/${name}.mp3`);
+      audio.play();
+    }
+
+    function updateDisplay(value, color) {
+      if (value === "done") {
+        countDisplay.textContent = "Awesome! You did it!";
+        countDisplay.style.fontSize = "32px"; // Smaller for text
+        countDisplay.style.color = "#28a745"; // Green for final message
+      } else if (isNaN(value)) {
+        countDisplay.textContent = value;
+        countDisplay.style.fontSize = "32px";
+        countDisplay.style.color = "#fff"; // White for "Get Ready..."
+      } else {
+        countDisplay.textContent = value;
+        countDisplay.style.fontSize = "100px"; // Big for numbers
+        countDisplay.style.color = color || "#fff"; // Apply gradient color here!
+      }
+    }
+    // Generate gradient color red → orange → green
+    function getGradientColor(count, total) {
+      let percent = count / total;
+      let r, g, b;
+
+      if (percent < 0.5) {
+        // Red to Orange
+        r = 255;
+        g = Math.round(255 * (percent * 2));
+        b = 0;
+      } else {
+        // Orange to Green
+        r = Math.round(255 * (1 - (percent - 0.5) * 2));
+        g = 255;
+        b = 0;
+      }
+
+      return `rgb(${r},${g},${b})`;
+    }
+
+    // Pre-select 10 by default
+    document.querySelector('.tab-button').classList.add('active');
+  </script>
+   
+  
+</body>
+</html>
