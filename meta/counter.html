@@ -16,11 +16,19 @@
       height: 100vh;
       margin: 0;
     }
+    .container{
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
     .tab-container {
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin: 20px 0;
+      margin-top: 0;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
     .tab-button {
@@ -37,9 +45,39 @@
       color: #000;
       font-weight: bold;
     }
+    label {
+      margin-top: 10px;
+      color: #aaaaaa;
+    }
+    select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-left: 10px;
+    }
+    .progress-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: auto;
+      padding: 20px 0;
+
+    }
+    .progress-container svg {
+      transform: rotate(-90deg);
+    }
     #countDisplay {
-      font-size: 25px;
-      margin: 40px 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60px;
+    }
+    #quote {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      text-align: center;
+      display: none;
     }
     #startBtn {
       padding: 15px 30px;
@@ -48,40 +86,81 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      width: 100%;
     }
     #startBtn:hover {
       background: #1e7e34;
+    }
+    label{
+      display: block;
+      padding-bottom: 8px;
     }
   </style>
 </head>
 <body>
 
-  <div class="tab-container">
-    <button class="tab-button" onclick="selectCount(10)">10</button>
-    <button class="tab-button" onclick="selectCount(12)">12</button>
-    <button class="tab-button" onclick="selectCount(15)">15</button>
-    <button class="tab-button" onclick="selectCount(20)">20</button>
+  <div class="container">
+    <label>Select your count</label>
+    <div class="tab-container">
+      <button class="tab-button" onclick="selectCount(10)">10</button>
+      <button class="tab-button" onclick="selectCount(12)">12</button>
+      <button class="tab-button" onclick="selectCount(15)">15</button>
+      <button class="tab-button" onclick="selectCount(20)">20</button>
+    </div>
+
+    <label>Let's decide the interval</label>
+      <select id="intervalSelect" onchange="updateInterval()">
+        <option value="1000">1 sec</option>
+        <option value="1500">1.5 sec</option>
+        <option value="2000" selected>2 sec</option>
+        <option value="2500">2.5 sec</option>
+        <option value="3000">3 sec</option>
+        <option value="3500">3.5 sec</option>
+        <option value="4000">4 sec</option>
+        <option value="4500">4.5 sec</option>
+        <option value="5000">5 sec</option>
+      </select>
+
+    <div class="progress-container" id="progressContainer">
+      <svg width="200" height="200">
+        <circle cx="100" cy="100" r="90" stroke="#333" stroke-width="15" fill="none"/>
+        <circle id="progressCircle" cx="100" cy="100" r="90" stroke="#28a745" stroke-width="15" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div id="countDisplay">0</div>
+    </div>
+
+    <div id="quote">"Every rep takes you closer to your best self!"</div>
+
+    <button id="startBtn" onclick="toggleWorkout()">Start Workout</button>
   </div>
 
-  <div id="countDisplay">0</div>
-
-  <button id="startBtn" onclick="toggleWorkout()">Start Workout</button>
+  <!-- Confetti JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
     let selectedCount = 10;
     let currentCount = 0;
     let isRunning = false;
+    let countGap = 2000;
 
     const countDisplay = document.getElementById('countDisplay');
+    const progressCircle = document.getElementById('progressCircle');
     const startBtn = document.getElementById('startBtn');
+    const quote = document.getElementById('quote');
+    const progressContainer = document.getElementById('progressContainer');
 
-    // Adjust gap between each count in ms
-    const countGap = 2000; // 2 sec
+    const circleLength = 2 * Math.PI * 90;
+    progressCircle.style.strokeDasharray = circleLength;
+    progressCircle.style.strokeDashoffset = circleLength;
 
     function selectCount(count) {
       selectedCount = count;
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
+    }
+
+    function updateInterval() {
+      countGap = parseInt(document.getElementById('intervalSelect').value);
     }
 
     function toggleWorkout() {
@@ -94,14 +173,30 @@
 
     function startWorkout() {
       currentCount = 0;
+      quote.style.display = "none";
+      progressContainer.style.display = "block";
       updateDisplay("Get Ready...");
+      updateProgress(0);
       startBtn.textContent = "Stop Workout";
       isRunning = true;
 
-      // Wait 5 sec before starting counts
-      setTimeout(() => {
-        runCounter();
-      }, 5000);
+      // 0–5 Get Ready countdown
+      let countdown = 5;
+      const countdownInterval = setInterval(() => {
+        if (!isRunning) {
+          clearInterval(countdownInterval);
+          return;
+        }
+        updateDisplay(countdown);
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(countdownInterval);
+          playSound('start');
+          setTimeout(() => {
+            runCounter();
+          }, 1000);
+        }
+      }, 1000);
     }
 
     function runCounter() {
@@ -110,31 +205,19 @@
       currentCount++;
       const color = getGradientColor(currentCount, selectedCount);
       updateDisplay(currentCount, color);
+      updateProgress(currentCount / selectedCount);
 
-      if (currentCount === selectedCount - 1) {
+      if (currentCount < selectedCount) {
         playSound(currentCount);
-        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
-        setTimeout(() => {
-          playSound('comeon');
-          setTimeout(runCounter, 2000);
-        }, countGap);
-        return;
-
-      } else if (currentCount < selectedCount) {
-        playSound(currentCount);
-        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
         setTimeout(runCounter, countGap);
-        return;
-
-      } else if (currentCount === selectedCount) {
+      } else {
         playSound(currentCount);
-        updateDisplay(currentCount, color); // ✅ FIXED: pass color!
         setTimeout(() => {
           playSound('wow');
-          updateDisplay("done");
+          showConfetti();
           isRunning = false;
           startBtn.textContent = "Start Workout";
-        }, 2000);
+        }, 1000);
       }
     }
 
@@ -142,6 +225,8 @@
       isRunning = false;
       startBtn.textContent = "Start Workout";
       updateDisplay(0);
+      updateProgress(0);
+      quote.style.display = "none";
     }
 
     function playSound(name) {
@@ -150,44 +235,65 @@
     }
 
     function updateDisplay(value, color) {
-      if (value === "done") {
-        countDisplay.textContent = "Awesome! You did it!";
-        countDisplay.style.fontSize = "32px"; // Smaller for text
-        countDisplay.style.color = "#28a745"; // Green for final message
-      } else if (isNaN(value)) {
+      if (isNaN(value)) {
         countDisplay.textContent = value;
-        countDisplay.style.fontSize = "32px";
-        countDisplay.style.color = "#fff"; // White for "Get Ready..."
+        countDisplay.style.fontSize = "28px";
+        countDisplay.style.color = "#fff";
       } else {
         countDisplay.textContent = value;
-        countDisplay.style.fontSize = "100px"; // Big for numbers
-        countDisplay.style.color = color || "#fff"; // Apply gradient color here!
+        countDisplay.style.fontSize = "60px";
+        countDisplay.style.color = color || "#fff";
       }
     }
-    // Generate gradient color red → orange → green
+
+    function updateProgress(percent) {
+      const offset = circleLength * (1 - percent);
+      progressCircle.style.strokeDashoffset = offset;
+    }
+
+    function showConfetti() {
+      progressContainer.style.display = "none";
+      quote.style.display = "block";
+      const duration = 5 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+
     function getGradientColor(count, total) {
       let percent = count / total;
       let r, g, b;
-
       if (percent < 0.5) {
-        // Red to Orange
         r = 255;
         g = Math.round(255 * (percent * 2));
         b = 0;
       } else {
-        // Orange to Green
         r = Math.round(255 * (1 - (percent - 0.5) * 2));
         g = 255;
         b = 0;
       }
-
       return `rgb(${r},${g},${b})`;
     }
 
     // Pre-select 10 by default
     document.querySelector('.tab-button').classList.add('active');
   </script>
-   
-  
+
 </body>
 </html>
