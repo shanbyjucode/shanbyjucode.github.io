@@ -60,7 +60,6 @@
       height: 200px;
       margin: auto;
       padding: 20px 0;
-
     }
     .progress-container svg {
       transform: rotate(-90deg);
@@ -209,6 +208,11 @@
       const color = getGradientColor(currentCount, selectedCount);
       updateDisplay(currentCount, color);
       updateProgress(currentCount / selectedCount);
+
+      // 🔑 Add vibration here
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
 
       if (currentCount < selectedCount) {
         playSound(currentCount);
