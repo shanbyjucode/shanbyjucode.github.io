@@ -75,6 +75,7 @@
       margin-top: 20px;
       margin-bottom: 20px;
       font-size: 15px;
+      color: #fcda76;
       text-align: center;
       display: none;
     }
@@ -108,10 +109,16 @@
       <button class="tab-button" onclick="selectCount(12)">12</button>
       <button class="tab-button" onclick="selectCount(15)">15</button>
       <button class="tab-button" onclick="selectCount(20)">20</button>
+      <button class="tab-button" onclick="selectCount(21)">21 💪🏼</button>
+      <!-- cardio buttons -->
+      <button class="tab-button" onclick="selectCount(25, 3)">25 x 3 🤸‍♀️</button>
+      <button class="tab-button" onclick="selectCount(25, 4)">25 x 4 🤸‍♀️</button>
     </div>
 
     <label>Let's decide the interval</label>
       <select id="intervalSelect" onchange="updateInterval()">
+        <option value="500">0.5 sec (Super Fast)</option>
+        <option value="800">0.8 sec (Fast)</option>
         <option value="1000">1 sec</option>
         <option value="1500">1.5 sec</option>
         <option value="2000" selected>2 sec</option>
@@ -141,6 +148,7 @@
 
   <script>
     let selectedCount = 4;
+    let sets = 1; // default 1 set
     let currentCount = 0;
     let isRunning = false;
     let countGap = 2000;
@@ -155,10 +163,20 @@
     progressCircle.style.strokeDasharray = circleLength;
     progressCircle.style.strokeDashoffset = circleLength;
 
-    function selectCount(count) {
+    function selectCount(count, totalSets = 1) {
       selectedCount = count;
+      sets = totalSets;
+      currentCount = 0;
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
+
+      // ✅ Auto-set faster interval for cardio workouts
+      if (count === 25 && (totalSets === 3 || totalSets === 4)) {
+        countGap = 800; // e.g. 0.8 sec per rep for cardio
+      } else {
+        // Reset to whatever is selected in the interval dropdown
+        countGap = parseInt(document.getElementById('intervalSelect').value);
+      }
     }
 
     function updateInterval() {
@@ -166,16 +184,12 @@
     }
 
     function toggleWorkout() {
-        if (isRunning) {
-          stopWorkout();
-        } else {
-          // ✅ Play a silent file to unlock audio context
-          const unlock = new Audio(`./images/other/sounds/silent.mp3`);
-          unlock.play().catch(() => {});
-
-          startWorkout();
-        }
+      if (isRunning) {
+        stopWorkout();
+      } else {
+        startWorkout();
       }
+    }
 
     function startWorkout() {
       currentCount = 0;
@@ -186,7 +200,6 @@
       startBtn.textContent = "Stop Workout";
       isRunning = true;
 
-      // 0–5 Get Ready countdown
       let countdown = 5;
       const countdownInterval = setInterval(() => {
         if (!isRunning) {
@@ -199,7 +212,13 @@
           clearInterval(countdownInterval);
           playSound('start');
           setTimeout(() => {
-            runCounter();
+            if (selectedCount === 21) {
+              runSpecial21();
+            } else if (selectedCount === 25 && sets > 1) {
+              runCardio();
+            } else {
+              runCounter();
+            }
           }, 1000);
         }
       }, 1000);
@@ -213,29 +232,11 @@
       updateDisplay(currentCount, color);
       updateProgress(currentCount / selectedCount);
 
-      if (navigator.vibrate) {
-        navigator.vibrate(200);
-      }
+      playSound(currentCount);
 
       if (currentCount < selectedCount) {
-        // 👉 For big counts: play normal count sound, then if it's the one before last, insert 'comeon'
-        if (currentCount === selectedCount - 1 && selectedCount >= 10) {
-          // Play normal count sound (e.g. 9 for 10)
-          playSound(currentCount);
-          // Then play 'comeon' after countGap
-          setTimeout(() => {
-            playSound('comeon');
-            // Then final count after 1 sec
-            setTimeout(runCounter, 1000);
-          }, countGap);
-        } else {
-          // Normal flow
-          playSound(currentCount);
-          setTimeout(runCounter, countGap);
-        }
+        setTimeout(runCounter, countGap);
       } else {
-        // Final count
-        playSound(currentCount);
         setTimeout(() => {
           playSound('wow');
           showConfetti();
@@ -243,6 +244,97 @@
           startBtn.textContent = "Start Workout";
         }, 1000);
       }
+    }
+
+    function runSpecial21() {
+      let sets21 = 3;
+      let repsPerSet = 7;
+      let currentRep = 0;
+      let currentSet = 1;
+
+      function runSet() {
+        if (!isRunning) return;
+
+        currentRep++;
+        currentCount++;
+        const color = getGradientColor(currentCount, selectedCount);
+        updateDisplay(currentRep, color);
+        updateProgress(currentCount / selectedCount);
+
+        playSound(currentRep);
+
+        if (currentRep < repsPerSet) {
+          setTimeout(runSet, countGap);
+        } else {
+          setTimeout(() => {
+            if (currentSet < sets21) {
+              setTimeout(() => {
+                playSound('change');
+                setTimeout(() => {
+                  currentRep = 0;
+                  currentSet++;
+                  runSet();
+                }, 500);
+              }, 500);
+            } else {
+              setTimeout(() => {
+                playSound('wow');
+                showConfetti();
+                isRunning = false;
+                startBtn.textContent = "Start Workout";
+              }, 1000);
+            }
+          }, countGap);
+        }
+      }
+
+      playSound(1);
+      runSet();
+    }
+
+    function runCardio() {
+      let repsPerSet = 25;
+      let currentRep = 0;
+      let currentSet = 1;
+
+      function runSet() {
+        if (!isRunning) return;
+
+        currentRep++;
+        currentCount++;
+        const color = getGradientColor(currentRep, repsPerSet);
+        updateDisplay(currentRep, color);
+        updateProgress(currentCount / (repsPerSet * sets));
+
+        playSound(currentRep);
+
+        if (currentRep < repsPerSet) {
+          setTimeout(runSet, countGap);
+        } else {
+          setTimeout(() => {
+            if (currentSet < sets) {
+              setTimeout(() => {
+                playSound('change');
+                setTimeout(() => {
+                  currentRep = 0;
+                  currentSet++;
+                  runSet();
+                }, 500);
+              }, 500);
+            } else {
+              setTimeout(() => {
+                playSound('wow');
+                showConfetti();
+                isRunning = false;
+                startBtn.textContent = "Start Workout";
+              }, 1000);
+            }
+          }, countGap);
+        }
+      }
+
+      playSound(1);
+      runSet();
     }
 
     function stopWorkout() {
@@ -254,9 +346,18 @@
     }
 
     function playSound(name) {
-      const audio = new Audio(`./images/other/sounds/${name}.mp3`);
-      audio.play();
-    }
+        const audio = new Audio(`./images/other/sounds/${name}.mp3`);
+
+        // Adjust playback speed for fast counts
+        if (countGap <= 800) {
+          audio.playbackRate = 1.5;
+        }
+        if (countGap <= 500) {
+          audio.playbackRate = 2.0;
+        }
+
+        audio.play();
+      }
 
     function updateDisplay(value, color) {
       if (isNaN(value)) {
