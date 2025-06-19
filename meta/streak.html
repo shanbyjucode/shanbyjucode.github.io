@@ -214,7 +214,7 @@
       const thisMonth = now.getMonth();
       const thisYear = now.getFullYear();
       const monthName = now.toLocaleString('default', { month: 'long' });
-      monthYearEl.innerText = `📆 ${monthName} ${thisYear}`;
+      monthYearEl.innerText = `${monthName} ${thisYear}`;
 
       calendar.innerHTML = '';
 
@@ -284,7 +284,7 @@
         const date = new Date(`${year}-${month}-01`);
         const monthName = date.toLocaleString('default', { month: 'long' });
         const entry = document.createElement('div');
-        entry.innerText = `📅 ${monthName} ${year} → ${grouped[key]} days completed`;
+        entry.innerText = `${monthName} ${year} → ${grouped[key]} days completed`;
         historyList.appendChild(entry);
       }
     }
