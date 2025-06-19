@@ -166,12 +166,16 @@
     }
 
     function toggleWorkout() {
-      if (isRunning) {
-        stopWorkout();
-      } else {
-        startWorkout();
+        if (isRunning) {
+          stopWorkout();
+        } else {
+          // ✅ Play a silent file to unlock audio context
+          const unlock = new Audio(`./images/other/sounds/silent.mp3`);
+          unlock.play().catch(() => {});
+
+          startWorkout();
+        }
       }
-    }
 
     function startWorkout() {
       currentCount = 0;
@@ -209,15 +213,28 @@
       updateDisplay(currentCount, color);
       updateProgress(currentCount / selectedCount);
 
-      // 🔑 Add vibration here
-      // if (navigator.vibrate) {
-      //   navigator.vibrate(200);
-      // }
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
 
       if (currentCount < selectedCount) {
-        playSound(currentCount);
-        setTimeout(runCounter, countGap);
+        // 👉 For big counts: play normal count sound, then if it's the one before last, insert 'comeon'
+        if (currentCount === selectedCount - 1 && selectedCount >= 10) {
+          // Play normal count sound (e.g. 9 for 10)
+          playSound(currentCount);
+          // Then play 'comeon' after countGap
+          setTimeout(() => {
+            playSound('comeon');
+            // Then final count after 1 sec
+            setTimeout(runCounter, 1000);
+          }, countGap);
+        } else {
+          // Normal flow
+          playSound(currentCount);
+          setTimeout(runCounter, countGap);
+        }
       } else {
+        // Final count
         playSound(currentCount);
         setTimeout(() => {
           playSound('wow');
