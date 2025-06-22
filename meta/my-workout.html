@@ -5,7 +5,6 @@
   <title>My Workout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
   <style>
     body {
       background: #121212;
@@ -14,18 +13,13 @@
       margin: 0;
       padding: 20px;
     }
-
-    h2 {
-      margin-bottom: 20px;
-    }
-
+    h2 { margin-bottom: 20px; }
     .accordion {
       border: 1px solid #333;
       border-radius: 8px;
       margin-bottom: 10px;
       overflow: hidden;
     }
-
     .accordion-header {
       background: #1c1c1c;
       padding: 16px;
@@ -34,384 +28,553 @@
       align-items: center;
       cursor: pointer;
     }
-
-    .accordion-header h3 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: normal;
-    }
-
+    .accordion-header h3 { margin: 0; font-size: 18px; font-weight: normal; }
     .accordion-header .icons {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
     }
-
     .accordion-header .material-icons {
-      margin-left: 12px;
-      cursor: pointer;
-      font-size: 24px;
-      transition: color 0.3s;
+      margin-left: 12px; cursor: pointer; font-size: 24px; transition: color 0.3s;
     }
-
-    .accordion-header .material-icons.favorite {
-      color: #00c853;
-    }
-
+    .accordion-header .material-icons.favorite { color: #00c853; }
     .accordion-content {
-      background: #1e1e1e;
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.4s ease;
+      background: #1e1e1e; overflow: hidden; max-height: 0; transition: max-height 0.4s ease;
     }
-
-    .accordion-content.open {
-      padding: 16px;
-    }
-
+    .accordion-content.open { padding: 16px; }
     .day-card {
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 16px;
-      margin-bottom: 15px;
-      background: #181818;
+      border: 1px solid #333; border-radius: 6px; padding: 16px; margin-bottom: 15px; background: #181818;
     }
-
-    .day-card h4 {
-      margin: 0 0 8px;
-      color: #00c853;
-    }
-
-    .muscle-group {
-      margin-bottom: 10px;
-    }
-
-    .muscle-group h5 {
-      margin: 0 0 5px;
-      font-weight: 500;
-    }
-
-    .exercise-list {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-    }
-
-    .exercise-list li {
-      margin: 14px 0;
-    }
-
-    .exercise-list a {
-      color: #00bfa5;
-      text-decoration: none;
-    }
-
-    .exercise-list a:hover {
-      text-decoration: underline;
-    }
-
-    .arrow {
-      transition: transform 0.3s;
-    }
-
-    .accordion-header.active .arrow {
-      transform: rotate(90deg);
-    }
+    .day-card h4 { margin: 0 0 8px; color: #00c853; }
+    .muscle-group h5 { margin: 0 0 5px; font-weight: 500; }
+    .exercise-list { list-style: none; padding-left: 0; margin: 0; }
+    .exercise-list li { margin: 14px 0; }
+    .exercise-list a { color: #00bfa5; text-decoration: none; }
+    .exercise-list a:hover { text-decoration: underline; }
+    .arrow { transition: transform 0.3s; }
+    .accordion-header.active .arrow { transform: rotate(90deg); }
   </style>
 </head>
 <body>
 
   <h2>My Workout</h2>
-
   <div id="accordionContainer"></div>
-       <!-- Bottom Navigation -->
-       <div class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <span class="material-icons">fitness_center</span>
-            <span class="nav-label">Workout</span>
-        </a>
-        <a href="my-workout.html" class="nav-item active">
-            <span class="material-icons">sports_martial_arts</span>
-            <span class="nav-label">My Workout</span>
-        </a>
-        <a href="assist.html" class="nav-item">
-            <span class="material-icons">apps</span>
-            <span class="nav-label">Apps</span>
-        </a>
-    </div>
+
   <script>
     const workoutPlans = [
-        {
-            name: "Workout Plan 1",
-            days: [
-            {
-                day: "Day 1",
-                workouts: [
-                {
-                    muscle: "Chest",
-                    exercises: [
-                    { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
-                    { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
-                    { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
-                    { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" },
-                    { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" }
-                    ]
-                },
-                {
-                    muscle: "Biceps",
-                    exercises: [
-                    { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
-                    { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
-                    { text: "Double Biceps Curl", link: "biceps-double-curl.html" },
-                    { text: "Preacher Curl", link: "biceps-preacher-curl.html" }
-                    ]
-                },
-                {
-                    muscle: "Abs",
-                    exercises: [
-                    { text: "Abs", link: "abs-list.html" }
-                    ]
-                },
-                {
-                    muscle: "Back",
-                    exercises: [
-                    { text: "Lat Pulldown", link: "back-lat-pull-down.html" },
-                    { text: "Chest Supported Straight Arm Pulldown", link: "back-incline-laying-straight-arm-pulldown.html" },
-                    { text: "Barbell Row", link: "back-barbell-row.html" },
-                    { text: "Single Arm Lat Pulldown", link: "back-single-arm-lat-pulldown.html" }
-                    ]
-                },
-                {
-                    muscle: "Triceps",
-                    exercises: [
-                    { text: "Bar Push Down", link: "trice-bar-push-down.html" },
-                    { text: "Skull Crusher", link: "trice-skull-crusher.html" },
-                    { text: "Bench Dips", link: "trice-bench-dips.html" },
-                    { text: "Chest Supported Kick Back", link: "trice-chest-supported-kickback.html" }
-                    ]
-                }
+      // ✅ Workout Plan 1 (master linked)
+      {
+        name: "Workout Plan 1",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+                  { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
+                  { text: "Decline Dumbbell Fly", link: "chest-delcine-dumbbell-fly.html" },
+                  { text: "Seated Cable Fly", link: "chest-seated-cable-fly.html" }
                 ]
-            },
-            {
-                day: "Day 3",
-                workouts: [
-                {
-                    muscle: "Shoulder",
-                    exercises: [
-                    { text: "Shoulder Press Machine", link: "shoulder-press-machine.html" },
-                    { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
-                    { text: "Dumbbell Lateral Raises", link: "shoulder-dumbbell-lateral-raises.html" },
-                    { text: "Face Pull", link: "shoulder-face-pull.html" },
-                    { text: "Up Right Row", link: "shoulder-up-right-row.html" },
-                    { text: "Back Fly", link: "shoulder-back-fly.html" },
-                    { text: "Dumbbell Shrug", link: "shoulder-dumbbell-shrug.html" }
-                    ]
-                },
-                {
-                    muscle: "Abs",
-                    exercises: [
-                    { text: "Abs", link: "abs-list.html" }
-                    ]
-                }
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
+                  { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
+                  { text: "Double Biceps Curl", link: "biceps-double-curl.html" },
+                  { text: "Preacher Curl", link: "biceps-preacher-curl.html" }
                 ]
-            },
-            {
-                day: "Day 4",
-                workouts: [
-                {
-                    muscle: "Biceps",
-                    exercises: [
-                    { text: "Reverse Grip Barbell Curl", link: "biceps-reverse-curl.html" },
-                    { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" },
-                    { text: "Cable Curl", link: "biceps-cable-curl.html" }
-                    ]
-                },
-                {
-                    muscle: "Triceps",
-                    exercises: [
-                    { text: "Rope Push Down", link: "trice-rope-push-down.html" },
-                    { text: "Double Arm Extension", link: "trice-double-arm-extension.html" },
-                    { text: "Reverse Grip Bar Push Down", link: "trice-reverse-grip-bar-push-down.html" }
-                    ]
-                },
-                {
-                    muscle: "Forearms",
-                    exercises: []
-                }
-                ]
-            },
-            {
-                day: "Day 5",
-                workouts: [
-                {
-                    muscle: "Leg",
-                    exercises: [
-                    { text: "Leg Extension", link: "leg-extension.html" },
-                    { text: "Leg Curl", link: "leg-leg-curl.html" },
-                    { text: "Super Squats", link: "leg-super-squats.html" },
-                    { text: "Walking Lunges", link: "walking-lunges.html" },
-                    { text: "Seated Calf", link: "leg-seated-calf.html" },
-                    { text: "Abduction", link: "leg-abduction.html" }
-                    ]
-                }
-                ]
-            },
-            {
-                day: "Day 6",
-                workouts: [
-                {
-                    muscle: "Abs and Cardio",
-                    exercises: [
-                    { text: "Abs", link: "abs-list.html" }
-                    ]
-                }
-                ]
-            }
+              },
+              {
+                muscle: "Abs",
+                exercises: [{ text: "Abs", link: "abs-list.html" }]
+              }
             ]
-        },
-        {
-            name: "Workout Plan 2",
-            days: [
-            {
-                day: "Day 1",
-                workouts: [
-                {
-                    muscle: "Chest",
-                    exercises: [
-                    { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
-                    { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
-                    { text: "Pec Fly", link: "chest-pec-fly.html" }
-                    ]
-                },
-                {
-                    muscle: "Shoulder",
-                    exercises: [
-                    { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
-                    { text: "Dumbbell Lateral Raises", link: "shoulder-dumbbell-lateral-raises.html" }
-                    ]
-                },
-                {
-                    muscle: "Triceps",
-                    exercises: [
-                    { text: "Skull Crusher", link: "trice-skull-crusher.html" },
-                    { text: "Bar Push Down", link: "trice-bar-push-down.html" },
-                    { text: "D Handle Push Down", link: "trice-d-handle-pushdown.html" }
-                    ]
-                }
+          },
+          {
+            day: "Day 2",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Lat Pulldown", link: "back-lat-pull-down.html" },
+                  { text: "Chest Supported Straight Arm Pulldown", link: "back-incline-laying-straight-arm-pulldown.html" },
+                  { text: "Barbell Row", link: "back-barbell-row.html" },
+                  { text: "Single Arm Lat Pulldown", link: "back-single-arm-lat-pulldown.html" }
                 ]
-            },
-            {
-                day: "Day 2",
-                workouts: [
-                {
-                    muscle: "Back",
-                    exercises: [
-                    { text: "Straight Arm Pulldown", link: "back-straight-arm-pulldown.html" },
-                    { text: "One Arm Dumbbell Row", link: "back-one-arm-dumbbell-row.html" },
-                    { text: "Seated Row", link: "back-seated-row.html" },
-                    { text: "Lat Pulldown", link: "back-lat-pull-down.html" },
-                    { text: "Back Fly", link: "shoulder-back-fly.html" },
-                    { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" }
-                    ]
-                },
-                {
-                    muscle: "Biceps",
-                    exercises: [
-                    { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
-                    { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" }
-                    ]
-                }
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Bar Push Down", link: "trice-bar-push-down.html" },
+                  { text: "Skull Crusher", link: "trice-skull-crusher.html" },
+                  { text: "Bench Dips", link: "trice-bench-dips.html" },
+                  { text: "Chest Supported Kick Back", link: "trice-chest-supported-kickback.html" }
                 ]
-            },
-            {
-                day: "Day 3",
-                workouts: [
-                {
-                    muscle: "Leg",
-                    exercises: [
-                    { text: "Leg Extension", link: "leg-extension.html" },
-                    { text: "Hack Squats", link: "hack-squats.html" },
-                    { text: "Walking Lunges", link: "walking-lunges.html" },
-                    { text: "Leg Press", link: "leg-press.html" }
-                    ]
-                }
-                ]
-            },
-            {
-                day: "Day 4",
-                workouts: [
-                {
-                    muscle: "Rest",
-                    exercises: []
-                }
-                ]
-            },
-            {
-                day: "Day 5",
-                workouts: [
-                {
-                    muscle: "Chest",
-                    exercises: [
-                    { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
-                    { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
-                    { text: "Incline Cable Fly", link: "chest-incline-cable-fly.html" }
-                    ]
-                },
-                {
-                    muscle: "Shoulder",
-                    exercises: [
-                    { text: "Military Press", link: "shoulder-military-press.html" },
-                    { text: "Cable Front Raise", link: "shoulder-cable-front-raise.html" }
-                    ]
-                },
-                {
-                    muscle: "Triceps",
-                    exercises: [
-                    { text: "Single Arm Triceps Extension", link: "trice-single-arm-extension.html" },
-                    { text: "Rope Push Down", link: "trice-rope-push-down.html" }
-                    ]
-                }
-                ]
-            },
-            {
-                day: "Day 6",
-                workouts: [
-                {
-                    muscle: "Back",
-                    exercises: [
-                    { text: "Close Grip Lat Pulldown", link: "back-close-grip-lat-pulldown.html" },
-                    { text: "Barbell Row", link: "back-barbell-row.html" },
-                    { text: "Mid Row", link: "back-mid-row.html" },
-                    { text: "Face Pull", link: "shoulder-face-pull.html" }
-                    ]
-                },
-                {
-                    muscle: "Biceps",
-                    exercises: [
-                    { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
-                    { text: "Preacher Curl", link: "biceps-preacher-curl.html" }
-                    ]
-                }
-                ]
-            },
-            {
-                day: "Day 7",
-                workouts: [
-                {
-                    muscle: "Leg",
-                    exercises: [
-                    { text: "Barbell Squats", link: "leg-barbell-squats.html" },
-                    { text: "Leg Curl", link: "leg-leg-curl.html" },
-                    { text: "Seated Calf", link: "leg-seated-calf.html" },
-                    { text: "Standing Calf", link: "leg-standing-calf.html" },
-                    { text: "Deadlift", link: "#" } // Not in workoutData so using "#"
-                    ]
-                }
-                ]
-            }
+              }
             ]
-        }
-        ];
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Machine", link: "shoulder-press-machine.html" },
+                  { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
+                  { text: "Lateral Raises Dumbbell", link: "shoulder-dumbbell-lateral-raises.html" },
+                  { text: "Face Pull", link: "shoulder-face-pull.html" },
+                  { text: "Up Right Row", link: "shoulder-up-right-row.html" },
+                  { text: "Back Fly", link: "shoulder-back-fly.html" },
+                  { text: "Dumbbell Shrug", link: "shoulder-dumbbell-shrug.html" }
+                ]
+              },
+              {
+                muscle: "Abs",
+                exercises: [{ text: "Abs", link: "abs-list.html" }]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Reverse Grip Barbell Curl", link: "biceps-reverse-curl.html" },
+                  { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" },
+                  { text: "Cable Curl", link: "biceps-cable-curl.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Rope Push Down", link: "trice-rope-push-down.html" },
+                  { text: "Double Arm Dumbbell Extension", link: "trice-double-arm-extension.html" },
+                  { text: "Reverse Grip Bar Push Down", link: "trice-reverse-grip-bar-push-down.html" },
+                  { text: "Forearms", link: "#" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 5",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Leg Curl", link: "leg-leg-curl.html" },
+                  { text: "Super Squats", link: "leg-super-squats.html" },
+                  { text: "Walking Lunges", link: "walking-lunges.html" },
+                  { text: "Seated Calf", link: "leg-seated-calf.html" },
+                  { text: "Abduction", link: "leg-abduction.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 6",
+            workouts: [
+              {
+                muscle: "Abs and Cardio",
+                exercises: [{ text: "Abs & Cardio", link: "abs-list.html" }]
+              }
+            ]
+          }
+        ]
+      },
 
+      // ✅ Workout Plan 2 (master linked)
+      {
+        name: "Workout Plan 2",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
+                  { text: "Decline Dumbbell Press", link: "chest-decline-dumbbell-press.html" },
+                  { text: "Pec Fly", link: "chest-pec-fly.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
+                  { text: "Lateral Raises", link: "shoulder-dumbbell-lateral-raises.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Skull Crusher", link: "trice-skull-crusher.html" },
+                  { text: "V Bar Push Down", link: "trice-bar-push-down.html" },
+                  { text: "D Handle Reverse Push Down", link: "trice-d-handle-pushdown.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 2",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Straight Arm Pull Down", link: "back-straight-arm-pulldown.html" },
+                  { text: "Dumbbell Row", link: "back-one-arm-dumbbell-row.html" },
+                  { text: "Seated Row", link: "back-seated-row.html" },
+                  { text: "Lat Pull Down", link: "back-lat-pull-down.html" },
+                  { text: "Back Fly", link: "shoulder-back-fly.html" },
+                  { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" }
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
+                  { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Hack Squats", link: "hack-squats.html" },
+                  { text: "Lunges", link: "walking-lunges.html" },
+                  { text: "Leg Press", link: "leg-press.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              { muscle: "Rest", exercises: [] }
+            ]
+          },
+          {
+            day: "Day 5",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
+                  { text: "Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Military Press", link: "shoulder-military-press.html" },
+                  { text: "Cable Front Raise", link: "shoulder-cable-front-raise.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Single Extension", link: "trice-single-arm-extension.html" },
+                  { text: "Laying Rope Push Down", link: "trice-rope-push-down.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 6",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Close Grip Lat Pull", link: "back-close-grip-lat-pulldown.html" },
+                  { text: "Barbell Row", link: "back-barbell-row.html" },
+                  { text: "Mid Row", link: "back-mid-row.html" },
+                  { text: "Face Pull", link: "shoulder-face-pull.html" }
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
+                  { text: "Preacher Curl", link: "biceps-preacher-curl.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 7",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Barbell Squats", link: "leg-barbell-squats.html" },
+                  { text: "Leg Curl", link: "leg-leg-curl.html" },
+                  { text: "Seated Calf", link: "leg-seated-calf.html" },
+                  { text: "Standing Calf", link: "leg-standing-calf.html" },
+                  { text: "Deadlift", link: "#" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      // ✅ Workout Plan 3 (full, verified links)
+      {
+        name: "Workout Plan 3",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Bench Press Dumbbell", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Incline Machine Press", link: "chest-incline-machine-press.html" }
+                ]
+              },
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Reverse Pulldown", link: "back-reverse-pulldown.html" },
+                  { text: "Barbell Row", link: "back-barbell-row.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
+                  { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 2",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
+                  { text: "Flat Bench Press Bar", link: "chest-flat-bench-press-bar.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Military Press", link: "shoulder-military-press.html" },
+                  { text: "Back Fly", link: "shoulder-back-fly.html" },
+                  { text: "Face Pull", link: "shoulder-face-pull.html" }
+                ]
+              },
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Dumbbell Row", link: "back-one-arm-dumbbell-row.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Leg Press", link: "leg-press.html" },
+                  { text: "Walking Lunges", link: "walking-lunges.html" },
+                  { text: "Barbell Squats", link: "leg-barbell-squats.html" },
+                  { text: "Seated Calf", link: "leg-seated-calf.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              {
+                muscle: "Abs and Cardio",
+                exercises: [
+                  { text: "Abs & Cardio", link: "abs-list.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 5",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+                  { text: "Pec Fly", link: "chest-pec-fly.html" }
+                ]
+              },
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Lat Pull Down", link: "back-lat-pull-down.html" },
+                  { text: "Straight Arm Pulldown", link: "back-straight-arm-pulldown.html" },
+                  { text: "Cable Row", link: "back-cable-row.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Bar Push Down", link: "trice-bar-push-down.html" }
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 6",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Curl", link: "leg-leg-curl.html" },
+                  { text: "Glute Kick", link: "leg-glute-kick.html" },
+                  { text: "Hip Thrust", link: "#" }, // 
+                  { text: "Dead Lift", link: "#" }, // 
+                  { text: "Statics Lunges Dumbbell", link: "#" },
+                  { text: "Sumo Squats Dumbbell", link: "leg-sumo-squat-dumbell.html" },
+                  { text: "Good Morning Bend", link: "leg-goodmorning-bend.html" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      // ✅ Workout Plan 4 (full, verified links)
+      {
+        name: "Workout Plan 4",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Decline Bench Press", link: "decline-bench-press.html" },
+                  { text: "Cable Fly", link: "chest-cable-fly.html" },
+                  { text: "Incline Machine Press", link: "chest-incline-machine-press.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Bench Dips", link: "trice-bench-dips.html" },
+                  { text: "V Bar Push Down", link: "trice-v-bar-push-down.html" },
+                  { text: "Single Arm Dumbbell Extension", link: "trice-single-arm-extension.html" },
+                  { text: "Dumbbell Kick Back", link: "trice-dumbbell-kickback.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 2",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Lat Pulldown", link: "back-lat-pull-down.html" },
+                  { text: "Seated Row", link: "back-seated-row.html" },
+                  { text: "Mid Row Wide Grip", link: "back-mid-row.html" }, // Assuming same mid row link
+                  { text: "Barbell Row", link: "back-barbell-row.html" }
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
+                  { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" },
+                  { text: "Cable Curl", link: "biceps-cable-curl.html" },
+                  { text: "Concentration Curl", link: "biceps-concentration-curl.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
+                  { text: "Lateral Raises Dumbbell", link: "shoulder-dumbbell-lateral-raises.html" },
+                  { text: "Bar Front Raise", link: "#" }, // Best match
+                  { text: "Back Fly", link: "shoulder-back-fly.html" },
+                  { text: "Dumbbell Shrugs", link: "shoulder-dumbbell-shrug.html" },
+                  { text: "Up Right Row", link: "shoulder-up-right-row.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Rope Push Down", link: "trice-rope-push-down.html" },
+                  { text: "Double Arm Dumbbell Extension", link: "trice-double-arm-extension.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Leg Press", link: "leg-press.html" },
+                  { text: "Hack Squats", link: "hack-squats.html" },
+                  { text: "Leg Curl", link: "leg-leg-curl.html" },
+                  { text: "Seated Calf", link: "leg-seated-calf.html" },
+                  { text: "Calf Press", link: "leg-calf-press.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 5",
+            workouts: [
+              {
+                muscle: "Abs and Cardio",
+                exercises: [
+                  { text: "Abs & Cardio", link: "abs-list.html" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+
+
+    ];
+
+    // ✅ Handle # alert
+    document.addEventListener("click", function (e) {
+      if (e.target.matches(".exercise-link")) {
+        const link = e.target.getAttribute("data-link");
+        if (link === "#") {
+          alert("This workout is personalized. Please consult your Meta Trainer for the correct instructions and proper form.");
+          e.preventDefault();
+        }
+      }
+    });
 
     const accordionContainer = document.getElementById("accordionContainer");
     const FAV_KEY = "favWorkoutPlan";
@@ -474,6 +637,8 @@
               const a = document.createElement("a");
               a.href = ex.link;
               a.textContent = ex.text;
+              a.className = "exercise-link"; // ✅ fix
+              a.setAttribute("data-link", ex.link); // ✅ fix
               li.appendChild(a);
               list.appendChild(li);
             });
