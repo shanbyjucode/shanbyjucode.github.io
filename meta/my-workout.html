@@ -51,6 +51,20 @@
     .exercise-list a:hover { text-decoration: underline; }
     .arrow { transition: transform 0.3s; }
     .accordion-header.active .arrow { transform: rotate(90deg); }
+
+    .accordion-header.highlight {
+      animation: highlight-pulse 1.5s ease;
+    }
+
+    @keyframes highlight-pulse {
+      0% {
+        box-shadow: 0 0 0 4px var(--secondary, #ff9800);
+      }
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -676,7 +690,229 @@
             ]
           }
         ]
+      },
+
+      // ✅ Workout Plan 6 (full, verified links)
+      {
+        name: "Workout Plan 6",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Lower Cable Cross Over Fly", link: "chest-lower-cable-cross-over-fly.html" },
+                  { text: "Incline Machine Press", link: "chest-incline-machine-press.html" },
+                  { text: "Pec Fly (Drop Set)", link: "chest-pec-fly.html" } // using Pec Fly link
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Incline Skull Crusher", link: "trice-skull-crusher.html" }, // best match
+                  { text: "Dumbbell Extension", link: "trice-double-arm-extension.html" },
+                  { text: "Cable Kick Back", link: "trice-chest-supported-kickback.html" }, // closest match
+                  { text: "Rope Push Down", link: "trice-rope-push-down.html" }
+                ]
+              },
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Lat Pulldown", link: "back-lat-pull-down.html" },
+                  { text: "Seated Row Wide Grip", link: "back-seated-row.html" }, // best match
+                  { text: "Cable Row", link: "back-cable-row.html" },
+                  { text: "Deadlift", link: "#" }, // not in master, fallback
+                  { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" }, // it's under shoulder in master
+                  { text: "Seated Back Fly", link: "shoulder-back-fly.html" } // same as back fly under shoulder
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Barbell Curl Wide Grip", link: "biceps-barbell-curl.html" }, // same link
+                  { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" },
+                  { text: "Laying Cable Curl", link: "biceps-cable-curl.html" } // best match
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Bar", link: "shoulder-military-press.html" }, // best match
+                  { text: "Bend Over Back Fly", link: "shoulder-back-fly.html" }, // same as back fly
+                  { text: "Dumbbell Lateral Raises Single", link: "shoulder-dumbbell-lateral-raises.html" }, // best match
+                  { text: "Plate Raise", link: "#" }, // not in master
+                  { text: "Face Pull", link: "shoulder-face-pull.html" },
+                  { text: "Back Shrug", link: "shoulder-dumbbell-shrug.html" } // best match
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Squats", link: "leg-barbell-squats.html" }, // best match
+                  { text: "Hack Squats", link: "hack-squats.html" },
+                  { text: "Leg Curl", link: "leg-leg-curl.html" },
+                  { text: "Calf", link: "leg-seated-calf.html" } // using Seated Calf link as general calf
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      // ✅ Workout Plan 7 (full, verified links)
+      {
+        name: "Workout Plan 7",
+        days: [
+          {
+            day: "Day 1",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Dumbbell Press", link: "chest-flat-dumbbell-press.html" },
+                  { text: "Decline Bench Press", link: "decline-bench-press.html" },
+                  { text: "Incline Bench Press", link: "chest-incline-bench-press.html" },
+                  { text: "Pec Fly", link: "chest-pec-fly.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Shoulder Press Dumbbell", link: "shoulder-press-dumbbell.html" },
+                  { text: "Lateral Raises Cable", link: "#" } // not in master exactly, fallback
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Bar Push Down", link: "trice-bar-push-down.html" },
+                  { text: "Skull Crusher Cable", link: "trice-skull-crusher.html" } // closest match
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 2",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Lat Pull Down", link: "back-lat-pull-down.html" },
+                  { text: "Dumbbell Row", link: "back-one-arm-dumbbell-row.html" },
+                  { text: "Seated Row", link: "back-seated-row.html" },
+                  { text: "Back Fly", link: "shoulder-back-fly.html" }, // from shoulder master list
+                  { text: "Shrug", link: "shoulder-barbell-shrug.html" }, // best match
+                  { text: "Upright Row", link: "shoulder-up-right-row.html" } // in shoulder master
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Barbell Curl", link: "biceps-barbell-curl.html" },
+                  { text: "Dumbbell Curl", link: "biceps-dumbbell-curl.html" },
+                  { text: "Cable 21", link: "#" } // best available
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 3",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Super Squats", link: "leg-super-squats.html" },
+                  { text: "Hack Squats", link: "hack-squats.html" },
+                  { text: "Leg Extension", link: "leg-extension.html" },
+                  { text: "Leg Press", link: "leg-press.html" },
+                  { text: "Statics Lunges", link: "leg-statics-lunges-smith.html" } // best match
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 4",
+            workouts: [
+              {
+                muscle: "Chest",
+                exercises: [
+                  { text: "Flat Bench Press", link: "chest-flat-bench-press-bar.html" },
+                  { text: "Incline Dumbbell Press", link: "chest-incline-dumbbell-press.html" },
+                  { text: "Flat Cable Fly", link: "chest-flat-cable-fly.html" }
+                ]
+              },
+              {
+                muscle: "Shoulder",
+                exercises: [
+                  { text: "Military Press", link: "shoulder-military-press.html" },
+                  { text: "Lateral Raises Dumbbell", link: "shoulder-dumbbell-lateral-raises.html" }
+                ]
+              },
+              {
+                muscle: "Triceps",
+                exercises: [
+                  { text: "Rope Push Down", link: "trice-rope-push-down.html" },
+                  { text: "Over Head Cable Press", link: "#" } // not in master
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 5",
+            workouts: [
+              {
+                muscle: "Back",
+                exercises: [
+                  { text: "Mid Row", link: "back-mid-row.html" },
+                  { text: "Reverse Pull Down", link: "back-reverse-pulldown.html" },
+                  { text: "Barbell Row", link: "back-barbell-row.html" },
+                  { text: "Straight Arm Pull Down", link: "back-straight-arm-pulldown.html" },
+                  { text: "Face Pull", link: "shoulder-face-pull.html" },
+                  { text: "Barbell Shrug", link: "shoulder-barbell-shrug.html" },
+                  { text: "Bent Over Back Fly", link: "shoulder-back-fly.html" }
+                ]
+              },
+              {
+                muscle: "Biceps",
+                exercises: [
+                  { text: "Cable Curl", link: "biceps-cable-curl.html" },
+                  { text: "Preacher Curl", link: "biceps-preacher-curl.html" },
+                  { text: "Dumbbell Hammer Curl", link: "biceps-dumbbell-hammer-curl.html" }
+                ]
+              }
+            ]
+          },
+          {
+            day: "Day 6",
+            workouts: [
+              {
+                muscle: "Leg",
+                exercises: [
+                  { text: "Barbell Squats", link: "leg-barbell-squats.html" },
+                  { text: "Walking Lunges", link: "walking-lunges.html" },
+                  { text: "Seated Calf", link: "leg-seated-calf.html" },
+                  { text: "Standing Calf", link: "leg-standing-calf.html" },
+                  { text: "Leg Curl", link: "leg-leg-curl.html" }
+                ]
+              }
+            ]
+          }
+        ]
       }
+
 
 
 
@@ -697,92 +933,130 @@
     const FAV_KEY = "favWorkoutPlan";
 
     function renderAccordion() {
-      accordionContainer.innerHTML = "";
-      const fav = localStorage.getItem(FAV_KEY);
-      const sorted = [...workoutPlans];
-      if (fav) {
-        const i = sorted.findIndex(p => p.name === fav);
-        if (i > -1) {
-          const favPlan = sorted.splice(i, 1)[0];
-          sorted.unshift(favPlan);
-        }
-      }
-      sorted.forEach(plan => {
-        const acc = document.createElement("div");
-        acc.className = "accordion";
-        const header = document.createElement("div");
-        header.className = "accordion-header";
-        const title = document.createElement("h3");
-        title.textContent = plan.name;
-        const icons = document.createElement("div");
-        icons.className = "icons";
-        const star = document.createElement("span");
-        star.className = "material-icons";
-        if (fav === plan.name) star.classList.add("favorite");
-        star.textContent = "star";
-        star.onclick = (e) => {
-          e.stopPropagation();
-          if (fav === plan.name) localStorage.removeItem(FAV_KEY);
-          else localStorage.setItem(FAV_KEY, plan.name);
-          renderAccordion();
-        };
-        const arrow = document.createElement("span");
-        arrow.className = "material-icons arrow";
-        arrow.textContent = "chevron_right";
-        icons.appendChild(star);
-        icons.appendChild(arrow);
-        header.appendChild(title);
-        header.appendChild(icons);
+  accordionContainer.innerHTML = "";
 
-        const content = document.createElement("div");
-        content.className = "accordion-content";
+  const fav = localStorage.getItem(FAV_KEY);
+  const lastFav = window.lastFav;
+  window.lastFav = fav;
 
-        plan.days.forEach(day => {
-          const card = document.createElement("div");
-          card.className = "day-card";
-          const dayTitle = document.createElement("h4");
-          dayTitle.textContent = day.day;
-          card.appendChild(dayTitle);
-          day.workouts.forEach(w => {
-            const muscleTitle = document.createElement("h5");
-            muscleTitle.textContent = w.muscle;
-            card.appendChild(muscleTitle);
-            const list = document.createElement("ul");
-            list.className = "exercise-list";
-            w.exercises.forEach(ex => {
-              const li = document.createElement("li");
-              const a = document.createElement("a");
-              a.href = ex.link;
-              a.textContent = ex.text;
-              a.className = "exercise-link"; // ✅ fix
-              a.setAttribute("data-link", ex.link); // ✅ fix
-              li.appendChild(a);
-              list.appendChild(li);
-            });
-            card.appendChild(list);
-          });
-          content.appendChild(card);
-        });
-
-        header.onclick = () => {
-          const open = content.classList.contains("open");
-          document.querySelectorAll(".accordion-content").forEach(c => {
-            c.style.maxHeight = null;
-            c.classList.remove("open");
-            c.previousSibling.classList.remove("active");
-          });
-          if (!open) {
-            content.classList.add("open");
-            header.classList.add("active");
-            content.style.maxHeight = content.scrollHeight + "px";
-          }
-        };
-
-        acc.appendChild(header);
-        acc.appendChild(content);
-        accordionContainer.appendChild(acc);
-      });
+  const sorted = [...workoutPlans];
+  if (fav) {
+    const i = sorted.findIndex(p => p.name === fav);
+    if (i > -1) {
+      const favPlan = sorted.splice(i, 1)[0];
+      sorted.unshift(favPlan);
     }
+  }
+
+  let favHeader = null; // ✅ keep reference to header that needs highlight
+
+  sorted.forEach(plan => {
+    const acc = document.createElement("div");
+    acc.className = "accordion";
+
+    const header = document.createElement("div");
+    header.className = "accordion-header";
+    const title = document.createElement("h3");
+    title.textContent = plan.name;
+
+    // ✅ Add "My Workout" label if this is the favorite
+    if (fav === plan.name) {
+      const label = document.createElement("span");
+      label.textContent = "My Workout";
+      label.style.background = "var(--secondary, #ff9800)";
+      label.style.color = "#fff";
+      label.style.fontSize = "12px";
+      label.style.padding = "2px 6px";
+      label.style.borderRadius = "4px";
+      label.style.position = "absolute";
+      label.style.top = "-2px";
+      label.style.right = "10px";
+      header.style.position = "relative";
+      header.appendChild(label);
+
+      favHeader = header; // ✅ this is the element to highlight later
+    }
+
+    const icons = document.createElement("div");
+    icons.className = "icons";
+    const star = document.createElement("span");
+    star.className = "material-icons";
+    if (fav === plan.name) star.classList.add("favorite");
+    star.textContent = "star";
+    star.onclick = (e) => {
+      e.stopPropagation();
+      if (fav === plan.name) localStorage.removeItem(FAV_KEY);
+      else localStorage.setItem(FAV_KEY, plan.name);
+      renderAccordion();
+    };
+
+    const arrow = document.createElement("span");
+    arrow.className = "material-icons arrow";
+    arrow.textContent = "chevron_right";
+    icons.appendChild(star);
+    icons.appendChild(arrow);
+
+    header.appendChild(title);
+    header.appendChild(icons);
+
+    const content = document.createElement("div");
+    content.className = "accordion-content";
+
+    plan.days.forEach(day => {
+      const card = document.createElement("div");
+      card.className = "day-card";
+      const dayTitle = document.createElement("h4");
+      dayTitle.textContent = day.day;
+      card.appendChild(dayTitle);
+      day.workouts.forEach(w => {
+        const muscleTitle = document.createElement("h5");
+        muscleTitle.textContent = w.muscle;
+        card.appendChild(muscleTitle);
+        const list = document.createElement("ul");
+        list.className = "exercise-list";
+        w.exercises.forEach(ex => {
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = ex.link;
+          a.textContent = ex.text;
+          a.className = "exercise-link";
+          a.setAttribute("data-link", ex.link);
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+        card.appendChild(list);
+      });
+      content.appendChild(card);
+    });
+
+    header.onclick = () => {
+      const open = content.classList.contains("open");
+      document.querySelectorAll(".accordion-content").forEach(c => {
+        c.style.maxHeight = null;
+        c.classList.remove("open");
+        c.previousSibling.classList.remove("active");
+      });
+      if (!open) {
+        content.classList.add("open");
+        header.classList.add("active");
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    };
+
+    acc.appendChild(header);
+    acc.appendChild(content);
+    accordionContainer.appendChild(acc);
+  });
+
+  // ✅ After ALL accordions are rendered, highlight and scroll the favHeader
+  if (fav && favHeader) {
+    favHeader.classList.add("highlight");
+    favHeader.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => favHeader.classList.remove("highlight"), 1500);
+  }
+}
+
+
 
     renderAccordion();
   </script>
