@@ -1093,128 +1093,148 @@
     const FAV_KEY = "favWorkoutPlan";
 
     function renderAccordion() {
-  accordionContainer.innerHTML = "";
+      accordionContainer.innerHTML = "";
 
-  const fav = localStorage.getItem(FAV_KEY);
-  const lastFav = window.lastFav;
-  window.lastFav = fav;
+      const fav = localStorage.getItem(FAV_KEY);
+      const lastFav = window.lastFav;
+      window.lastFav = fav;
 
-  const sorted = [...workoutPlans];
-  if (fav) {
-    const i = sorted.findIndex(p => p.name === fav);
-    if (i > -1) {
-      const favPlan = sorted.splice(i, 1)[0];
-      sorted.unshift(favPlan);
-    }
-  }
+      const openPlanName = localStorage.getItem("openPlanName");
 
-  let favHeader = null; // ✅ keep reference to header that needs highlight
-
-  sorted.forEach(plan => {
-    const acc = document.createElement("div");
-    acc.className = "accordion";
-
-    const header = document.createElement("div");
-    header.className = "accordion-header";
-    const title = document.createElement("h3");
-    title.textContent = plan.name;
-
-    // ✅ Add "My Workout" label if this is the favorite
-    if (fav === plan.name) {
-      const label = document.createElement("span");
-      label.textContent = "My Workout";
-      label.style.background = "var(--secondary, #ff9800)";
-      label.style.color = "#fff";
-      label.style.fontSize = "12px";
-      label.style.padding = "2px 6px";
-      label.style.borderRadius = "4px";
-      label.style.position = "absolute";
-      label.style.top = "-2px";
-      label.style.right = "10px";
-      header.style.position = "relative";
-      header.appendChild(label);
-
-      favHeader = header; // ✅ this is the element to highlight later
-    }
-
-    const icons = document.createElement("div");
-    icons.className = "icons";
-    const star = document.createElement("span");
-    star.className = "material-icons";
-    if (fav === plan.name) star.classList.add("favorite");
-    star.textContent = "star";
-    star.onclick = (e) => {
-      e.stopPropagation();
-      if (fav === plan.name) localStorage.removeItem(FAV_KEY);
-      else localStorage.setItem(FAV_KEY, plan.name);
-      renderAccordion();
-    };
-
-    const arrow = document.createElement("span");
-    arrow.className = "material-icons arrow";
-    arrow.textContent = "chevron_right";
-    icons.appendChild(star);
-    icons.appendChild(arrow);
-
-    header.appendChild(title);
-    header.appendChild(icons);
-
-    const content = document.createElement("div");
-    content.className = "accordion-content";
-
-    plan.days.forEach(day => {
-      const card = document.createElement("div");
-      card.className = "day-card";
-      const dayTitle = document.createElement("h4");
-      dayTitle.textContent = day.day;
-      card.appendChild(dayTitle);
-      day.workouts.forEach(w => {
-        const muscleTitle = document.createElement("h5");
-        muscleTitle.textContent = w.muscle;
-        card.appendChild(muscleTitle);
-        const list = document.createElement("ul");
-        list.className = "exercise-list";
-        w.exercises.forEach(ex => {
-          const li = document.createElement("li");
-          const a = document.createElement("a");
-          a.href = ex.link;
-          a.textContent = ex.text;
-          a.className = "exercise-link";
-          a.setAttribute("data-link", ex.link);
-          li.appendChild(a);
-          list.appendChild(li);
-        });
-        card.appendChild(list);
-      });
-      content.appendChild(card);
-    });
-
-    header.onclick = () => {
-      const open = content.classList.contains("open");
-      document.querySelectorAll(".accordion-content").forEach(c => {
-        c.style.maxHeight = null;
-        c.classList.remove("open");
-        c.previousSibling.classList.remove("active");
-      });
-      if (!open) {
-        content.classList.add("open");
-        header.classList.add("active");
-        content.style.maxHeight = content.scrollHeight + "px";
+      const sorted = [...workoutPlans];
+      if (fav) {
+        const i = sorted.findIndex(p => p.name === fav);
+        if (i > -1) {
+          const favPlan = sorted.splice(i, 1)[0];
+          sorted.unshift(favPlan);
+        }
       }
-    };
 
-    acc.appendChild(header);
-    acc.appendChild(content);
-    accordionContainer.appendChild(acc);
-  });
+      let favHeader = null;
 
-  // ✅ After ALL accordions are rendered, highlight and scroll the favHeader
-  if (fav && favHeader) {
-    favHeader.classList.add("highlight");
-    favHeader.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => favHeader.classList.remove("highlight"), 1500);
-  }
-}
+      sorted.forEach(plan => {
+        const acc = document.createElement("div");
+        acc.className = "accordion";
+
+        const header = document.createElement("div");
+        header.className = "accordion-header";
+        const title = document.createElement("h3");
+        title.textContent = plan.name;
+
+        // ✅ My Workout label
+        if (fav === plan.name) {
+          const label = document.createElement("span");
+          label.textContent = "My Workout";
+          label.style.background = "var(--secondary, #ff9800)";
+          label.style.color = "#fff";
+          label.style.fontSize = "12px";
+          label.style.padding = "2px 6px";
+          label.style.borderRadius = "4px";
+          label.style.position = "absolute";
+          label.style.top = "-2px";
+          label.style.right = "10px";
+          header.style.position = "relative";
+          header.appendChild(label);
+
+          favHeader = header;
+        }
+
+        const icons = document.createElement("div");
+        icons.className = "icons";
+        const star = document.createElement("span");
+        star.className = "material-icons";
+        if (fav === plan.name) star.classList.add("favorite");
+        star.textContent = "star";
+        star.onclick = (e) => {
+          e.stopPropagation();
+          if (fav === plan.name) localStorage.removeItem(FAV_KEY);
+          else localStorage.setItem(FAV_KEY, plan.name);
+          renderAccordion();
+        };
+
+        const arrow = document.createElement("span");
+        arrow.className = "material-icons arrow";
+        arrow.textContent = "chevron_right";
+        icons.appendChild(star);
+        icons.appendChild(arrow);
+
+        header.appendChild(title);
+        header.appendChild(icons);
+
+        const content = document.createElement("div");
+        content.className = "accordion-content";
+
+        plan.days.forEach(day => {
+          const card = document.createElement("div");
+          card.className = "day-card";
+          const dayTitle = document.createElement("h4");
+          dayTitle.textContent = day.day;
+          card.appendChild(dayTitle);
+
+          day.workouts.forEach(w => {
+            const muscleTitle = document.createElement("h5");
+            muscleTitle.textContent = w.muscle;
+            card.appendChild(muscleTitle);
+
+            const list = document.createElement("ul");
+            list.className = "exercise-list";
+            w.exercises.forEach(ex => {
+              const li = document.createElement("li");
+              const a = document.createElement("a");
+              a.href = ex.link;
+              a.textContent = ex.text;
+              a.className = "exercise-link";
+              a.setAttribute("data-link", ex.link);
+              li.appendChild(a);
+              list.appendChild(li);
+            });
+            card.appendChild(list);
+          });
+
+          content.appendChild(card);
+        });
+
+        // ✅ Accordion open/close
+        header.onclick = () => {
+          const open = content.classList.contains("open");
+          document.querySelectorAll(".accordion-content").forEach(c => {
+            c.style.maxHeight = null;
+            c.classList.remove("open");
+            c.previousSibling.classList.remove("active");
+          });
+
+          if (!open) {
+            content.classList.add("open");
+            header.classList.add("active");
+            content.style.maxHeight = content.scrollHeight + "px";
+            localStorage.setItem("openPlanName", plan.name); // save opened one
+          } else {
+            localStorage.removeItem("openPlanName");
+          }
+        };
+
+        // ✅ Restore open state from localStorage
+        if (plan.name === openPlanName) {
+            // Delay maxHeight calculation after DOM paint
+            setTimeout(() => {
+              content.classList.add("open");
+              header.classList.add("active");
+              content.style.maxHeight = content.scrollHeight + "px";
+            }, 0);
+          }
+
+        acc.appendChild(header);
+        acc.appendChild(content);
+        accordionContainer.appendChild(acc);
+      });
+
+      // ✅ Highlight favorite header
+      if (fav && favHeader) {
+        favHeader.classList.add("highlight");
+        favHeader.scrollIntoView({ behavior: "smooth", block: "start" });
+        setTimeout(() => favHeader.classList.remove("highlight"), 1500);
+      }
+    }
 
 
 
