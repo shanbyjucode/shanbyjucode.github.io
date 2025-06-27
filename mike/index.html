@@ -126,6 +126,55 @@
       cursor: pointer;
     }
 
+    .centered-avatar {
+      width: 72px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .tooltip-box {
+      position: absolute;
+      top: 100%; /* tooltip shows below the avatar */
+      margin-top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .tooltip-container:hover .tooltip-box {
+      opacity: 1;
+    }
+
+    .tooltip-box::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent transparent #333 transparent;
+    }
+
+    /* Show on mobile tap */
+    .tooltip-box.show {
+      opacity: 1 !important;
+      pointer-events: auto;
+    }
+
     @media (max-width: 500px) {
       .nav-btn {
         padding: 6px 10px;
@@ -136,11 +185,14 @@
 </head>
 <body>
   <div class="page">
-    <img src="https://app-dev2.goodmeetings.ai/static/media/mike.4f5c5afe708366c5cfd9.gif" alt="Mike Avatar" class="avatar" />
+    <div class="tooltip-container centered-avatar" id="avatarTooltip">
+      <img src="https://app-dev2.goodmeetings.ai/static/media/mike.4f5c5afe708366c5cfd9.gif" alt="Mike Avatar" class="avatar" />
+      <div class="tooltip-box">I’ve got all the insights ready — tap a button or ask me anything!</div>
+    </div>
     <div class="centered">
       <div class="title">Hey, I'm Mike!</div>
       <div class="subtitle">
-        You're viewing the '<strong>[Goodmeetings × Edmyst] walkthrough</strong>' from <strong>May 25, 2025</strong>. <br> I’ve got all the insights ready — tap a button or ask me anything!
+        <strong>[Goodmeetings × Edmyst] walkthrough</strong><br> May 25, 2025, 2:00 PM
       </div>
     </div>
 
@@ -188,6 +240,21 @@
     function scrollNav(offset) {
       document.getElementById('navScroll').scrollBy({ left: offset, behavior: 'smooth' });
     }
+
+    function scrollNav(offset) {
+      document.getElementById('navScroll').scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    // Mobile tooltip behavior
+    const avatar = document.getElementById('avatarTooltip');
+    const tooltip = avatar.querySelector('.tooltip-box');
+
+    avatar.addEventListener('click', () => {
+      tooltip.classList.add('show');
+      setTimeout(() => {
+        tooltip.classList.remove('show');
+      }, 3000); // Hide after 3 seconds
+    });
   </script>
 </body>
 </html>
