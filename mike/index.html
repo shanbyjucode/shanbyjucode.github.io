@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mike Assistant</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      height: 100%;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .centered {
+      text-align: center;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 0;
+      background: #f9f9f9;
+      position: sticky;
+      top: 0px;
+      z-index: 100;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-scroll {
+      overflow-x: auto;
+      white-space: nowrap;
+      flex-grow: 1;
+      scroll-behavior: smooth;
+    }
+
+    .nav-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-btn {
+      display: inline-block;
+      padding: 8px 14px;
+      margin-right: 6px;
+      border-radius: 20px;
+      background-color: #e0e0e0;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .arrow-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 10px;
+    }
+
+    .content {
+      padding: 20px 0;
+    }
+
+    .chat-input {
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      padding: 10px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px;
+      border-radius: 24px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .chat-input button {
+      background-color: #1976d2;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      margin-left: 10px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 500px) {
+      .nav-btn {
+        padding: 6px 10px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <img src="https://app-dev2.goodmeetings.ai/static/media/mike.4f5c5afe708366c5cfd9.gif" alt="Mike Avatar" class="avatar" />
+    <div class="centered">
+      <div class="title">Hey, I'm Mike!</div>
+      <div class="subtitle">
+        You're viewing the '<strong>[Goodmeetings × Edmyst] walkthrough</strong>' from <strong>May 25, 2025</strong>. <br> I’ve got all the insights ready — tap a button or ask me anything!
+      </div>
+    </div>
+
+    <div class="nav-wrapper">
+      <button class="arrow-btn" onclick="scrollNav(-100)">◀</button>
+      <div class="nav-scroll" id="navScroll">
+        <button class="nav-btn">Summary</button>
+        <button class="nav-btn">Action Items</button>
+        <button class="nav-btn">Transcript</button>
+        <button class="nav-btn">Pitch Report</button>
+        <button class="nav-btn">Client Report</button>
+        <button class="nav-btn">Meeting Report</button>
+        <button class="nav-btn">Autofill</button>
+        <button class="nav-btn">Speaker Tracks</button>
+      </div>
+      <button class="arrow-btn" onclick="scrollNav(100)">▶</button>
+    </div>
+
+    <div class="content">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt, ligula sed tristique tempor, enim magna convallis mauris, ac tincidunt felis velit eget orci.</p>
+      <p>Aliquam a tincidunt nibh. Aenean malesuada feugiat semper. Pellentesque tristique enim in lectus tempor luctus. Sed tincidunt iaculis eros vel tristique. Sed placerat ut purus at sagittis.</p>
+      <p>Suspendisse vitae eros non neque tincidunt sagittis. Nulla facilisi. Nullam blandit metus libero, et dapibus ex varius nec. Donec nec eros quis justo convallis ultrices.</p>
+      <p>Praesent vehicula libero eget eros bibendum tempor. Donec fermentum, sapien nec finibus fermentum, augue sapien luctus orci, a interdum enim magna in massa. Fusce ut justo nec lorem dapibus pretium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt, ligula sed tristique tempor, enim magna convallis mauris, ac tincidunt felis velit eget orci.</p>
+      <p>Aliquam a tincidunt nibh. Aenean malesuada feugiat semper. Pellentesque tristique enim in lectus tempor luctus. Sed tincidunt iaculis eros vel tristique. Sed placerat ut purus at sagittis.</p>
+      <p>Suspendisse vitae eros non neque tincidunt sagittis. Nulla facilisi. Nullam blandit metus libero, et dapibus ex varius nec. Donec nec eros quis justo convallis ultrices.</p>
+      <p>Praesent vehicula libero eget eros bibendum tempor. Donec fermentum, sapien nec finibus fermentum, augue sapien luctus orci, a interdum enim magna in massa. Fusce ut justo nec lorem dapibus pretium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt, ligula sed tristique tempor, enim magna convallis mauris, ac tincidunt felis velit eget orci.</p>
+      <p>Aliquam a tincidunt nibh. Aenean malesuada feugiat semper. Pellentesque tristique enim in lectus tempor luctus. Sed tincidunt iaculis eros vel tristique. Sed placerat ut purus at sagittis.</p>
+      <p>Suspendisse vitae eros non neque tincidunt sagittis. Nulla facilisi. Nullam blandit metus libero, et dapibus ex varius nec. Donec nec eros quis justo convallis ultrices.</p>
+      <p>Praesent vehicula libero eget eros bibendum tempor. Donec fermentum, sapien nec finibus fermentum, augue sapien luctus orci, a interdum enim magna in massa. Fusce ut justo nec lorem dapibus pretium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt, ligula sed tristique tempor, enim magna convallis mauris, ac tincidunt felis velit eget orci.</p>
+      <p>Aliquam a tincidunt nibh. Aenean malesuada feugiat semper. Pellentesque tristique enim in lectus tempor luctus. Sed tincidunt iaculis eros vel tristique. Sed placerat ut purus at sagittis.</p>
+      <p>Suspendisse vitae eros non neque tincidunt sagittis. Nulla facilisi. Nullam blandit metus libero, et dapibus ex varius nec. Donec nec eros quis justo convallis ultrices.</p>
+      <p>Praesent vehicula libero eget eros bibendum tempor. Donec fermentum, sapien nec finibus fermentum, augue sapien luctus orci, a interdum enim magna in massa. Fusce ut justo nec lorem dapibus pretium.</p>
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <input type="text" placeholder="Ask Mike anything about this meeting" />
+    <button>↑</button>
+  </div>
+
+  <script>
+    function scrollNav(offset) {
+      document.getElementById('navScroll').scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
