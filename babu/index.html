@@ -151,7 +151,7 @@
       msg1.onend = () => {
         setTimeout(() => {
           speechSynthesis.speak(msg2);
-        }, 1000); // 1.5 second delay
+        }, 800); // delay
       };
 
       speechSynthesis.speak(msg1);
@@ -163,6 +163,7 @@
       const rate = parseFloat(rateInput.value) || 0;
       localStorage.setItem(WHOLE_RATE_KEY, rate);
       calculateTotal();
+      totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     let speakTimer;
