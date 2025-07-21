@@ -65,6 +65,14 @@
     .logo img {
       width: 85px;
     }
+    .hen-gif {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 120px;
+      height: auto;
+      z-index: 999;
+    }
   </style>
 </head>
 <body>
@@ -88,6 +96,7 @@
     <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
     <div class="total" id="totalPrice">₹0.00</div>
   </div>
+  <img src="hen.gif" alt="Hen" class="hen-gif" />
 
   <script>
     const rateInput = document.getElementById('rateInput');
