@@ -138,23 +138,46 @@
       if (rupees === 0) return;
 
       const textToSpeak = `${rupees} രൂപ`;
-
       const msg = new SpeechSynthesisUtterance(textToSpeak);
       msg.rate = 0.9;
-      if (malayalamVoice) msg.voice = malayalamVoice;
 
-      speechSynthesis.speak(msg);
+      let fallbackTriggered = false;
+
+      if (malayalamVoice) {
+        msg.voice = malayalamVoice;
+
+        msg.onerror = () => {
+          fallbackTriggered = true;
+          console.warn("🔇 TTS error, using Google fallback");
+          speakUsingGoogleTTS(textToSpeak);
+        };
+
+        msg.onend = () => {
+          if (!fallbackTriggered && msg.text.trim() === '') {
+            console.warn("🔇 Empty speech, using Google fallback");
+            speakUsingGoogleTTS(textToSpeak);
+          }
+        };
+
+        try {
+          speechSynthesis.speak(msg);
+        } catch (e) {
+          console.warn("🔇 Exception in TTS, using Google fallback");
+          speakUsingGoogleTTS(textToSpeak);
+        }
+      } else {
+        // No Malayalam voice found
+        speakUsingGoogleTTS(textToSpeak);
+      }
     }
 
-
-
-    // Event listeners
-     function scrollToTotal() {
+    function scrollToTotal() {
       setTimeout(() => {
         totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300); // wait for keyboard to show
+      }, 300); // allow time for keyboard
     }
 
+    // Event Listeners
     rateInput.addEventListener('focus', scrollToTotal);
     kgInput.addEventListener('focus', scrollToTotal);
 
@@ -167,7 +190,6 @@
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
-
       clearTimeout(speakTimer);
       speakTimer = setTimeout(() => {
         speakTotal();
