@@ -176,8 +176,20 @@
     }
 
     function speakTotal() {
-      const total = totalPrice.textContent.replace('₹', '');
-      const msg = new SpeechSynthesisUtterance(`${total}`);
+      const raw = totalPrice.textContent.replace('₹', '');
+      const total = parseFloat(raw);
+
+      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid
+
+      const rupees = Math.floor(total);
+      const paisa = Math.round((total - rupees) * 100);
+
+      let textToSpeak = '';
+
+      if (rupees > 0) textToSpeak += `${rupees} രൂപ `;
+      if (paisa > 0) textToSpeak += `${paisa} പൈസ`;
+
+      const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
       msg.rate = 0.9;
 
       if (malayalamVoice) {
