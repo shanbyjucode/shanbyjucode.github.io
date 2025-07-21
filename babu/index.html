@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ml">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -69,8 +69,8 @@
 
     input {
       width: 80%;
-      padding: 14px;
-      font-size: 20px;
+      padding: 18px;
+      font-size: 22px;
       border-radius: 8px;
       border: 1px solid #444;
       background: #2c2c2c;
@@ -79,18 +79,21 @@
       margin: 0 auto;
       text-align: center;
     }
+
     .total {
-      margin-top: 5px;
+      margin-top: 10px;
       font-size: 50px;
       font-weight: bold;
       color: #4CAF50;
       text-align: center;
     }
-    .logo{
+
+    .logo {
       text-align: center;
       padding-bottom: 20px;
     }
-    .logo img{
+
+    .logo img {
       width: 85px;
     }
   </style>
@@ -98,19 +101,16 @@
 <body>
   <div class="container">
     <div class="logo">
-      <img src="./logo.png" alt="">
+      <img src="./logo.png" alt="Logo">
     </div>
+
     <div class="tabs">
       <div class="tab active" id="meatTab">
-        <div>
-          <img src="./meet.png" alt="Meat">
-        </div>
+        <div><img src="./meet.png" alt="Meat"></div>
         Meat
       </div>
       <div class="tab" id="wholeTab">
-        <div>
-          <img src="./whole.png" alt="Whole Chicken">
-        </div>
+        <div><img src="./whole.png" alt="Whole Chicken"></div>
         Chicken
       </div>
     </div>
@@ -124,10 +124,9 @@
       <label for="kgInput">Weight (KG)</label>
       <input type="number" id="kgInput" value="1" />
     </div>
+
     <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
-    <div class="total" id="totalPrice">
-      ₹0.00
-    </div>
+    <div class="total" id="totalPrice">₹0.00</div>
   </div>
 
   <script>
@@ -155,8 +154,31 @@
     function calculateTotal() {
       const rate = parseFloat(rateInput.value) || 0;
       const kg = parseFloat(kgInput.value) || 0;
-      totalPrice.textContent = "₹" + (rate * kg).toFixed(2);
+      const total = rate * kg;
+      totalPrice.textContent = "₹" + total.toFixed(2);
     }
+
+    function speakTotal() {
+      const total = totalPrice.textContent.replace('₹', '');
+      const voices = speechSynthesis.getVoices();
+      const mlVoice = voices.find(v => v.lang === 'ml-IN');
+
+      if (!mlVoice) {
+        console.warn("Malayalam voice not found.");
+        return;
+      }
+
+      const msg = new SpeechSynthesisUtterance(`മൊത്തം രൂപ: ${total}`);
+      msg.lang = 'ml-IN';
+      msg.voice = mlVoice;
+      msg.rate = 0.9;
+
+      speechSynthesis.speak(msg);
+    }
+
+    // Initialize on load
+    speechSynthesis.getVoices(); // preload voices
+    window.speechSynthesis.onvoiceschanged = () => {}; // ensures voices load on all browsers
 
     meatTab.addEventListener('click', () => {
       activeType = "meat";
@@ -184,16 +206,23 @@
       calculateTotal();
     });
 
-    kgInput.addEventListener('input', calculateTotal);
+    let speakTimer;
+    kgInput.addEventListener('input', () => {
+      calculateTotal();
+      clearTimeout(speakTimer);
+      speakTimer = setTimeout(() => {
+        speakTotal();
+      }, 2000); // speak after 2 seconds of no typing
+    });
 
-    // Register service worker
+    // Register service worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker registered'))
         .catch(err => console.error('Service Worker error:', err));
     }
 
-    // Initialize
+    // Initialize fields
     updateRateField();
     calculateTotal();
   </script>
