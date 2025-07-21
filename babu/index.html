@@ -179,15 +179,20 @@
       const raw = totalPrice.textContent.replace('₹', '');
       const total = parseFloat(raw);
 
-      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid
+      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid baiju
 
-      const rupees = Math.floor(total);
-      const paisa = Math.round((total - rupees) * 100);
+      let rupees = Math.floor(amount);
+        let paisa = Math.round((amount - rupees) * 100);
+        let textToSpeak = '';
 
-      let textToSpeak = '';
-
-      if (rupees > 0) textToSpeak += `${rupees} രൂപ `;
-      if (paisa > 0) textToSpeak += `${paisa} പൈസ`;
+        if (rupees > 0) {
+          textToSpeak += `${rupees} രൂപ `;
+        }
+        if (paisa > 0 && rupees === 0) {
+          textToSpeak += `${paisa} പൈസ`; // only paisa, no rupees
+        } else if (paisa > 0) {
+          textToSpeak += `${paisa} പൈസ`; // both rupees and paisa
+        }
 
       const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
       msg.rate = 0.9;
