@@ -209,10 +209,14 @@
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
-      clearTimeout(speakTimer);
+
+      // Smooth scroll total into view
+      document.getElementById('totalPrice').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      clearTimeout(speakTimer); // Clear previous timer
       speakTimer = setTimeout(() => {
         speakTotal();
-      }, 2000); // speak after 2 seconds of no typing
+      }, 2000); // 2 seconds after typing stops
     });
 
     // Register service worker for PWA
