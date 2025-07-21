@@ -137,18 +137,26 @@
       let rupees = Math.floor(amount);
       if (rupees === 0) return;
 
-      let textToSpeak = `${rupees} രൂപ നന്ദി ഉണ്ടേ`;
+      const part1 = `${rupees} രൂപ`;
+      const part2 = `നന്ദി ഉണ്ടേ`;
 
-      const msg = new SpeechSynthesisUtterance(textToSpeak);
-      msg.rate = 0.9;
+      const msg1 = new SpeechSynthesisUtterance(part1);
+      msg1.rate = 0.9;
+      if (malayalamVoice) msg1.voice = malayalamVoice;
 
-      if (malayalamVoice) {
-        msg.voice = malayalamVoice;
-        speechSynthesis.speak(msg);
-      } else {
-        speakUsingGoogleTTS(textToSpeak);
-      }
+      const msg2 = new SpeechSynthesisUtterance(part2);
+      msg2.rate = 0.9;
+      if (malayalamVoice) msg2.voice = malayalamVoice;
+
+      msg1.onend = () => {
+        setTimeout(() => {
+          speechSynthesis.speak(msg2);
+        }, 1500); // 1.5 second delay
+      };
+
+      speechSynthesis.speak(msg1);
     }
+
 
     // Event listeners
     rateInput.addEventListener('input', () => {
