@@ -136,14 +136,14 @@
       let paisa = Math.round((amount - rupees) * 100);
       let textToSpeak = '';
 
-      if (rupees > 0) {
-        textToSpeak += `${rupees} രൂപ `;
-      }
-      if (paisa > 0 && rupees === 0) {
-        textToSpeak += `${paisa} പൈസ`;
+      if (rupees > 0 && paisa > 0) {
+        textToSpeak += `${rupees} രൂപ ${paisa} പൈസ`;
+      } else if (rupees > 0) {
+        textToSpeak += `${rupees} രൂപ`;
       } else if (paisa > 0) {
         textToSpeak += `${paisa} പൈസ`;
       }
+
 
       if (textToSpeak.trim() === '') return;
 
