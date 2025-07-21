@@ -128,6 +128,15 @@
     <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
     <div class="total" id="totalPrice">₹0.00</div>
   </div>
+  <button onclick="speak()">Speak Malayalam</button>
+<script>
+  function speak() {
+    const msg = new SpeechSynthesisUtterance("1234");
+    msg.lang = 'ml-IN';
+    msg.rate = 0.9;
+    speechSynthesis.speak(msg);
+  }
+</script>
 
   <script>
     const meatTab = document.getElementById('meatTab');
@@ -157,24 +166,34 @@
       const total = rate * kg;
       totalPrice.textContent = "₹" + total.toFixed(2);
     }
+    
 
     function speakTotal() {
       const total = totalPrice.textContent.replace('₹', '');
-      const voices = speechSynthesis.getVoices();
-      const mlVoice = voices.find(v => v.lang === 'ml-IN');
+      const msg = new SpeechSynthesisUtterance(`${total}`);
 
-      if (!mlVoice) {
-        console.warn("Malayalam voice not found.");
-        return;
+      const voices = window.speechSynthesis.getVoices();
+      const malayalamVoice = voices.find(v => v.lang === 'ml-IN' || v.name.toLowerCase().includes('malayalam'));
+
+      if (malayalamVoice) {
+        msg.voice = malayalamVoice;
+        msg.lang = malayalamVoice.lang;
+      } else {
+        msg.lang = 'ml-IN'; // fallback
       }
 
-      const msg = new SpeechSynthesisUtterance(`മൊത്തം രൂപ: ${total}`);
-      msg.lang = 'ml-IN';
-      msg.voice = mlVoice;
       msg.rate = 0.9;
+      window.speechSynthesis.speak(msg);
+    } 
 
-      speechSynthesis.speak(msg);
-    }
+    window.speechSynthesis.onvoiceschanged = () => {
+      const voices = window.speechSynthesis.getVoices();
+      console.log("Available Voices:", voices);
+
+      // Optional: filter Malayalam voices
+      const malVoices = voices.filter(v => v.lang.includes('ml'));
+      console.log("Malayalam Voices:", malVoices);
+    };
 
     // Initialize on load
     speechSynthesis.getVoices(); // preload voices
