@@ -179,7 +179,7 @@
       const raw = totalPrice.textContent.replace('₹', '');
       const total = parseFloat(raw);
 
-      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid ok
+      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid baiju
 
       const rupees = Math.floor(total);
       const paisa = Math.round((total - rupees) * 100);
