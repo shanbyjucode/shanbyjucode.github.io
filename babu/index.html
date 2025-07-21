@@ -73,7 +73,7 @@
       <img src="./logo.png" alt="Logo">
     </div>
 
-    <h3 style="text-align:center; margin-bottom: 20px; color: #ccc;">Whole Chicken</h3>
+    <h3 id="dateTime" style="text-align:center; margin-bottom: 20px; color: #ccc;"></h3>
 
     <div class="form-group">
       <label for="rateInput">Rate (₹ per KG)</label>
@@ -176,6 +176,38 @@
         totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300); // allow time for keyboard
     }
+
+    // time
+      function formatDateTime() {
+      const now = new Date();
+
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const months = ["January", "February", "March", "April", "May", "June",
+                      "July", "August", "September", "October", "November", "December"];
+
+      const dayName = days[now.getDay()];
+      const day = now.getDate();
+      const month = months[now.getMonth()];
+
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+
+      const timeString = `${hours}.${minutes} ${ampm}`;
+      return `${dayName} ${day} ${month}, ${timeString}`;
+    }
+
+    function updateTimeHeader() {
+      document.getElementById('dateTime').textContent = formatDateTime();
+    }
+
+    // Set initial time
+    updateTimeHeader();
+
+    // Update every 30 seconds
+    setInterval(updateTimeHeader, 30000);
 
     // Event Listeners
     rateInput.addEventListener('focus', scrollToTotal);
