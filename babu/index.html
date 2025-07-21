@@ -179,20 +179,21 @@
       const raw = totalPrice.textContent.replace('₹', '');
       const total = parseFloat(raw);
 
-      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid baiju
+      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid
 
-      let rupees = Math.floor(amount);
-        let paisa = Math.round((amount - rupees) * 100);
-        let textToSpeak = '';
+      let rupees = Math.floor(total);
+      let paisa = Math.round((total - rupees) * 100);
+      let textToSpeak = '';
 
-        if (rupees > 0) {
-          textToSpeak += `${rupees} രൂപ `;
-        }
-        if (paisa > 0 && rupees === 0) {
-          textToSpeak += `${paisa} പൈസ`; // only paisa, no rupees
-        } else if (paisa > 0) {
-          textToSpeak += `${paisa} പൈസ`; // both rupees and paisa
-        }
+      if (rupees > 0 && paisa === 0) {
+        textToSpeak += `${rupees} രൂപ`;
+      } else if (rupees > 0 && paisa > 0) {
+        textToSpeak += `${rupees} രൂപ ${paisa} പൈസ`;
+      } else if (rupees === 0 && paisa > 0) {
+        textToSpeak += `${paisa} പൈസ`;
+      }
+
+      if (!textToSpeak.trim()) return;
 
       const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
       msg.rate = 0.9;
@@ -206,7 +207,7 @@
       speechSynthesis.speak(msg);
     }
 
-    // Tab switchingg
+    // Tab switching
     meatTab.addEventListener('click', () => {
       activeType = "meat";
       meatTab.classList.add('active');
@@ -221,7 +222,7 @@
       updateRateField();
     });
 
-    // Rate change and save to localStorage
+    // Rate input
     rateInput.addEventListener('input', () => {
       const rate = parseFloat(rateInput.value) || 0;
       if (activeType === "meat") {
@@ -234,12 +235,10 @@
       calculateTotal();
     });
 
-    // KG input and auto-speak
+    // KG input and speak
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
-
-      // Smooth scroll into view on mobile
       totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       clearTimeout(speakTimer);
@@ -248,7 +247,7 @@
       }, 1000);
     });
 
-    // Register service worker for PWA
+    // PWA: service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('✅ Service Worker registered'))
