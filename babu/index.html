@@ -73,17 +73,19 @@
       <img src="./logo.png" alt="Logo">
     </div>
 
+    <h3 style="text-align:center; margin-bottom: 20px; color: #ccc;">Whole Chicken</h3>
+
     <div class="form-group">
-      <label for="rateInput">ചിക്കൻ റേറ്റ് (₹ / KG)</label>
+      <label for="rateInput">Rate (₹ per KG)</label>
       <input type="number" id="rateInput" />
     </div>
 
     <div class="form-group">
-      <label for="kgInput">വെയിറ്റ് (KG)</label>
+      <label for="kgInput">Weight (KG)</label>
       <input type="number" id="kgInput" value="1" />
     </div>
 
-    <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">ആകെ</span>
+    <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
     <div class="total" id="totalPrice">₹0.00</div>
   </div>
 
@@ -95,7 +97,6 @@
     const WHOLE_RATE_KEY = "wholeRate";
     const defaultRate = parseFloat(localStorage.getItem(WHOLE_RATE_KEY)) || 133;
 
-    // === MALAYALAM TTS SETUP ===
     let malayalamVoice = null;
 
     function setMalayalamVoice() {
@@ -117,45 +118,66 @@
       const kg = parseFloat(kgInput.value) || 0;
       const total = rate * kg;
       totalPrice.textContent = "₹" + total.toFixed(2);
-      return total;
+    }
+
+    function speakUsingGoogleTTS(text) {
+      const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=ml&client=tw-ob`;
+      const audio = new Audio(url);
+      audio.play();
     }
 
     function speakTotal() {
-      const total = calculateTotal();
-      if (total === 0 || isNaN(total)) return;
+      const raw = totalPrice.textContent.replace('₹', '');
+      const amount = parseFloat(raw);
 
-      let rupees = Math.floor(total);
-      let paisa = Math.round((total - rupees) * 100);
+      if (amount === 0 || isNaN(amount)) return;
+
+      let rupees = Math.floor(amount);
+      let paisa = Math.round((amount - rupees) * 100);
       let textToSpeak = '';
 
-      if (rupees > 0) textToSpeak += `${rupees} രൂപ `;
-      if (paisa > 0) textToSpeak += `${paisa} പൈസ`;
+      if (rupees > 0) {
+        textToSpeak += `${rupees} രൂപ `;
+      }
+      if (paisa > 0 && rupees === 0) {
+        textToSpeak += `${paisa} പൈസ`;
+      } else if (paisa > 0) {
+        textToSpeak += `${paisa} പൈസ`;
+      }
 
       if (textToSpeak.trim() === '') return;
 
       const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
       msg.rate = 0.9;
-      if (malayalamVoice) msg.voice = malayalamVoice;
-      else msg.lang = 'ml-IN';
-      speechSynthesis.speak(msg);
+
+      if (malayalamVoice) {
+        msg.voice = malayalamVoice;
+        speechSynthesis.speak(msg);
+      } else {
+        speakUsingGoogleTTS(textToSpeak);
+      }
     }
 
-    // Rate input listener
+    // Event listeners
     rateInput.addEventListener('input', () => {
       const rate = parseFloat(rateInput.value) || 0;
       localStorage.setItem(WHOLE_RATE_KEY, rate);
       calculateTotal();
     });
 
-    // KG input + speak
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
+
+      totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
       clearTimeout(speakTimer);
-      speakTimer = setTimeout(() => speakTotal(), 1000);
+      speakTimer = setTimeout(() => {
+        speakTotal();
+      }, 1000);
     });
 
-    // Register service worker for PWA
+    // Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('✅ Service Worker registered'))
