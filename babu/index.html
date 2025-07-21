@@ -159,18 +159,24 @@
 
 
     // Event listeners
+     function scrollToTotal() {
+      setTimeout(() => {
+        totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300); // wait for keyboard to show
+    }
+
+    rateInput.addEventListener('focus', scrollToTotal);
+    kgInput.addEventListener('focus', scrollToTotal);
+
     rateInput.addEventListener('input', () => {
       const rate = parseFloat(rateInput.value) || 0;
       localStorage.setItem(WHOLE_RATE_KEY, rate);
       calculateTotal();
-      totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
-
-      totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       clearTimeout(speakTimer);
       speakTimer = setTimeout(() => {
