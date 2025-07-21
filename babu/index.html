@@ -113,10 +113,13 @@
       speechSynthesis.onvoiceschanged = setMalayalamVoice;
     }
 
+    let currentAmount = 0;
+
     function calculateTotal() {
       const rate = parseFloat(rateInput.value) || 0;
       const kg = parseFloat(kgInput.value) || 0;
       const total = rate * kg;
+      currentAmount = total;
       totalPrice.textContent = "₹" + total.toFixed(2);
     }
 
@@ -127,8 +130,7 @@
     }
 
     function speakTotal() {
-      const raw = totalPrice.textContent.replace('₹', '');
-      const amount = parseFloat(raw);
+      const amount = currentAmount;
 
       if (amount === 0 || isNaN(amount)) return;
 
