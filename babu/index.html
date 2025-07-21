@@ -135,21 +135,11 @@
       if (amount === 0 || isNaN(amount)) return;
 
       let rupees = Math.floor(amount);
-      let paisa = Math.round((amount - rupees) * 100);
-      let textToSpeak = '';
+      if (rupees === 0) return;
 
-      if (rupees > 0 && paisa > 0) {
-        textToSpeak += `${rupees} രൂപ ${paisa} പൈസ`;
-      } else if (rupees > 0) {
-        textToSpeak += `${rupees} രൂപ`;
-      } else if (paisa > 0) {
-        textToSpeak += `${paisa} പൈസ`;
-      }
+      let textToSpeak = `${rupees} രൂപ`;
 
-
-      if (textToSpeak.trim() === '') return;
-
-      const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
+      const msg = new SpeechSynthesisUtterance(textToSpeak);
       msg.rate = 0.9;
 
       if (malayalamVoice) {
