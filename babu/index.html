@@ -24,37 +24,6 @@
       padding: 20px;
     }
 
-    .tabs {
-      display: flex;
-      margin-bottom: 20px;
-      gap: 10px;
-    }
-
-    .tab {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      background: #2a2a2a;
-      transition: 0.3s;
-      color: #ccc;
-    }
-
-    .tab img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      margin-bottom: 5px;
-    }
-
-    .tab.active {
-      border-color: #4CAF50;
-      background: #333;
-      color: #4CAF50;
-    }
-
     .form-group {
       margin-bottom: 15px;
     }
@@ -104,59 +73,27 @@
       <img src="./logo.png" alt="Logo">
     </div>
 
-    <div class="tabs">
-      <div class="tab active" id="meatTab">
-        <div><img src="./meet.png" alt="Meat"></div>
-        Meat
-      </div>
-      <div class="tab" id="wholeTab">
-        <div><img src="./whole.png" alt="Whole Chicken"></div>
-        Chicken
-      </div>
-    </div>
-
     <div class="form-group">
-      <label for="rateInput">Rate (₹ per KG)</label>
+      <label for="rateInput">ചിക്കൻ റേറ്റ് (₹ / KG)</label>
       <input type="number" id="rateInput" />
     </div>
 
     <div class="form-group">
-      <label for="kgInput">Weight (KG)</label>
+      <label for="kgInput">വെയിറ്റ് (KG)</label>
       <input type="number" id="kgInput" value="1" />
     </div>
 
-    <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
+    <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">ആകെ</span>
     <div class="total" id="totalPrice">₹0.00</div>
   </div>
 
   <script>
-    const meatTab = document.getElementById('meatTab');
-    const wholeTab = document.getElementById('wholeTab');
     const rateInput = document.getElementById('rateInput');
     const kgInput = document.getElementById('kgInput');
     const totalPrice = document.getElementById('totalPrice');
 
-    const MEAT_RATE_KEY = "meatRate";
     const WHOLE_RATE_KEY = "wholeRate";
-
-    let activeType = "meat";
-
-    const defaultRates = {
-      meat: parseFloat(localStorage.getItem(MEAT_RATE_KEY)) || 210,
-      whole: parseFloat(localStorage.getItem(WHOLE_RATE_KEY)) || 133,
-    };
-
-    function updateRateField() {
-      rateInput.value = activeType === "meat" ? defaultRates.meat : defaultRates.whole;
-      calculateTotal();
-    }
-
-    function calculateTotal() {
-      const rate = parseFloat(rateInput.value) || 0;
-      const kg = parseFloat(kgInput.value) || 0;
-      const total = rate * kg;
-      totalPrice.textContent = "₹" + total.toFixed(2);
-    }
+    const defaultRate = parseFloat(localStorage.getItem(WHOLE_RATE_KEY)) || 133;
 
     // === MALAYALAM TTS SETUP ===
     let malayalamVoice = null;
@@ -175,79 +112,50 @@
       speechSynthesis.onvoiceschanged = setMalayalamVoice;
     }
 
-    function speakTotal() {
-      const raw = totalPrice.textContent.replace('₹', '');
-      const total = parseFloat(raw);
+    function calculateTotal() {
+      const rate = parseFloat(rateInput.value) || 0;
+      const kg = parseFloat(kgInput.value) || 0;
+      const total = rate * kg;
+      totalPrice.textContent = "₹" + total.toFixed(2);
+      return total;
+    }
 
-      if (total === 0 || isNaN(total)) return; // Don't speak if 0 or invalid
+    function speakTotal() {
+      const total = calculateTotal();
+      if (total === 0 || isNaN(total)) return;
 
       let rupees = Math.floor(total);
       let paisa = Math.round((total - rupees) * 100);
       let textToSpeak = '';
 
-      if (rupees > 0 && paisa === 0) {
-        textToSpeak += `${rupees} രൂപ`;
-      } else if (rupees > 0 && paisa > 0) {
-        textToSpeak += `${rupees} രൂപ ${paisa} പൈസ`;
-      } else if (rupees === 0 && paisa > 0) {
-        textToSpeak += `${paisa} പൈസ`;
-      }
+      if (rupees > 0) textToSpeak += `${rupees} രൂപ `;
+      if (paisa > 0) textToSpeak += `${paisa} പൈസ`;
 
-      if (!textToSpeak.trim()) return;
+      if (textToSpeak.trim() === '') return;
 
       const msg = new SpeechSynthesisUtterance(textToSpeak.trim());
       msg.rate = 0.9;
-
-      if (malayalamVoice) {
-        msg.voice = malayalamVoice;
-      } else {
-        msg.lang = 'ml-IN';
-      }
-
+      if (malayalamVoice) msg.voice = malayalamVoice;
+      else msg.lang = 'ml-IN';
       speechSynthesis.speak(msg);
     }
 
-    // Tab switching
-    meatTab.addEventListener('click', () => {
-      activeType = "meat";
-      meatTab.classList.add('active');
-      wholeTab.classList.remove('active');
-      updateRateField();
-    });
-
-    wholeTab.addEventListener('click', () => {
-      activeType = "whole";
-      wholeTab.classList.add('active');
-      meatTab.classList.remove('active');
-      updateRateField();
-    });
-
-    // Rate input
+    // Rate input listener
     rateInput.addEventListener('input', () => {
       const rate = parseFloat(rateInput.value) || 0;
-      if (activeType === "meat") {
-        localStorage.setItem(MEAT_RATE_KEY, rate);
-        defaultRates.meat = rate;
-      } else {
-        localStorage.setItem(WHOLE_RATE_KEY, rate);
-        defaultRates.whole = rate;
-      }
+      localStorage.setItem(WHOLE_RATE_KEY, rate);
       calculateTotal();
     });
 
-    // KG input and speak
+    // KG input + speak
     let speakTimer;
     kgInput.addEventListener('input', () => {
       calculateTotal();
-      totalPrice.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
       clearTimeout(speakTimer);
-      speakTimer = setTimeout(() => {
-        speakTotal();
-      }, 1000);
+      speakTimer = setTimeout(() => speakTotal(), 1000);
     });
 
-    // PWA: service worker
+    // Register service worker for PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('✅ Service Worker registered'))
@@ -255,7 +163,7 @@
     }
 
     // Init
-    updateRateField();
+    rateInput.value = defaultRate;
     calculateTotal();
   </script>
 </body>
