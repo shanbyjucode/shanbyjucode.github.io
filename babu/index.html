@@ -12,7 +12,79 @@
       background: #121212;
       margin: 0;
       padding: 20px;
+      padding-top: 60px; 
       color: #f5f5f5;
+    }
+    /* News banner */
+    #news-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      font-size: 16px;
+      z-index: 1000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #news-banner a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    #news-ticker-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #1e1e1e;
+      color: #fff;
+      z-index: 1000;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding: 8px 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    #news-ticker-wrapper {
+      display: inline-flex;
+      gap: 20px;
+    }
+
+    .news-item {
+      display: flex;
+      align-items: flex-start;
+      min-width: 280px;
+      margin-right: 12px;
+      white-space: normal;
+    }
+
+    .news-item img {
+      width: 78px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 8px;
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .news-item a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;   /* 👈 Show only 3 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .container {
@@ -95,6 +167,11 @@
   </style>
 </head>
 <body>
+  <div id="news-ticker-container">
+    <div id="news-ticker-wrapper" id="news-ticker">
+      <!-- News items will be injected here -->
+    </div>
+  </div>
   <div class="container">
     <div class="logo">
       <img src="./logo.png" alt="Logo">
@@ -115,8 +192,9 @@
     <span style="display: block; font-size: 15px; text-align: center; padding-top: 20px;">Total</span>
     <div class="total" id="totalPrice">₹0.00</div>
   </div>
-  <img src="hen.gif" alt="Hen" class="hen-gif" />
-
+    <div>
+      <img src="hen.gif" alt="Hen" class="hen-gif" />
+    </div>
   <script>
     const rateInput = document.getElementById('rateInput');
     const kgInput = document.getElementById('kgInput');
@@ -266,6 +344,39 @@
     // Init
     rateInput.value = defaultRate;
     calculateTotal();
+  </script>
+  <script>
+    async function loadNewsTicker() {
+      try {
+        const res = await fetch(
+          'https://api.rss2json.com/v1/api.json?rss_url=' +
+          encodeURIComponent('https://malayalam.oneindia.com/rss/feeds/oneindia-malayalam-fb.xml')
+        );
+        if (!res.ok) throw 'News fetch failed';
+        const data = await res.json();
+        const ticker = document.getElementById('news-ticker-wrapper');
+        ticker.innerHTML = '';
+
+        data.items.slice(0, 10).forEach(item => {
+          const newsItem = document.createElement('div');
+          newsItem.className = 'news-item';
+
+          // Use thumbnail, or fallback to enclosure image, or placeholder
+          const image = item.thumbnail || item.enclosure?.link || 'https://via.placeholder.com/30x30?text=📰';
+
+          newsItem.innerHTML = `
+            <img src="${image}" alt="News" />
+            <a href="${item.link}" target="_blank">${item.title}</a>
+          `;
+          ticker.appendChild(newsItem);
+        });
+      } catch (err) {
+        console.error('News error:', err);
+        document.getElementById('news-ticker-wrapper').innerHTML = `<span style="color:#f00">⚠️ News unavailable</span>`;
+      }
+    }
+    loadNewsTicker();
+    setInterval(loadNewsTicker, 300000);
   </script>
 </body>
 </html>
