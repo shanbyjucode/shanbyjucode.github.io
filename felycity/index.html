@@ -1,71 +1,111 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gray-100">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Felycity Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Felycity Health Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .dashboard {
+      max-width: 400px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #444;
+    }
+
+    .card span {
+      font-size: 16px;
+    }
+
+    .profile {
+      text-align: center;
+    }
+
+    .profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .updated {
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+      margin-top: 8px;
+    }
+  </style>
 </head>
-<body class="min-h-screen p-4 text-gray-800">
-  <div class="max-w-md mx-auto">
-    <h1 class="text-xl font-bold text-center mb-4">👵 Felycity Health Dashboard</h1>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-white shadow-md rounded-2xl p-4 text-center">
-        <div class="text-sm text-gray-500">BP</div>
-        <div id="bp" class="text-2xl font-bold text-blue-600">--</div>
-      </div>
-
-      <div class="bg-white shadow-md rounded-2xl p-4 text-center">
-        <div class="text-sm text-gray-500">Oxygen</div>
-        <div id="oxygen" class="text-2xl font-bold text-green-600">--</div>
-      </div>
-
-      <div class="bg-white shadow-md rounded-2xl p-4 text-center">
-        <div class="text-sm text-gray-500">Heart Rate</div>
-        <div id="heartRate" class="text-2xl font-bold text-red-600">--</div>
-      </div>
-
-      <div class="bg-white shadow-md rounded-2xl p-4 text-center">
-        <div class="text-sm text-gray-500">Last Updated</div>
-        <div id="lastUpdated" class="text-md text-gray-700">--</div>
-      </div>
+<body>
+  <div class="dashboard">
+    <div class="card profile">
+      <img id="profilePic" src="" alt="Profile Picture">
+      <h2 id="name">Loading...</h2>
+      <div class="updated" id="lastUpdated"></div>
     </div>
 
-    <div class="bg-white mt-6 p-4 rounded-2xl shadow-md flex items-center space-x-4">
-      <img id="profilePic" src="" alt="Profile" class="w-16 h-16 rounded-full border" />
-      <div>
-        <div id="name" class="font-semibold text-lg">--</div>
-        <div class="text-sm text-gray-500" id="emailDisplay">--</div>
-      </div>
+    <div class="card">
+      <h2>Blood Pressure</h2>
+      <span id="bp">--</span>
+    </div>
+
+    <div class="card">
+      <h2>Oxygen Level</h2>
+      <span id="oxygen">--</span>
+    </div>
+
+    <div class="card">
+      <h2>Heart Rate</h2>
+      <span id="heartRate">--</span>
     </div>
   </div>
 
   <script>
-    const email = localStorage.getItem("email") || prompt("Enter your email:");
-    localStorage.setItem("email", email);
-    
-    fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
-      .then(res => res.json())
+    const email = prompt("Enter your email to view health data:");
+    const apiUrl = `https://script.google.com/macros/s/AKfycbwLOadaQURV0rbXxsVAKqCjg3ZzXw3phyFqjMYDOReaA3fBakLCdzvubmwt2dJhdDdLwg/exec?email=${email}`;
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to fetch");
+        return response.json();
+      })
       .then(data => {
         if (data.error) {
-          alert("User not found!");
+          alert(data.error);
           return;
         }
-    
+
+        document.getElementById("name").textContent = data.name;
         document.getElementById("bp").textContent = data.bp;
         document.getElementById("oxygen").textContent = data.oxygen;
         document.getElementById("heartRate").textContent = data.heartRate;
-        document.getElementById("lastUpdated").textContent = data.lastUpdated;
-        document.getElementById("name").textContent = data.name;
+        document.getElementById("lastUpdated").textContent = "Last updated: " + data.lastUpdated;
         document.getElementById("profilePic").src = data.profilePic;
-        document.getElementById("emailDisplay").textContent = email;
       })
       .catch(err => {
-        console.error("Failed to fetch user data.", err);
-        alert("Something went wrong. Try again.");
+        console.error(err);
+        alert("Something went wrong. Please try again later.");
       });
-    </script>
-    
+  </script>
 </body>
 </html>
