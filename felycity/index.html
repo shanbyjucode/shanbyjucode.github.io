@@ -46,7 +46,7 @@
     localStorage.setItem("email", email);
     document.getElementById("emailDisplay").textContent = email;
 
-    fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
+    fetch(`https://script.google.com/macros/s/AKfycbx2sAWU6N3PNx2Qu9ZFCRX_fC7DTyF7SeAFmoasBF54vYnI_kP_z1DQ2nIB0YUXt_ZHyw/exec?email=${email}`)
       .then(res => res.json())
       .then(data => {
         if (data.error) {
