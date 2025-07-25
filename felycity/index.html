@@ -9,7 +9,7 @@
 <body class="min-h-screen p-4 text-gray-800">
   <div class="max-w-md mx-auto">
     <h1 class="text-xl font-bold text-center mb-4">👵 Felycity Health Dashboard</h1>
-    
+
     <div class="grid grid-cols-2 gap-4">
       <div class="bg-white shadow-md rounded-2xl p-4 text-center">
         <div class="text-sm text-gray-500">BP</div>
@@ -43,21 +43,25 @@
 
   <script>
     const email = localStorage.getItem("email") || prompt("Enter your email:");
-  localStorage.setItem("email", email);
+    localStorage.setItem("email", email);
+    document.getElementById("emailDisplay").textContent = email;
 
-fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
-  .then(res => res.text())  // <- change from .json() to .text()!
-  .then(text => JSON.parse(text)) // <- then parse manually
-  .then(data => {
-    if (data.error) return alert("User not found!");
-    document.getElementById("bp").textContent = data.bp;
-    document.getElementById("oxygen").textContent = data.oxygen;
-    document.getElementById("heartRate").textContent = data.heartRate;
-    document.getElementById("lastUpdated").textContent = data.lastUpdated;
-    document.getElementById("name").textContent = data.name;
-    document.getElementById("profilePic").src = data.profilePic;
-  });
+    fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) return alert("User not found!");
 
+        document.getElementById("bp").textContent = data.bp;
+        document.getElementById("oxygen").textContent = data.oxygen;
+        document.getElementById("heartRate").textContent = data.heartRate;
+        document.getElementById("lastUpdated").textContent = data.lastUpdated;
+        document.getElementById("name").textContent = data.name;
+        document.getElementById("profilePic").src = data.profilePic;
+      })
+      .catch(err => {
+        alert("Failed to fetch user data.");
+        console.error(err);
+      });
   </script>
 </body>
 </html>
