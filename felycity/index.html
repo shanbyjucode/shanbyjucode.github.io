@@ -44,24 +44,28 @@
   <script>
     const email = localStorage.getItem("email") || prompt("Enter your email:");
     localStorage.setItem("email", email);
-    document.getElementById("emailDisplay").textContent = email;
-
+    
     fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
       .then(res => res.json())
       .then(data => {
-        if (data.error) return alert("User not found!");
-
+        if (data.error) {
+          alert("User not found!");
+          return;
+        }
+    
         document.getElementById("bp").textContent = data.bp;
         document.getElementById("oxygen").textContent = data.oxygen;
         document.getElementById("heartRate").textContent = data.heartRate;
         document.getElementById("lastUpdated").textContent = data.lastUpdated;
         document.getElementById("name").textContent = data.name;
         document.getElementById("profilePic").src = data.profilePic;
+        document.getElementById("emailDisplay").textContent = email;
       })
       .catch(err => {
-        alert("Failed to fetch user data.");
-        console.error(err);
+        console.error("Failed to fetch user data.", err);
+        alert("Something went wrong. Try again.");
       });
-  </script>
+    </script>
+    
 </body>
 </html>
