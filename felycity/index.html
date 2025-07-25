@@ -42,24 +42,22 @@
   </div>
 
   <script>
-    const email = localStorage.getItem("email") || prompt("Enter your email to continue:");
-    localStorage.setItem("email", email);
-    document.getElementById("emailDisplay").textContent = email;
+    const email = localStorage.getItem("email") || prompt("Enter your email:");
+  localStorage.setItem("email", email);
 
-    fetch(`https://script.google.com/macros/s/AKfycbx2sAWU6N3PNx2Qu9ZFCRX_fC7DTyF7SeAFmoasBF54vYnI_kP_z1DQ2nIB0YUXt_ZHyw/exec?email=${email}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
-          alert("User not found!");
-          return;
-        }
-        document.getElementById("bp").textContent = data.bp;
-        document.getElementById("oxygen").textContent = data.oxygen;
-        document.getElementById("heartRate").textContent = data.heartRate;
-        document.getElementById("lastUpdated").textContent = data.lastUpdated;
-        document.getElementById("name").textContent = data.name;
-        document.getElementById("profilePic").src = data.profilePic;
-      });
+fetch(`https://script.google.com/macros/s/AKfycbxQWKwpIHYOQ4uhPTshFlm5rjvAcyi9rggk79_Ythe2ARiteS1BVM0kg62aQ3jeLxXp-g/exec?email=${email}`)
+  .then(res => res.text())  // <- change from .json() to .text()!
+  .then(text => JSON.parse(text)) // <- then parse manually
+  .then(data => {
+    if (data.error) return alert("User not found!");
+    document.getElementById("bp").textContent = data.bp;
+    document.getElementById("oxygen").textContent = data.oxygen;
+    document.getElementById("heartRate").textContent = data.heartRate;
+    document.getElementById("lastUpdated").textContent = data.lastUpdated;
+    document.getElementById("name").textContent = data.name;
+    document.getElementById("profilePic").src = data.profilePic;
+  });
+
   </script>
 </body>
 </html>
