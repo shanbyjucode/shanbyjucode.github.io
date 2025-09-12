@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>AI Meeting Search — Stepwise Progress (with visible profile + loader)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      font-family: "Montserrat", sans-serif;
+      justify-content:center;
+      color:#111;
+      padding:28px;
+      background-color: #f9f9fb;
+    }
+
+    /* Wrapper holds profile (outside container) and the content */
+    .chat-wrapper{
+      position:relative;
+      max-width:520px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      gap:0;
+    }
+
+    /* Profile picture positioned absolutely so it sits outside/left of the container */
+    .profile-wrap{
+      position:absolute;
+      left:-58px;
+      top:6px;
+      width:48px;             /* slightly larger to fit the ring */
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:20;
+      pointer-events:auto;
+    }
+
+    /* The rotating ring container */
+    .profile-wrap .ring {
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      display:none; /* shown only when .loading is present */
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* visible ring style (orange while loading) */
+    .profile-wrap.loading .ring {
+      display:flex;
+      animation: spin 1.2s linear infinite;
+      /* orange ring while loading */
+      background: conic-gradient(from 0deg, #4671F0, #B6C5EF);
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
+    }
+
+    /* small outer glow */
+    .profile-wrap.loading .ring::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      filter: blur(6px);
+      opacity: 0.12;
+      background: radial-gradient(circle at 30% 20%, rgba(249,115,22,0.6), transparent 25%);
+      pointer-events: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .profile-pic{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      object-fit:cover;
+      display:block;
+      background: #fff;
+      position:relative;
+      z-index:2; /* keep above ring */
+    }
+
+    .container{
+      width:100%;
+      max-width:420px;
+      border-radius:14px;
+      padding:18px;
+      position:relative;
+      z-index:10;
+      background-color: #ffffff;
+      box-shadow: rgba(0, 0, 0, 0.03) 0px 1px 2px;
+    }
+
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: opacity 0.7s ease, transform 0.7s ease, height 0.7s ease, margin 0.7s ease;
+    }
+
+    .steps.hidden {
+      opacity: 0;
+      transform: translateY(-18px);
+      height: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      transition: background .18s, transform .12s;
+      background: #fbfbfc;
+      border: 1px solid rgba(16,24,40,0.03);
+    }
+
+    .step.current {
+      background: #fff7ed; /* light warm tint for current */
+      transform: translateY(-1px);
+      border-color: rgba(249,115,22,0.14);
+    }
+
+    /* --- Visible unchecked box (orange waiting) --- */
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: inline-grid;
+      place-items: center;
+      border: 2px solid rgba(249,115,22,0.45); /* orange border for waiting */
+      flex: 0 0 22px;
+      background: #fff; /* keep it white so it reads as unchecked */
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .checkbox.waiting {
+      border-color: rgba(249,115,22,0.45);
+    }
+
+    /* checked style (green) */
+    .checkbox.checked {
+      border: 2px solid rgba(16,185,129,0.45);
+      background: linear-gradient(180deg, rgba(16,185,129,0.18), rgba(6,95,70,0.04));
+    }
+
+    .check-svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.26s ease, transform 0.26s ease;
+    }
+
+    .checkbox.checked .check-svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* status text colors */
+    .status {
+      color: rgba(249,115,22,0.95); /* orange waiting */
+      font-size:12px;
+      margin-left:auto;
+    }
+    .status.done {
+      color: rgba(16,185,129,0.95); /* green when done */
+    }
+
+    .label {
+      font-size: 14px;
+      color: #111;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      width:100%;
+    }
+
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top:12px;
+      border-top:1px dashed rgba(0,0,0,0.06);
+      transition: opacity .28s ease, height .28s ease, margin .28s ease;
+    }
+
+    .typing.hidden {
+      opacity: 0;
+      height: 0;
+      margin: 0;
+      padding-top: 0;
+      overflow: hidden;
+      border-top: none;
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4671F0;
+      opacity: 0.28;
+      animation: bounce 1s infinite;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.12s; }
+    .dot:nth-child(3) { animation-delay: 0.24s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0) scale(0.9); opacity: 0.28; }
+      40% { transform: translateY(-6px) scale(1); opacity: 1; }
+    }
+
+    .results {
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid rgba(0,0,0,0.04);
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.7s ease, transform 0.7s ease, margin-top 0.4s ease;
+      background: #fff;
+    }
+
+    .results.visible {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* responsive */
+    @media (max-width:520px){
+      .chat-wrapper{ padding-left:42px; }
+      .profile-wrap{ left:6px; transform: translateX(-6px); top:14px; }
+      .profile-pic{ width:56px; height:56px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-wrapper" role="region" aria-label="AI meeting search area">
+    <!-- profile placed outside the container on the left -->
+    <div class="profile-wrap loading" aria-hidden="false" id="profileWrap">
+      <!-- the rotating ring is behind the image -->
+      <div class="ring" aria-hidden="true"></div>
+
+      <img class="profile-pic"
+           src="https://app.goodmeetings.ai/static/media/mike.4f5c5afe708366c5cfd9.gif"
+           alt="Mike profile"
+           id="profilePic"
+           onerror="this.style.display='none'">
+    </div>
+
+    <div class="container" role="article" aria-live="polite" aria-atomic="true">
+      <!-- title/subtitle intentionally removed -->
+
+      <ul class="steps" id="stepsList" role="list"></ul>
+
+      <div class="typing" id="typingArea" aria-hidden="false">
+        <div class="dots" aria-hidden="true">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div id="typingText" style="color:#374151; font-size: 14px;">Initializing…</div>
+      </div>
+
+      <div class="results" id="results" role="region" aria-label="Search results">
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:0 0 20px;">
+            <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z" stroke="rgba(0,0,0,0.06)" stroke-width="1.2"/>
+            <path d="M10 13l2 2 4-4" stroke="#10b981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div style="font-weight:600;color:#111">Results ready — 4 meetings found</div>
+        </div>
+
+        <div style="font-size:13px;line-height:1.5;color:#111">
+          <div><strong>12 Aug</strong> — Project Kickoff (Notes available)</div>
+          <div><strong>19 Aug</strong> — Client Sync</div>
+          <div><strong>05 Sep</strong> — Design Review</div>
+          <div><strong>10 Sep</strong> — Sprint Planning</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const steps = [
+      "Searching meetings involving Alok Mishra",
+      "Filtering by date & relevance",
+      "Organizing meeting notes",
+      "Preparing results"
+    ];
+
+    const stepsList = document.getElementById('stepsList');
+    const typingText = document.getElementById('typingText');
+    const results = document.getElementById('results');
+    const typingArea = document.getElementById('typingArea');
+    const profileWrap = document.getElementById('profileWrap');
+
+    // populate steps (unchecked initially) — now each has visible box + status (orange waiting)
+    steps.forEach((text, i) => {
+      const li = document.createElement('li');
+      li.className = 'step';
+      li.setAttribute('data-index', i);
+      li.innerHTML = `
+        <div class="checkbox waiting" aria-hidden="true">
+          <!-- check svg stays hidden until checked -->
+          <svg class="check-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5" stroke="#10b981" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">
+          <span class="main">${text}</span>
+          <span class="status">waiting</span>
+        </div>
+      `;
+      stepsList.appendChild(li);
+    });
+
+    let current = 0;
+    let demoRunning = false;
+
+    function markStepDone(i){
+      const li = stepsList.querySelector(`.step[data-index="${i}"]`);
+      if(!li) return;
+      li.classList.remove('current');
+      const box = li.querySelector('.checkbox');
+      // remove waiting class, add checked
+      box.classList.remove('waiting');
+      box.classList.add('checked');
+      // update status color + text
+      const status = li.querySelector('.status');
+      if(status){
+        status.textContent = 'done';
+        status.classList.add('done');
+      }
+      // optional small pop animation
+      li.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.02)' },
+        { transform: 'scale(1)' }
+      ], { duration: 260, easing: 'ease-out' });
+    }
+
+    function setCurrent(i){
+      stepsList.querySelectorAll('.step').forEach(s => s.classList.remove('current'));
+      const li = stepsList.querySelector(`.step[data-index="${i}"]`);
+      if(li) li.classList.add('current');
+      typingText.textContent = steps[i];
+    }
+
+    function startLoader(){
+      profileWrap.classList.add('loading');
+      demoRunning = true;
+    }
+    function stopLoader(){
+      profileWrap.classList.remove('loading');
+      demoRunning = false;
+    }
+
+    function runFlow(){
+      if (demoRunning === false) startLoader();
+
+      if(current >= steps.length){
+        // stop loader
+        stopLoader();
+
+        // hide steps block and typing area
+        stepsList.classList.add('hidden');
+
+        // hide typing area so it doesn't leave gaps
+        typingArea.classList.add('hidden');
+
+        // reveal results after transition
+        setTimeout(() => {
+          results.classList.add('visible');
+        }, 700);
+        return;
+      }
+
+      setCurrent(current);
+      // simulate variable work time per step for realism
+      const durations = [1500, 1700, 1400, 1100];
+      const duration = durations[current] ?? 1400;
+
+      setTimeout(() => {
+        markStepDone(current);
+        current++;
+        // short pause then next step
+        setTimeout(runFlow, 420);
+      }, duration);
+    }
+
+    // start flow after small delay so user can see initial UI (loader visible immediately)
+    setTimeout(runFlow, 600);
+
+    // clicking profile restarts the demo
+    const profilePic = document.querySelector('.profile-pic');
+    if(profilePic){
+      profilePic.style.cursor = 'pointer';
+      profilePic.title = 'Click to restart demo';
+      profilePic.addEventListener('click', () => {
+        // reset UI to initial state for demo
+        stepsList.classList.remove('hidden');
+        results.classList.remove('visible');
+        typingArea.classList.remove('hidden');
+        document.getElementById('typingArea').style.opacity = '1';
+        typingText.textContent = 'Initializing…';
+        // reset steps
+        stepsList.querySelectorAll('.step').forEach((li) => {
+          li.classList.remove('current');
+          const box = li.querySelector('.checkbox');
+          box.classList.remove('checked');
+          box.classList.add('waiting');
+          const status = li.querySelector('.status');
+          if(status){
+            status.textContent = 'waiting';
+            status.classList.remove('done');
+          }
+        });
+        current = 0;
+        // start loader again
+        startLoader();
+        setTimeout(runFlow, 300);
+      });
+    }
+  </script>
+</body>
+</html>
