@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Land Finder Demo</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" crossorigin=""/>
+
+<!-- Simple styles -->
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --accent:#2b6cb0;
+    --muted:#6b7280;
+    --green:#2ecc71;
+    --orange:#ff9f43;
+    --danger:#ff6b6b;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  body,html{height:100%;margin:0;background:var(--bg);color:#111}
+  .wrap{padding:24px;max-width:1100px;margin:24px auto}
+  button.primary{
+    background:#0b74de;color:#fff;padding:12px 18px;border-radius:10px;border:0;font-weight:600;
+    box-shadow: 0 6px 18px rgba(11,116,222,0.18);cursor:pointer;
+  }
+
+  /* FULLPAGE MODAL */
+  .overlay{
+    position:fixed;inset:0;background:rgba(10,10,10,0.25);display:none;z-index:50;
+    backdrop-filter: blur(4px);
+  }
+  .modal{
+    position:fixed;inset:18px;border-radius:14px;overflow:hidden;background:#fff;display:flex;z-index:60;
+    box-shadow:0 20px 50px rgba(15,23,42,0.35);
+  }
+  .modal .mapwrap{flex:1;position:relative;min-width:320px}
+  /* full map container that fills modal */
+  #map{height:100%;width:100%;display:block}
+  .modal .leftpanel{
+    width:380px;background:var(--card);padding:16px;box-sizing:border-box;border-right:1px solid rgba(18,18,18,0.04);
+    display:flex;flex-direction:column;gap:12px;overflow:auto;
+  }
+
+  /* small top controls like radio + search */
+  .topcontrols{display:flex;gap:8px;align-items:center}
+  .chip {display:flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;background:#f7f9fc;border:1px solid rgba(12,12,12,0.03);font-size:14px}
+  .search{display:flex;margin-top:6px}
+  .search input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(12,12,12,0.06);font-size:15px}
+  .search button{margin-left:8px;padding:10px 12px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+
+  /* location card shown after click */
+  .loc-card{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:12px;background:#fff;box-shadow:0 8px 20px rgba(12,12,12,0.06)}
+  .loc-card img{width:80px;height:64px;border-radius:8px;object-fit:cover}
+  .loc-body{flex:1}
+  .loc-body h4{margin:0;font-size:16px}
+  .loc-body p{margin:6px 0;color:var(--muted);font-size:13px}
+  .cta-find{display:block;margin-top:8px;padding:10px;border-radius:10px;border:0;background:#263347;color:#fff;font-weight:700;cursor:pointer}
+
+  /* loader steps */
+  .steps{margin-top:10px;background:#fff;border-radius:12px;padding:10px;box-shadow:0 8px 20px rgba(12,12,12,0.05)}
+  .step{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:1px solid rgba(10,10,10,0.03);margin-bottom:8px;transition:all .25s}
+  .step .dot{width:16px;height:16px;border-radius:50%;background:#eee;display:inline-block;flex:0 0 16px}
+  .step.active{background:linear-gradient(90deg, rgba(56,189,248,0.06), rgba(16,185,129,0.03));box-shadow:inset 0 -1px 0 rgba(12,12,12,0.02)}
+  .step.done{background:linear-gradient(90deg,#ecfdf5,#f0fdf4);border-color:rgba(34,197,94,0.12)}
+  .status{margin-left:auto;color:var(--muted);font-size:13px}
+
+  /* final ROR summary card */
+  .ror{margin-top:12px;padding:20px;border-radius:12px;background:linear-gradient(135deg,#e6fff0,#d5ffe6);box-shadow:0 10px 30px rgba(38,203,157,0.08)}
+  .ror h2{margin:0;font-size:44px;color:#08332d}
+  .ror p{margin:8px 0;color:#234e3a}
+
+  /* details table */
+  .owner{margin-top:10px;background:#fff;padding:14px;border-radius:12px;box-shadow:0 8px 20px rgba(12,12,12,0.04)}
+  .owner table{width:100%;border-collapse:collapse;font-size:14px}
+  .owner td{padding:8px 6px;border-bottom:1px dashed rgba(0,0,0,0.04)}
+  .owner td.key{color:var(--muted);width:46%}
+  .owner .save{display:block;margin-top:12px;padding:12px;border-radius:10px;border:0;background:#263347;color:#fff;font-weight:700;cursor:pointer}
+
+  /* close button */
+  .close-btn{position:absolute;18px;right:18px;top:18px;background:#fff;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(12,12,12,0.08);cursor:pointer;z-index:70}
+  .close-btn svg{width:20px;height:20px;opacity:0.85}
+
+  /* tiny footer quote */
+  .quote{margin-top:auto;padding:12px;color:var(--muted);font-style:italic;background:transparent}
+
+  /* small responsive */
+  @media (max-width:900px){
+    .modal{flex-direction:column}
+    .modal .leftpanel{width:auto;height:48vh}
+    .mapwrap{height:52vh}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h3>Land Finder demo</h3>
+  <p>Click button to open full-screen map. Click anywhere on the map to select a location.</p>
+  <button id="openMap" class="primary">I know the land location</button>
+</div>
+
+<!-- Modal & overlay -->
+<div class="overlay" id="overlay"></div>
+
+<div class="modal" id="modal" aria-hidden="true" style="display:none;">
+  <div class="leftpanel" id="leftPanel">
+    <div class="topcontrols">
+      <label class="chip"><input type="radio" checked disabled style="margin-right:6px"> Locality / Landmark</label>
+      <label class="chip"><input type="radio" disabled style="margin-right:6px"> Enter Google Map Link</label>
+    </div>
+
+    <div class="search" style="margin-top:10px">
+      <input id="fakeSearch" placeholder="Search your locality or landmark (type & press Enter)" />
+      <button id="clearSearch">Clear</button>
+    </div>
+
+    <!-- Placeholder area that will be replaced with loc-card and steps/results -->
+    <div id="panelContent" style="margin-top:8px;display:flex;flex-direction:column;gap:12px;">
+      <div class="hint" style="padding:12px;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(12,12,12,0.04)">
+        <strong>Tip:</strong> Search your land location above and click directly on the map in your area to get the land details.
+      </div>
+    </div>
+
+    <div class="quote">Good land is like good friends, both are hard to find 😉</div>
+  </div>
+
+  <div class="mapwrap">
+    <div id="map"></div>
+  </div>
+
+  <div class="close-btn" id="closeBtn" title="Close">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M6 18L18 6" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+
+<!-- jQuery + Leaflet -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+$(function(){
+  const $overlay = $('#overlay');
+  const $modal = $('#modal');
+  const $panel = $('#panelContent');
+  const $open = $('#openMap');
+  const $close = $('#closeBtn');
+  let map, marker;
+
+  // Open modal and init map (if not already)
+  $open.on('click', openModal);
+  $close.on('click', closeModal);
+  $overlay.on('click', closeModal);
+
+  function openModal(){
+    $overlay.fadeIn(200);
+    $modal.show().attr('aria-hidden','false').css({opacity:0}).animate({opacity:1},250);
+    if(!map) initMap();
+    // center on India by default
+    map.invalidateSize();
+    map.setView([21.0, 85.8], 7);
+  }
+  function closeModal(){
+    $overlay.fadeOut(200);
+    $modal.fadeOut(200).attr('aria-hidden','true');
+    // clear marker and panel
+    if(marker) { map.removeLayer(marker); marker=null; }
+    // restore hint
+    $panel.html('<div class="hint" style="padding:12px;background:#fff;border-radius:10px;box-shadow:0 10px 30px rgba(12,12,12,0.04)"><strong>Tip:</strong> Search your land location above and click directly on the map in your area to get the land details.</div>');
+  }
+
+  function initMap(){
+    // initialize leaflet map with OSM tiles
+    map = L.map('map', {attributionControl:false, zoomControl:true});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom: 19
+    }).addTo(map);
+
+    // clicking on map -> add marker + show panel card
+    map.on('click', async function(e){
+      const {lat,lng} = e.latlng;
+      // remove old
+      if(marker) map.removeLayer(marker);
+      marker = L.marker([lat,lng]).addTo(map);
+      // animate marker with a little bounce (simple)
+      marker._icon.style.transform += ' translateY(-6px)';
+      setTimeout(()=> marker._icon.style.transform = marker._icon.style.transform.replace(' translateY(-6px)',''), 400);
+
+      // reverse geocode to fetch place name (Nominatim)
+      showLoadingCard(lat,lng);
+      try{
+        const nomUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+        const res = await fetch(nomUrl, {headers:{'Accept':'application/json'}});
+        if(!res.ok) throw new Error('reverse failed');
+        const data = await res.json();
+        const display = data.display_name || 'Selected Location';
+        showLocationCard(display, lat, lng);
+      }catch(err){
+        // fallback
+        showLocationCard('Selected Location', lat, lng);
+      }
+    });
+  }
+
+  function showLoadingCard(lat,lng){
+    $panel.html(`<div style="padding:14px;border-radius:12px;background:#fff;box-shadow:0 10px 30px rgba(12,12,12,0.04)">
+      <div style="font-weight:700">Fetching location details…</div>
+      <div style="margin-top:10px;color:var(--muted);font-size:14px">Please wait while we look up this location</div>
+      <div style="margin-top:12px"><div style="height:8px;background:#f1f5f9;border-radius:6px;overflow:hidden"><div style="width:40%;height:8px;background:linear-gradient(90deg,#0ea5e9,#06b6d4)"></div></div></div>
+    </div>`);
+  }
+
+  function showLocationCard(name, lat, lng){
+    // produce the loc-card HTML
+    const html = `
+      <div class="loc-card">
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="land image" />
+        <div class="loc-body">
+          <h4>${escapeHtml(shorten(name, 60))}</h4>
+          <p><small style="color:var(--muted)">Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}</small></p>
+          <button class="cta-find" id="findBtn">Find your land</button>
+        </div>
+      </div>
+      <div class="steps" id="stepsWrap" style="display:none">
+        <div class="step" data-step="1"><span class="dot"></span><div>Checking location details</div><div class="status">done</div></div>
+        <div class="step" data-step="2"><span class="dot"></span><div>Searching land records</div><div class="status">...</div></div>
+        <div class="step" data-step="3"><span class="dot"></span><div>Matching plot & khata info</div><div class="status">waiting</div></div>
+        <div class="step" data-step="4"><span class="dot"></span><div>Preparing your land record</div><div class="status">waiting</div></div>
+      </div>
+    `;
+    $panel.html(html);
+
+    // wire up find button
+    $('#findBtn').on('click', function(){
+      runStepsAndShowResult(name, lat, lng);
+    });
+  }
+
+  function runStepsAndShowResult(name, lat, lng){
+    const $stepsWrap = $('#stepsWrap');
+    $stepsWrap.show();
+    const $steps = $stepsWrap.find('.step');
+
+    // sequence with timings (simulate)
+    const sequence = [
+      {idx:0, status:'done', time:700},
+      {idx:1, status:'loading', time:1200},
+      {idx:2, status:'waiting', time:1000},
+      {idx:3, status:'waiting', time:900}
+    ];
+
+    // helper to set state
+    function setStep(k, stateTxt, cls){
+      const $s = $steps.eq(k);
+      $s.removeClass('active done');
+      if(cls==='active') $s.addClass('active').find('.status').text('processing');
+      if(cls==='done') $s.addClass('done').find('.status').text(stateTxt || 'done');
+      if(cls==='waiting') $s.find('.status').text(stateTxt || 'waiting');
+    }
+
+    // run sequence with timeouts
+    let total = 0;
+    sequence.forEach((item,i)=>{
+      total += item.time;
+      setTimeout(()=>{
+        // set active then done
+        setStep(item.idx, '', 'active');
+        setTimeout(()=> setStep(item.idx, item.status==='loading' ? 'complete' : 'done', 'done'), 600);
+      }, total - item.time);
+    });
+
+    // after all steps done, show final result
+    setTimeout(()=> showFinalCard(name, lat, lng), total + 700);
+  }
+
+  function showFinalCard(name, lat, lng){
+    const finalHtml = `
+      <div class="ror">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <h2>8<span style="font-size:18px">/10</span></h2>
+            <div style="font-weight:700;color:#065f46">Low Risk <span style="font-size:14px">😊</span></div>
+          </div>
+          <button class="chip" style="background:#fff;border:1px solid rgba(12,12,12,0.04);cursor:pointer" id="viewROR">View ROR</button>
+        </div>
+        <div style="margin-top:12px">
+          <strong>Why this Score?</strong>
+          <ul style="margin:8px 0 0 18px">
+            <li>Location: ${escapeHtml(shorten(name,40))}</li>
+            <li>Clear ownership details available</li>
+            <li>Regular mutation records present (proper transfer history)</li>
+            <li>No public use restrictions on the land</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="owner">
+        <h4 style="margin:0 0 10px 0">Ownership Details</h4>
+        <table>
+          <tr><td class="key">Owner Name</td><td>Amarendra Sahu</td></tr>
+          <tr><td class="key">Father's Name</td><td>Ananda Chandra Sahu</td></tr>
+          <tr><td class="key">Caste</td><td>Khandayat</td></tr>
+          <tr><td class="key">Address</td><td>Brahmapur</td></tr>
+          <tr><td class="key">Owner Type</td><td>Private Individual</td></tr>
+          <tr><td class="key">Khata No</td><td>897/829</td></tr>
+          <tr><td class="key">Plot No</td><td>1234</td></tr>
+          <tr><td class="key">Survey No</td><td>456/78</td></tr>
+        </table>
+
+        <button class="save" id="saveProp">Save this property</button>
+      </div>
+    `;
+    $panel.html(finalHtml);
+    $('#saveProp').on('click', ()=> alert('Property saved (demo)'));
+    $('#viewROR').on('click', ()=> alert('Open ROR (demo)'));
+  }
+
+  // small helpers:
+  function escapeHtml(s){ return s ? s.replace(/[&<>"']/g, (m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])) : s; }
+  function shorten(s, n){ if(!s) return ''; return s.length>n? s.slice(0,n-1)+'…': s; }
+
+  // fake search input: center map to typed query using Nominatim search
+  $('#fakeSearch').on('keypress', async function(e){
+    if(e.key === 'Enter'){
+      const q = $(this).val().trim();
+      if(!q) return;
+      try{
+        const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&limit=5`;
+        const r = await fetch(url);
+        if(!r.ok) throw new Error('search failed');
+        const data = await r.json();
+        if(data && data.length){
+          const item = data[0];
+          map.setView([parseFloat(item.lat), parseFloat(item.lon)], 14);
+        } else {
+          alert('No results found');
+        }
+      }catch(err){
+        console.warn(err); alert('Search failed (network)');
+      }
+    }
+  });
+
+  $('#clearSearch').on('click', function(){ $('#fakeSearch').val(''); });
+
+});
+</script>
+</body>
+</html>
