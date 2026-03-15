@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Gets the Property? — Legal Heir Finder</title>
+<style>
+  :root{
+    --primary:#1a3a5c; --accent:#b5811e; --green:#2a7a4b; --red:#c0392b;
+    --border:#e2e2de; --radius:10px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#f2f2f0;color:#1a1a1a;min-height:100vh;-webkit-font-smoothing:antialiased;}
+  header{background:#1a3a5c;color:#fff;padding:11px 24px;display:flex;align-items:center;gap:12px;}
+  header .logo{font-size:1.5rem;}
+  header h1{font-size:1rem;font-weight:700;}
+  header p{font-size:.72rem;opacity:.6;margin-top:1px;}
+  .badge{margin-left:auto;background:rgba(255,255,255,.15);color:#fff;font-size:.68rem;padding:3px 9px;border-radius:4px;font-weight:600;letter-spacing:.04em;white-space:nowrap;}
+  main{max-width:680px;margin:20px auto;padding:0 14px 60px;}
+  .card{background:#fff;border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);padding:28px 32px;margin-bottom:14px;}
+  @media(max-width:560px){.card{padding:18px 16px;}}
+
+  /* Progress */
+  .prog-wrap{margin-bottom:22px;}
+  .prog-lbl{display:flex;justify-content:space-between;font-size:.72rem;color:#999;margin-bottom:5px;}
+  .prog-bar{background:#ebebea;border-radius:2px;height:3px;}
+  .prog-fill{background:#1a3a5c;height:3px;border-radius:2px;transition:width .3s;}
+
+  .step-title{font-size:1.15rem;font-weight:700;color:#111;margin-bottom:4px;}
+  .step-sub{font-size:.86rem;color:#666;margin-bottom:18px;line-height:1.6;}
+
+  /* Inputs */
+  label.fl{display:block;font-size:.85rem;font-weight:600;color:#333;margin-bottom:5px;margin-top:16px;}
+  input[type=text]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-size:.95rem;color:#111;background:#fafafa;transition:border .15s;outline:none;}
+  input[type=text]:focus{border-color:#1a3a5c;background:#fff;}
+  .hint{font-size:.78rem;color:#999;margin-top:4px;line-height:1.5;}
+
+  /* Choice cards */
+  .cg{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .cc{flex:1;min-width:100px;max-width:180px;border:1.5px solid var(--border);border-radius:8px;padding:14px 12px;cursor:pointer;text-align:center;font-size:.9rem;font-weight:600;color:#555;transition:all .12s;user-select:none;}
+  .cc:hover{border-color:#1a3a5c;color:#1a3a5c;background:#f5f8fc;}
+  .cc.sel{border-color:#1a3a5c;background:#1a3a5c;color:#fff;}
+  .cc .big{font-size:1.7rem;display:block;margin-bottom:7px;}
+
+  /* Counter */
+  .ctr-wrap{margin-top:6px;}
+  .ctr-lbl{font-size:.84rem;color:#555;margin-bottom:5px;}
+  .ctr-row{display:flex;align-items:center;width:fit-content;}
+  .cb{width:38px;height:38px;border:1px solid var(--border);background:#f5f5f4;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s;flex-shrink:0;}
+  .cb:first-child{border-radius:6px 0 0 6px;}
+  .cb:last-child{border-radius:0 6px 6px 0;}
+  .cb:hover{background:#1a3a5c;color:#fff;border-color:#1a3a5c;}
+  .cv{width:52px;height:38px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);border-left:none;border-right:none;text-align:center;font-size:1.1rem;font-weight:700;color:#1a3a5c;background:#fff;outline:none;}
+
+  /* Buttons */
+  .btn-row{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;flex-wrap:wrap;}
+  .btn{padding:10px 22px;border-radius:6px;border:none;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .12s;}
+  .btn-p{background:#1a3a5c;color:#fff;}.btn-p:hover{background:#254d7a;}
+  .btn-s{background:#ebebea;color:#444;border:1px solid #ddd;}.btn-s:hover{background:#ddd;}
+  .btn-a{background:#b5811e;color:#fff;}.btn-a:hover{background:#956a17;}
+
+  /* Info boxes — minimal */
+  .ib{font-size:.82rem;color:#3a5570;margin-top:10px;line-height:1.6;padding:9px 13px;background:#f3f7fb;border-radius:6px;}
+  .wb{font-size:.82rem;color:#2a5038;margin-top:10px;line-height:1.6;padding:9px 13px;background:#f2faf5;border-radius:6px;}
+  .ab{font-size:.82rem;color:#5a4510;margin-top:10px;line-height:1.6;padding:9px 13px;background:#faf7ef;border-radius:6px;}
+
+  /* Results */
+  .rh{margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid #ebebea;}
+  .rh .bi{font-size:2.2rem;}
+  .rh h2{font-size:1.25rem;color:#111;margin-top:6px;font-weight:700;}
+  .rh p{color:#888;font-size:.8rem;margin-top:3px;}
+
+  /* Slice cards */
+  .slice-row{display:flex;align-items:stretch;background:#fafafa;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;}
+  .slice-icon-col{background:#1a3a5c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;width:52px;flex-shrink:0;}
+  .slice-body{padding:10px 14px;flex:1;}
+  .slice-who{font-weight:700;font-size:.95rem;color:#111;}
+  .slice-share{font-size:1.2rem;font-weight:800;color:#b5811e;margin:2px 0;}
+  .slice-why{font-size:.78rem;color:#555;line-height:1.5;}
+  .slice-law{font-size:.7rem;color:#bbb;margin-top:3px;font-style:italic;}
+
+  /* Branch container */
+  .branch-box{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;}
+  .branch-header{background:#f8f8f6;padding:10px 14px;display:flex;align-items:center;gap:8px;}
+  .branch-header .bh-icon{font-size:1.2rem;}
+  .branch-header .bh-text{font-size:.88rem;font-weight:700;color:#111;}
+  .branch-header .bh-share{margin-left:auto;background:#b5811e;color:#fff;padding:2px 9px;border-radius:4px;font-size:.75rem;font-weight:700;}
+  .branch-body{padding:10px 14px;display:flex;flex-direction:column;gap:6px;}
+  .branch-note{font-size:.76rem;color:#777;padding:5px 0;border-bottom:1px solid #f0f0ee;margin-bottom:3px;}
+
+  /* Sub-branch */
+  .sub-branch-box{border:1px solid var(--border);border-radius:6px;margin-top:4px;overflow:hidden;}
+  .sub-branch-header{background:#f5f5f3;padding:7px 12px;font-size:.8rem;font-weight:700;color:#555;display:flex;align-items:center;gap:6px;}
+  .sub-branch-body{padding:8px 12px;display:flex;flex-direction:column;gap:5px;}
+
+  /* Inline slice */
+  .inline-slice{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#fff;border-radius:6px;border:1px solid #eee;}
+  .is-icon{font-size:1.1rem;flex-shrink:0;}
+  .is-who{font-size:.84rem;font-weight:600;color:#333;flex:1;}
+  .is-share{font-size:.88rem;font-weight:800;color:#1a3a5c;white-space:nowrap;}
+  .is-pct{font-size:.72rem;color:#2a7a4b;font-weight:600;margin-left:3px;}
+  .is-law{font-size:.67rem;color:#bbb;display:block;margin-top:1px;}
+
+  .lapsed-note{background:#fdf5f5;border:1px solid #e8c8c8;border-radius:6px;padding:8px 12px;font-size:.78rem;color:#9a3030;margin:4px 0;}
+  .post-branch-header{background:#f2faf5!important;}
+  .post-branch-share{background:#2a7a4b!important;}
+
+  /* Legal references */
+  .law-section{margin-top:20px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  .law-toggle{width:100%;background:#f8f8f6;border:none;padding:11px 14px;text-align:left;font-size:.82rem;font-weight:700;color:#1a3a5c;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .law-toggle:hover{background:#f0f0ee;}
+  .law-body{padding:12px 14px;font-size:.75rem;color:#555;line-height:1.8;display:none;}
+  .law-body.open{display:block;}
+  .law-body strong{color:#1a3a5c;}
+  .law-body .case{color:#2a7a4b;font-style:italic;}
+
+  .print-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+
+  /* Welcome */
+  .welcome-icon{font-size:2.8rem;text-align:center;margin-bottom:14px;}
+  .fl-list{list-style:none;margin:14px 0;}
+  .fl-list li{padding:8px 0;border-bottom:1px solid #f0f0ee;font-size:.88rem;color:#444;display:flex;align-items:flex-start;gap:10px;}
+  .fl-list li .fi{font-size:1rem;flex-shrink:0;margin-top:1px;}
+  .discl{background:#faf7ef;border-radius:6px;padding:10px 14px;font-size:.75rem;color:#6a5010;margin-top:18px;line-height:1.5;}
+
+  .fade-in{animation:fi .2s ease;}
+  @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── Vertical Family Tree ─────────────────────────────────────────────────── */
+  .vtree{margin:4px 0 8px;}
+  .vtree-root-card{background:#1a3a5c;color:#fff;border-radius:8px;padding:10px 16px;display:inline-flex;align-items:center;gap:9px;}
+  .vtrc-ico{font-size:1.1rem;}
+  .vtrc-name{font-size:.92rem;font-weight:700;}
+  .vtrc-sub{font-size:.72rem;opacity:.6;margin-left:4px;}
+  .vtree-stem{width:2px;height:14px;background:#d0d0cc;margin-left:20px;}
+  .vtree-stem-sub{width:2px;height:8px;margin-left:13px;}
+  .vtree-sub-pd .vtree-stem-sub{background:#d0a8a8;}
+  .vtree-sub-post .vtree-stem-sub{background:#9ac8a8;}
+
+  /* Section labels */
+  .vtree-sec-div{margin:10px 0 3px 28px;font-size:.66rem;font-weight:700;color:#bbb;text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;gap:8px;}
+  .vtree-sec-div::after{content:'';flex:1;height:1px;background:#ebebea;}
+
+  /* Items */
+  .vtree-item{display:flex;align-items:flex-start;margin-bottom:4px;}
+
+  /* Connectors */
+  .vtconn-mid{width:26px;flex-shrink:0;align-self:stretch;border-left:1.5px solid #d0d0cc;position:relative;}
+  .vtconn-mid::after{content:'';position:absolute;top:12px;left:-2px;width:13px;height:1.5px;background:#d0d0cc;}
+  .vtconn-last{width:26px;flex-shrink:0;position:relative;}
+  .vtconn-last::before{content:'';position:absolute;left:0;top:0;width:1.5px;height:14px;background:#d0d0cc;}
+  .vtconn-last::after{content:'';position:absolute;top:12px;left:0;width:13px;height:1.5px;background:#d0d0cc;}
+
+  /* Color variants */
+  .vtconn-pd.vtconn-mid{border-left-color:#d0a8a8;}
+  .vtconn-pd.vtconn-mid::after,.vtconn-pd.vtconn-last::before,.vtconn-pd.vtconn-last::after{background:#d0a8a8;}
+  .vtconn-post.vtconn-mid{border-left-color:#9ac8a8;}
+  .vtconn-post.vtconn-mid::after,.vtconn-post.vtconn-last::before,.vtconn-post.vtconn-last::after{background:#9ac8a8;}
+
+  .vtree-body{flex:1;padding:1px 0;}
+
+  /* Node card — compact */
+  .vtnode{background:#fff;border:1px solid #e2e2de;border-radius:8px;padding:7px 28px 7px 10px;position:relative;display:flex;align-items:flex-start;gap:7px;flex-wrap:wrap;}
+  .vtnode-alive{border-color:#c2e0ce;}
+  .vtnode-dead-b{border-color:#ddb8b8;background:#fdf8f8;}
+  .vtnode-dead-a{border-color:#a8d4b8;background:#f5fbf7;}
+  .vtnode-dead-u{border-color:#d8cc88;background:#fdf9f0;}
+  .vtn-ico{font-size:1rem;flex-shrink:0;margin-top:2px;}
+  .vtn-info{flex:1;min-width:80px;}
+  .vtn-name{font-size:.84rem;font-weight:600;color:#111;cursor:text;border-bottom:1px dashed transparent;transition:border .1s;word-break:break-word;display:inline;}
+  .vtn-name:hover{border-bottom-color:#aaa;}
+  .vtn-name.empty{color:#ccc;font-style:italic;font-weight:400;font-size:.78rem;}
+  .vtn-name-edit{font-size:.84rem;font-weight:600;border:1.5px solid #b5811e;border-radius:4px;padding:1px 6px;outline:none;background:#fffcf5;width:130px;}
+  .vtn-role{display:block;font-size:.67rem;color:#aaa;margin-top:1px;}
+  .vtn-status{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:4px;}
+  .vtn-alive{background:#f0faf4;color:#2a7a4b;border:1px solid #c2e0ce;font-size:.69rem;font-weight:600;padding:2px 8px;border-radius:4px;cursor:pointer;}
+  .vtn-alive:hover{background:#2a7a4b;color:#fff;border-color:#2a7a4b;}
+  .vtn-dead{background:#fdf5f5;color:#c0392b;border:1px solid #ddb8b8;font-size:.69rem;font-weight:600;padding:2px 7px;border-radius:4px;cursor:default;display:inline-flex;align-items:center;gap:3px;}
+  .vtn-yr{width:54px;padding:1px 4px;border:1px solid #ddb8b8;border-radius:3px;font-size:.72rem;background:#fff;}
+  .vtn-alive-sm{font-size:.65rem;color:#999;cursor:pointer;border:1px solid #ddd;border-radius:4px;padding:1px 6px;background:#f8f8f8;}
+  .vtn-alive-sm:hover{background:#444;color:#fff;border-color:#444;}
+  .vtn-tag{font-size:.65rem;font-weight:600;padding:1px 5px;border-radius:3px;}
+  .vtn-pd{background:#fdf5f5;color:#b03030;border:1px solid #ddb8b8;}
+  .vtn-post{background:#f2faf5;color:#2a7a4b;border:1px solid #b2dfcc;}
+  .vtn-unk{background:#faf7ef;color:#8a6a20;border:1px solid #d0c060;}
+  .vtn-rm{position:absolute;top:5px;right:5px;background:none;border:none;color:#ddd;cursor:pointer;font-size:.8rem;line-height:1;padding:1px 3px;}
+  .vtn-rm:hover{color:#c0392b;}
+
+  /* Sub-family */
+  .vtree-sub{margin-top:3px;}
+  .vtree-sublist{padding-left:12px;}
+  .vtsub-banner{font-size:.66rem;font-weight:600;padding:2px 8px;border-radius:3px;display:inline-block;margin:2px 0 3px 12px;}
+  .vtree-sub-pd .vtsub-banner{background:#fdf5f5;color:#b03030;border:1px solid #ddb8b8;}
+  .vtree-sub-post .vtsub-banner{background:#f2faf5;color:#2a7a4b;border:1px solid #b2dfcc;}
+
+  /* Add button */
+  .vtree-add-btn{background:#f5f8fc;border:1px dashed #9ab4cc;color:#4a6a8a;border-radius:6px;padding:4px 11px;font-size:.76rem;font-weight:600;cursor:pointer;margin:2px 0;}
+  .vtree-add-btn:hover{background:#1a3a5c;color:#fff;border-color:#1a3a5c;}
+
+  /* Roster — every family member at a glance */
+  .roster-section{margin-top:22px;}
+  .roster-title{font-size:.84rem;font-weight:700;color:#333;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #ebebea;}
+  .rs-row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;padding:8px 10px;border-radius:6px;margin-bottom:4px;border:1px solid #f0f0ee;}
+  .rs-name{font-size:.83rem;color:#111;}
+  .rs-share{font-size:.83rem;font-weight:700;text-align:right;white-space:nowrap;align-self:start;}
+  .rs-reason{font-size:.73rem;color:#777;line-height:1.4;grid-column:1/-1;}
+  .rs-heir{background:#f5fbf7;border-color:#c2e0ce;}.rs-heir .rs-share{color:#2a7a4b;}
+  .rs-branch{background:#faf7ef;border-color:#d8c880;}.rs-branch .rs-share{color:#8a6020;}
+  .rs-post{background:#f5f8fc;border-color:#b8cce0;}.rs-post .rs-share{color:#1a3a5c;}
+  .rs-out{background:#f8f8f8;border-color:#eee;}.rs-out .rs-share{color:#bbb;}
+  .rs-excluded{background:#fafaf8;border-color:#e0e0d0;}.rs-excluded .rs-share{color:#bbb;}
+  .rs-lapsed{background:#fdf5f5;border-color:#e8c8c8;}.rs-lapsed .rs-share{color:#c05050;}
+  .rs-sub{border-style:dashed;}
+
+  /* Coparcenary banner + will screen */
+  .cop-banner{background:#faf6ee;border:1px solid #d0c080;border-radius:8px;padding:13px 16px;margin-bottom:14px;}
+  .cop-banner-title{font-size:.84rem;font-weight:700;color:#6a5010;margin-bottom:6px;}
+  .cop-banner-body{font-size:.8rem;color:#444;line-height:1.75;}
+  .cop-law{font-size:.7rem;color:#aaa;font-style:italic;display:block;margin-top:6px;}
+  .sec15-2-banner{background:#f5eef8;border:1px solid #c8a0d8;border-radius:8px;padding:13px 16px;margin-bottom:14px;}
+  .sec15-2-title{font-size:.84rem;font-weight:700;color:#5a2080;margin-bottom:6px;}
+  .sec15-2-body{font-size:.8rem;color:#444;line-height:1.75;}
+
+  @media print{header,.btn-row,.print-row,.prog-wrap,.law-toggle{display:none!important;} body{background:#fff;} .card{box-shadow:none;border:1px solid #ddd;} .law-body{display:block!important;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚖️</div>
+  <div><h1>Who Gets the Property?</h1><p>Legal Heir Finder · Hindu Succession Act 1956 (as amended)</p></div>
+  <div class="badge">Hindu Law · No Will</div>
+</header>
+<main><div id="app"></div></main>
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const S={
+  step:0, name:'', gender:'', deathYear:2023,
+  members:[], nextId:1, // family tree
+  // Computed fields (populated by computeAndRender — do not set manually)
+  wifeCount:0,
+  aliveSons:0, aliveDaughters:0, motherAlive:false,
+  pdSonCount:0,
+  pdSons:[],
+  pdDauCount:0,
+  pdDaus:[],
+  fatherAlive:false,
+  postSonCount:0, postSons:[], postDauCount:0, postDaus:[],
+  // Female
+  femHusband:false,
+  femAliveSons:0, femAliveDaughters:0,
+  femPdSonCount:0, femPdSons:[],
+  femPdDauCount:0, femPdDaus:[],
+  femPostSonCount:0, femPostSons:[], femPostDauCount:0, femPostDaus:[],
+  femHusbFam:false, femParents:false,
+  // Property type & will
+  hasWill:'no', propType:'self', coparceners:2, femPropSource:'self',
+  // Name arrays
+  wifeNames:[], aliveSonNames:[], aliveDauNames:[],
+  motherName:'', fatherName:'',
+  femHusbandName:'', femAliveSonNames:[], femAliveDauNames:[],
+};
+
+// ── Math helpers ──────────────────────────────────────────────────────────────
+function gcd(a,b){return b===0?a:gcd(b,a%b);}
+function fr(n,d){if(n===0)return'0';const g=gcd(Math.abs(n),Math.abs(d));const sn=n/g,sd=d/g;return sd===1?`${sn} (all of it)`:`${sn}/${sd}`;}
+function pc(n,d){const v=n/d*100;return v%1===0?v+'%':v.toFixed(2).replace(/\.?0+$/,'')+'%';}
+
+// ── DOM helpers ───────────────────────────────────────────────────────────────
+const app=document.getElementById('app');
+function render(html){app.innerHTML=`<div class="card fade-in">${html}</div>`;window.scrollTo({top:0,behavior:'smooth'});}
+function prog(c,t,lbl){const p=Math.round(c/t*100);return `<div class="prog-wrap"><div class="prog-lbl"><span>${lbl}</span><span>Step ${c} of ${t}</span></div><div class="prog-bar"><div class="prog-fill" style="width:${p}%"></div></div></div>`;}
+
+function counter(id,val,lbl=''){return `<div class="ctr-wrap">${lbl?`<div class="ctr-lbl">${lbl}</div>`:''}<div class="ctr-row"><button class="cb" onclick="cc('${id}',-1)">−</button><input class="cv" id="${id}" type="number" value="${val}" min="0" max="30" readonly><button class="cb" onclick="cc('${id}',1)">+</button></div></div>`;}
+function cc(id,d){const e=document.getElementById(id);let v=parseInt(e.value)+d;e.value=Math.max(0,Math.min(30,v));}
+function gc(id){const e=document.getElementById(id);return e?parseInt(e.value)||0:0;}
+
+function choiceG(name,opts,sel='',cb=''){return `<div class="cg" data-cg="${name}">${opts.map(o=>`<div class="cc${sel===o.v?' sel':''}" data-v="${o.v}" onclick="pick('${name}','${o.v}',this,'${cb}')"><span class="big">${o.icon}</span>${o.lbl}</div>`).join('')}<input type="hidden" id="cg_${name}" value="${sel}"></div>`;}
+function pick(name,val,el,cb){el.closest('[data-cg]').querySelectorAll('.cc').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById('cg_'+name).value=val;if(cb && window[cb]) window[cb](val);}
+function gcg(name){const e=document.getElementById('cg_'+name);return e?e.value:'';}
+
+// Toggle callbacks for conditional show/hide areas (called by pick via cb parameter)
+function toggleWifeArea(v){var a=document.getElementById('wca');if(!a)return;a.style.display=v==='y'?'block':'none';if(v==='y'&&gc('wc')===0)document.getElementById('wc').value=1;}
+function togglePdSonArea(v){var a=document.getElementById('pdsc');if(!a)return;a.style.display=v==='y'?'block':'none';if(v==='y'&&gc('pdscnt')===0)document.getElementById('pdscnt').value=1;}
+function togglePdDauArea(v){var a=document.getElementById('pddc');if(!a)return;a.style.display=v==='y'?'block':'none';if(v==='y'&&gc('pddcnt')===0)document.getElementById('pddcnt').value=1;}
+function togglePostSonArea(v){var a=document.getElementById('possc');if(!a)return;a.style.display=v==='y'?'block':'none';if(v==='y'&&gc('posscnt')===0)document.getElementById('posscnt').value=1;}
+function togglePostDauArea(v){var a=document.getElementById('posdc');if(!a)return;a.style.display=v==='y'?'block':'none';if(v==='y'&&gc('posdcnt')===0)document.getElementById('posdcnt').value=1;}
+function onGenderChange(v){var ma=document.getElementById('male-prop-area'),fa=document.getElementById('fem-prop-area');if(ma)ma.style.display=v==='male'?'block':'none';if(fa)fa.style.display=v==='female'?'block':'none';}
+function onWillChange(v){var ya=document.getElementById('will-yes-area'),na=document.getElementById('will-no-area');if(ya)ya.style.display=v==='yes'?'block':'none';if(na)na.style.display=v!=='yes'?'block':'none';}
+
+// ── Result renderers ──────────────────────────────────────────────────────────
+function sliceRow(icon,who,shareN,shareD,why,lawRef){
+  return `<div class="slice-row">
+    <div class="slice-icon-col">${icon}</div>
+    <div class="slice-body">
+      <div class="slice-who">${who}</div>
+      <div class="slice-share">${fr(shareN,shareD)} &nbsp;<span style="font-size:.85rem;color:var(--green);font-weight:600;">(${pc(shareN,shareD)})</span></div>
+      <div class="slice-why">📌 ${why}</div>
+      <div class="slice-law">⚖️ ${lawRef}</div>
+    </div>
+  </div>`;}
+
+function inlineSlice(icon,who,shareN,shareD,why,lawRef){
+  return `<div class="inline-slice">
+    <span class="is-icon">${icon}</span>
+    <span class="is-who">${who}<span class="is-law">${lawRef}</span></span>
+    <span><span class="is-share">${fr(shareN,shareD)}</span><span class="is-pct">${pc(shareN,shareD)}</span></span>
+  </div>`;}
+
+function lapsedNote(msg){return `<div class="lapsed-note">⚠️ ${msg}</div>`;}
+
+// ── Name helpers ─────────────────────────────────────────────────────────────
+function nm(n,fallback){return n&&n.trim()?n.trim():fallback;}
+function nml(n,fallback){return n&&n.trim()?`${n.trim()} (${fallback})`:fallback;}
+
+// ── Roster: every family member with share + reason ───────────────────────────
+function buildFamilyRoster(D){
+  const dir=S.members.filter(m=>m.parentId===null);
+  const isMale=S.gender==='male';
+  function bdActive(b){return(b.widowCount||0)+(b.aliveSons||0)+(b.aliveDaughters||0)+(b.pdGSonCount||0)+(b.pdGDauCount||0)>0||(b.pdGSons||[]).some(g=>g.aliveSons+g.aliveDaughters>0)||(b.pdGDaus||[]).some(g=>g.aliveSons+g.aliveDaughters>0);}
+  function rRow(icon,name,shareStr,reason,cls,indent){
+    const ml=indent?`style="margin-left:${indent*16}px"`:'';
+    return `<div class="rs-row ${cls} ${indent?'rs-sub':''}" ${ml}><div class="rs-name">${icon} <strong>${name}</strong></div><div class="rs-share">${shareStr||'—'}</div><div class="rs-reason">${reason}</div></div>`;
+  }
+  const pdSA=isMale?S.pdSons:S.femPdSons, pdDA=isMale?S.pdDaus:S.femPdDaus;
+  const poSA=isMale?S.postSons:S.femPostSons, poDA=isMale?S.postDaus:S.femPostDaus;
+  let psi=0,pdi=0,ppsi=0,ppdi=0;
+  let html='';
+  dir.forEach(m=>{
+    const icon=roleIcon(m.role), name=nm(m.name,roleLbl(m.role));
+    let sh='—',why='',cls='rs-out',sub=[];
+    if(m.role==='spouse'){
+      if(wasAliveAtDeath(m)){
+        sh=D>0?`${fr(1,D)} (${pc(1,D)})`:'All of it'; cls='rs-heir';
+        why=isMale?`Surviving wife — 1 of ${D} equal parts, same as each child. §10 Rule 1, HSA 1956.`:`Surviving husband — 1 of ${D} equal parts. §15(1)(a), HSA 1956.`;
+      } else {why=`Passed away before ${S.name} — cannot inherit.`;}
+    } else if(m.role==='son'||m.role==='daughter'){
+      const isSon=m.role==='son';
+      if(m.alive){
+        sh=`${fr(1,D)} (${pc(1,D)})`; cls='rs-heir';
+        why=isMale?(isSon?`Alive son — 1 of ${D} equal parts. §10 Rule 2, HSA 1956.`:`Alive daughter — equal to son since the 2005 Amendment. §10 Rule 2.`):(isSon?`Alive son — 1 of ${D} equal parts. §15(1)(a).`:`Alive daughter — 1 of ${D} equal parts. §15(1)(a) + 2005 Amendment.`);
+      } else if(predeceasedD(m)){
+        const bd=(isSon?pdSA:pdDA)[(isSon?psi:pdi)]; isSon?psi++:pdi++;
+        if(bd&&bdActive(bd)){
+          const bW=isSon?bd.widowCount:0;
+          const actGS=(bd.pdGSons||[]).filter(g=>g.aliveSons+g.aliveDaughters>0);
+          const actGD=(bd.pdGDaus||[]).filter(g=>g.aliveSons+g.aliveDaughters>0);
+          const bD=bW+(bd.aliveSons||0)+(bd.aliveDaughters||0)+actGS.length+actGD.length;
+          sh=`${fr(1,D)} → family`; cls='rs-branch';
+          why=`Passed away before ${S.name} — their share (${fr(1,D)}) goes to their surviving family, split ${bD} ways. §10 Rules 3 & 4.`;
+          childOf(m.id).forEach(c=>{
+            const cn=nm(c.name,roleLbl(c.role)),ci=roleIcon(c.role);
+            if(c.role==='spouse'&&c.alive&&isSon){sub.push(rRow(ci,cn,`${fr(1,D*bD)} (${pc(1,D*bD)})`,`Widow of predeceased son — equal share within this branch. §10 Rule 4(i).`,'rs-heir',1));}
+            else if((c.role==='son'||c.role==='daughter')&&c.alive){sub.push(rRow(ci,cn,`${fr(1,D*bD)} (${pc(1,D*bD)})`,`Alive grandchild — steps into parent's share. §10 Rule 3.`,'rs-heir',1));}
+            else if(!c.alive&&predeceasedD(c)){
+              const gcf=childOf(c.id).filter(gc=>gc.alive);
+              if(gcf.length>0){
+                sub.push(rRow('🕊️',cn,`${fr(1,D*bD)} → ${gcf.length} great-grandchild${gcf.length>1?'ren':''}`,`Also predeceased ${S.name} — great-grandchildren step in. First Schedule, §8.`,'rs-branch',1));
+                gcf.forEach(gc=>sub.push(rRow(roleIcon(gc.role),nm(gc.name,roleLbl(gc.role)),`${fr(1,D*bD*gcf.length)} (${pc(1,D*bD*gcf.length)})`,`Great-grandchild stepping in for grandparent's sub-share.`,'rs-heir',2)));
+              } else {sub.push(rRow('🕊️',cn,'—',`Also predeceased ${S.name} with no children — their sub-share lapses.`,'rs-lapsed',1));}
+            } else if(!c.alive&&wasAliveAtDeath(c)){sub.push(rRow(ci,cn,`${fr(1,D*bD)} → their estate`,`Was alive at ${S.name}'s death, inherited this sub-share, but has since died — passes through their own estate.`,'rs-post',1));}
+          });
+        } else {cls='rs-lapsed'; why=`Passed away before ${S.name} with no surviving family — share lapses and redistributes among all other heirs.`;}
+      } else {
+        const pd=(isSon?poSA:poDA)[(isSon?ppsi:ppdi)]; isSon?ppsi++:ppdi++;
+        const pW=pd?pd.widowCount:0,pS=pd?pd.aliveSons:0,pDc=pd?pd.aliveDaughters:0,pDen=pW+pS+pDc;
+        sh=`${fr(1,D)} → their estate`; cls='rs-post';
+        why=`Was alive at ${S.name}'s death, inherited ${fr(1,D)} of the estate, but has since passed away — this share now distributes through their own estate.`;
+        if(pDen>0) childOf(m.id).forEach(c=>{
+          if((c.role==='spouse'&&c.alive&&isSon)||(c.role==='son'&&c.alive)||(c.role==='daughter'&&c.alive))
+            sub.push(rRow(roleIcon(c.role),nm(c.name,roleLbl(c.role)),`${fr(1,D*pDen)} (${pc(1,D*pDen)})`,`Inherits ${fr(1,pDen)} of the ${fr(1,D)} that ${nm(m.name,'their parent')} held.`,'rs-heir',1));
+        });
+      }
+    } else if(m.role==='mother'){
+      if(isMale){
+        if(m.alive){sh=`${fr(1,D)} (${pc(1,D)})`; cls='rs-heir'; why=`Surviving mother — Class I heir, 1 equal part. §8 + First Schedule Entry 1 + §10 Rule 2, HSA 1956.`;}
+        else {why=`Did not survive ${S.name} — not entitled to inherit.`;}
+      } else {
+        const hasDir=S.femHusband||S.femAliveSons>0||S.femAliveDaughters>0||S.femPdSons.some(b=>bdActive(b))||S.femPdDaus.some(b=>bdActive(b))||S.femPostSonCount>0||S.femPostDauCount>0;
+        if(m.alive){
+          if(hasDir){cls='rs-excluded'; why=`Alive, but husband and/or children are present (§15(1)(a)) — parents are excluded by higher-priority heirs.`;}
+          else if(S.femHusbFam){cls='rs-excluded'; why=`Alive, but husband's family inherits first (§15(1)(b) takes priority over §15(1)(c)).`;}
+          else{cls='rs-heir'; sh='Part of estate'; why=`No husband, children, or husband's family survived — mother inherits. §15(1)(c), HSA 1956.`;}
+        } else {why=`Did not survive ${S.name} — not entitled to inherit.`;}
+      }
+    } else if(m.role==='father'){
+      if(isMale){
+        const hasC1=S.wifeCount>0||S.aliveSons>0||S.aliveDaughters>0||S.motherAlive||S.pdSons.some(b=>bdActive(b))||S.pdDaus.some(b=>bdActive(b))||S.postSonCount>0||S.postDauCount>0;
+        if(m.alive){
+          if(hasC1){cls='rs-excluded'; why=`Father is a Class II heir — excluded because Class I heirs (wife, children, and/or mother) are present. §8 + First Schedule, HSA 1956.`;}
+          else{cls='rs-heir'; sh='All of it'; why=`No Class I heirs survived — father inherits everything. §8(b) + First Schedule Class II, HSA 1956.`;}
+        } else {why=`Did not survive ${S.name} — not entitled to inherit.`;}
+      } else {
+        const hasDir=S.femHusband||S.femAliveSons>0||S.femAliveDaughters>0||S.femPdSons.some(b=>bdActive(b))||S.femPdDaus.some(b=>bdActive(b))||S.femPostSonCount>0||S.femPostDauCount>0;
+        if(m.alive){
+          if(hasDir){cls='rs-excluded'; why=`Alive, but husband and/or children are present (§15(1)(a)) — parents are excluded.`;}
+          else if(S.femHusbFam){cls='rs-excluded'; why=`Alive, but husband's family inherits first (§15(1)(b) takes priority over §15(1)(c)).`;}
+          else{cls='rs-heir'; sh='Part of estate'; why=`No husband, children, or husband's family survived — father inherits. §15(1)(c), HSA 1956.`;}
+        } else {why=`Did not survive ${S.name} — not entitled to inherit.`;}
+      }
+    }
+    html+=rRow(icon,name,sh,why,cls);
+    if(sub.length) html+=sub.join('');
+  });
+  if(!html) return '';
+  return `<div class="roster-section"><div class="roster-title">📋 Every family member — share &amp; reason</div>${html}</div>`;
+}
+
+// Build a branch box for a predeceased child's family
+function buildBranchBox(label,topN,topD,b,isSonBranch){
+  const activePdGSons = (b.pdGSons||[]).filter(g=>g.aliveSons+g.aliveDaughters>0);
+  const activePdGDaus = (b.pdGDaus||[]).filter(g=>g.aliveSons+g.aliveDaughters>0);
+  const bw = (isSonBranch && b.widowCount>0)?1:0;
+  const bD = bw + (b.aliveSons||0) + (b.aliveDaughters||0) + activePdGSons.length + activePdGDaus.length;
+
+  if(bD===0) return lapsedNote(`${label} — no surviving family members found in this branch. Their share lapses and is redistributed among other heirs. <em>(Hindu Succession Act — if an heir under Rule 3 has no heirs themselves, that branch share passes back to the estate.)</em>`);
+
+  let innerHTML='';
+  const branchLaw = isSonBranch ? 'Section 10, Rule 4(i), Hindu Succession Act 1956' : 'Section 10, Rule 4(ii), Hindu Succession Act 1956';
+
+  if(isSonBranch && b.widowCount===1){
+    const wLbl=nml(b.spouseNames&&b.spouseNames[0],'His wife (widow)');
+    innerHTML+=inlineSlice('👩',wLbl,topN,topD*bD,'Gets a share equal to each of his children.',branchLaw);
+  } else if(isSonBranch && b.widowCount>1){
+    innerHTML+=inlineSlice('👩‍👩','All his wives together',topN,topD*bD,`They share this one portion equally — each wife gets ${fr(topN,topD*bD*b.widowCount)} (${pc(topN,topD*bD*b.widowCount)}).`,branchLaw);
+    for(let w=1;w<=b.widowCount;w++){
+      const wLbl=nml(b.spouseNames&&b.spouseNames[w-1],`His wife #${w}`);
+      innerHTML+=inlineSlice('👩',wLbl,topN,topD*bD*b.widowCount,'Her individual share within the wives\' group.',branchLaw);
+    }
+  }
+  for(let i=1;i<=(b.aliveSons||0);i++){
+    const sLbl=nml(b.sonNames&&b.sonNames[i-1],`His son (your grandson) #${i}`);
+    innerHTML+=inlineSlice('👦',sLbl,topN,topD*bD,'Alive — inherits directly.',branchLaw);
+  }
+  for(let i=1;i<=(b.aliveDaughters||0);i++){
+    const dLbl=nml(b.dauNames&&b.dauNames[i-1],`His daughter (your granddaughter) #${i}`);
+    innerHTML+=inlineSlice('👧',dLbl,topN,topD*bD,'Alive — inherits directly.',branchLaw);
+  }
+
+  // Predeceased grandsons
+  activePdGSons.forEach((g,gidx)=>{
+    const gD=g.aliveSons+g.aliveDaughters;
+    const gsLaw='First Schedule to Section 8 (son of predeceased son of predeceased son) + Section 10, Rule 4(i): "the branch of his predeceased sons gets the same portion"';
+    const gName=nm(g.name,'');
+    const gHeader=gName?`${gName} (his son / grandson #${gidx+1})`:`His son (grandson #${gidx+1})`;
+    let subHTML='';
+    for(let i=1;i<=g.aliveSons;i++){
+      const gsLbl=nml(g.sonNames&&g.sonNames[i-1],`His son (your great-grandson) #${i}`);
+      subHTML+=inlineSlice('👶',gsLbl,topN,topD*bD*gD,'Steps into their father\'s sub-share.',gsLaw);
+    }
+    for(let i=1;i<=g.aliveDaughters;i++){
+      const gdLbl=nml(g.dauNames&&g.dauNames[i-1],`His daughter (your great-granddaughter) #${i}`);
+      subHTML+=inlineSlice('👶',gdLbl,topN,topD*bD*gD,'Steps into their father\'s sub-share.',gsLaw);
+    }
+    innerHTML+=`<div class="sub-branch-box">
+      <div class="sub-branch-header">🕊️ ${gHeader} also passed away — his children step in &nbsp;<span style="margin-left:auto;font-size:.75rem;color:var(--accent);font-weight:700;">${fr(topN,topD*bD)} → split ${gD} ways</span></div>
+      <div class="sub-branch-body">${subHTML}</div>
+    </div>`;
+  });
+
+  // Predeceased granddaughters
+  activePdGDaus.forEach((g,gidx)=>{
+    const gD=g.aliveSons+g.aliveDaughters;
+    const gdLaw='First Schedule to Section 8 + Section 10, Rule 4(i) — branch representation within predeceased son\'s branch';
+    const gName=nm(g.name,'');
+    const gHeader=gName?`${gName} (his daughter / granddaughter #${gidx+1})`:`His daughter (granddaughter #${gidx+1})`;
+    let subHTML='';
+    for(let i=1;i<=g.aliveSons;i++){
+      const gsLbl=nml(g.sonNames&&g.sonNames[i-1],`Her son (your great-grandson) #${i}`);
+      subHTML+=inlineSlice('👶',gsLbl,topN,topD*bD*gD,'Steps into their mother\'s sub-share.',gdLaw);
+    }
+    for(let i=1;i<=g.aliveDaughters;i++){
+      const gdLbl=nml(g.dauNames&&g.dauNames[i-1],`Her daughter (your great-granddaughter) #${i}`);
+      subHTML+=inlineSlice('👶',gdLbl,topN,topD*bD*gD,'Steps into their mother\'s sub-share.',gdLaw);
+    }
+    innerHTML+=`<div class="sub-branch-box">
+      <div class="sub-branch-header">🕊️ ${gHeader} also passed away — her children step in &nbsp;<span style="margin-left:auto;font-size:.75rem;color:var(--accent);font-weight:700;">${fr(topN,topD*bD)} → split ${gD} ways</span></div>
+      <div class="sub-branch-body">${subHTML}</div>
+    </div>`;
+  });
+
+  // Lapsed sub-branches
+  (b.pdGSons||[]).filter(g=>g.aliveSons+g.aliveDaughters===0).forEach(()=>{
+    innerHTML+=lapsedNote('A grandson also passed away and had no children — his sub-share is redistributed within this branch.');
+  });
+  (b.pdGDaus||[]).filter(g=>g.aliveSons+g.aliveDaughters===0).forEach(()=>{
+    innerHTML+=lapsedNote('A granddaughter also passed away and had no children — her sub-share is redistributed within this branch.');
+  });
+
+  return `<div class="branch-box">
+    <div class="branch-header">
+      <span class="bh-icon">🕊️</span>
+      <span class="bh-text">${label} — family inherits together</span>
+      <span class="bh-share">${fr(topN,topD)} (${pc(topN,topD)})</span>
+    </div>
+    <div class="branch-body">
+      <div class="branch-note">This person passed away before ${S.name}, so their share goes to their own family — split equally among them as shown below.</div>
+      ${innerHTML}
+    </div>
+  </div>`;}
+
+// Build a branch box for a child who was alive at death but died after
+function buildPostDeathBox(label,topN,topD,b,isSon){
+  const cW=b.widowCount||0, cS=b.aliveSons||0, cD_=b.aliveDaughters||0;
+  const cD=cW+cS+cD_;
+  const law='Section 8 + Section 10 Rules, Hindu Succession Act 1956 (succession within this person\'s own estate)';
+  const personName=nm(b.memberName,'this person');
+  let inner='';
+  if(cW===1){
+    const wLbl=nml(b.spouseNames&&b.spouseNames[0],isSon?'His wife (widow)':'Her husband');
+    inner+=inlineSlice('👩',wLbl,topN,topD*(cD||1),`Gets 1 equal part of ${isSon?'his':'her'} estate, which holds ${fr(topN,topD)} of ${S.name}'s property.`,law);
+  } else if(cW>1){
+    inner+=inlineSlice('👩‍👩',isSon?'All his wives together':'His/her spouses together',topN,topD*(cD||1),`They share equally — each gets ${fr(topN,topD*(cD||1)*cW)}.`,law);
+    for(let w=1;w<=cW;w++){
+      const wLbl=nml(b.spouseNames&&b.spouseNames[w-1],`${isSon?'His':'Her'} wife #${w}`);
+      inner+=inlineSlice('👩',wLbl,topN,topD*(cD||1)*cW,'Her individual share.',law);
+    }
+  }
+  for(let i=1;i<=cS;i++){
+    const sLbl=nml(b.sonNames&&b.sonNames[i-1],`${isSon?'His':'Her'} son #${i}`);
+    inner+=inlineSlice('👦',sLbl,topN,topD*(cD||1),`Gets 1 equal part of ${isSon?'his':'her'} estate.`,law);
+  }
+  for(let i=1;i<=cD_;i++){
+    const dLbl=nml(b.dauNames&&b.dauNames[i-1],`${isSon?'His':'Her'} daughter #${i}`);
+    inner+=inlineSlice('👧',dLbl,topN,topD*(cD||1),`Gets 1 equal part of ${isSon?'his':'her'} estate.`,law);
+  }
+  if(cD===0) inner=`<div class="branch-note" style="color:#666;">No family details entered — consult an advocate for further distribution of this share.</div>`;
+  return `<div class="branch-box" style="border-color:var(--green);">
+    <div class="branch-header post-branch-header">
+      <span class="bh-icon">↩️</span>
+      <span class="bh-text">${label}</span>
+      <span class="bh-share post-branch-share">${fr(topN,topD)} (${pc(topN,topD)})</span>
+    </div>
+    <div class="branch-body">
+      <div class="branch-note"><strong>Was alive when ${S.name} died — directly inherited ${fr(topN,topD)} of the estate.</strong> ${isSon?'He':'She'} has since passed away. This portion is now part of ${isSon?'his':'her'} own estate and passes to ${isSon?'his':'her'} heirs below.<br><span style="font-size:.75rem;color:#777;">⚖️ Distribution through a separate succession (${isSon?'his':'her'} own estate). See an advocate to confirm exact shares.</span></div>
+      ${inner}
+    </div>
+  </div>`;}
+
+// Legal references section
+function lawSection(mode){
+  const fem = mode==='female';
+  return `<div class="law-section">
+    <button class="law-toggle" onclick="toggleLaw(this)">
+      📖 Legal References &amp; Basis for This Calculation <span>▼ Show</span>
+    </button>
+    <div class="law-body">
+      ${!fem?`
+      <strong>Section 8, Hindu Succession Act 1956</strong> — General rules of succession for a Hindu male dying without a will. Property passes first to Class I heirs listed in the First Schedule.<br><br>
+      <strong>First Schedule — Class I Heirs (as listed in the Act):</strong><br>
+      Son; Daughter; Widow; Mother; Son of a predeceased son; Daughter of a predeceased son; Widow of a predeceased son; Son of a predeceased daughter; Daughter of a predeceased daughter; <em>Son of a predeceased son of a predeceased son</em>; <em>Daughter of a predeceased son of a predeceased son</em>; <em>Widow of a predeceased son of a predeceased son</em>; Son of a predeceased son of a predeceased daughter; Daughter of a predeceased son of a predeceased daughter.<br><br>
+      <strong>Section 9</strong> — Order of succession among Class I heirs: all Class I heirs inherit simultaneously and simultaneously exclude Class II heirs.<br><br>
+      <strong>Section 10 — Distribution rules:</strong><br>
+      • <strong>Rule 1:</strong> The widow, or all widows together, take one share.<br>
+      • <strong>Rule 2:</strong> Each surviving son, daughter, and the mother take one share each.<br>
+      • <strong>Rule 3:</strong> The heirs in the branch of each predeceased son or daughter take between them one share.<br>
+      • <strong>Rule 4(i):</strong> Within a predeceased son's branch — his widow (or widows together), surviving sons, and daughters each get equal portions; <em>"and the branch of his predeceased sons gets the same portion."</em> This is the statutory basis for grandchildren who have also passed away having their children step in.<br>
+      • <strong>Rule 4(ii):</strong> Within a predeceased daughter's branch — her surviving sons and daughters get equal portions.<br><br>
+      <strong>Section 11</strong> — If there are no Class I or Class II heirs, property passes to agnates; then to cognates.<br><br>`:''}
+      ${fem?`
+      <strong>Section 15, Hindu Succession Act 1956</strong> — Succession for a female Hindu dying without a will:<br>
+      • Section 15(1)(a): First to sons, daughters (incl. children of predeceased sons/daughters), and the husband.<br>
+      • Section 15(1)(b): Then to heirs of the husband.<br>
+      • Section 15(1)(c): Then to mother and father.<br>
+      • Section 15(1)(d): Then to heirs of the father.<br>
+      • Section 15(1)(e): Then to heirs of the mother.<br><br>
+      <strong>Section 15(2)</strong> — Special rule: If the property was inherited from her father/mother, and she dies without children, it goes back to the father's heirs (not husband's). If inherited from husband/father-in-law, it goes to the husband's heirs.<br><br>
+      <strong>Section 16</strong> — Order of succession and distribution among the above heirs follows the same branch/representation principles.<br><br>`:''}
+      <strong>Hindu Succession (Amendment) Act, 2005</strong> — Amended Section 6 to make daughters equal coparceners in HUF. Also confirmed daughters as Class I heirs equal to sons. Applies to all successions opening on or after 09 September 2005.<br><br>
+      <strong class="case">Vineeta Sharma v. Rakesh Sharma (2020) 9 SCC 1 — Supreme Court of India (3-judge bench)</strong><br>
+      Held: The 2005 Amendment applies to daughters regardless of whether the father was alive on 09.09.2005. A daughter is a coparcener by birth. Overruled the contrary view in Phulavati (2016).<br><br>
+      <strong class="case">Ashim Gujral v. Kuvam Gujral (2022) — Delhi High Court</strong><br>
+      Confirmed that the First Schedule to Section 8 explicitly names "son of a predeceased son of a predeceased son" as a Class I heir, establishing three-generation representation.<br><br>
+      <strong class="case">Maganbhai Garbadbhai Patel v. Sushilaben (2018) — Gujarat High Court (J.B. Pardiwala J.)</strong><br>
+      Held that "son of predeceased son of predeceased daughter is entitled to get share by virtue of branch of predeceased daughter" — confirming multi-level branch representation under Rule 4.<br><br>
+      <strong class="case">N. Krishnammal v. R. Ekambaram AIR 1979 SC 1298 — Supreme Court</strong><br>
+      Confirmed verbatim text of Rule 4(i) and 4(ii) and their application to two-generation branch distribution.
+    </div>
+  </div>`;}
+
+function toggleLaw(btn){
+  const body=btn.nextElementSibling;
+  const open=body.classList.toggle('open');
+  btn.querySelector('span').textContent=open?'▲ Hide':'▼ Show';
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// FAMILY TREE BUILDER
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── Member CRUD ──────────────────────────────────────────────────────────────
+function byId(id){return S.members.find(m=>m.id===id);}
+function childOf(pid){return S.members.filter(m=>m.parentId===pid);}
+function addM(parentId,role){S.members.push({id:S.nextId++,parentId,role,name:'',alive:true,deathYear:null});renderTree();}
+function removeM(id){const k=[id];for(let i=0;i<k.length;i++)S.members.filter(m=>m.parentId===k[i]).forEach(m=>k.push(m.id));S.members=S.members.filter(m=>!k.includes(m.id));renderTree();}
+function setAlive(id){const m=byId(id);if(!m)return;m.alive=true;m.deathYear=null;renderTree();}
+function setDead(id){const m=byId(id);if(!m)return;m.alive=false;renderTree();}
+function updName(id,v){const m=byId(id);if(m)m.name=v.trim();}
+function updDY(id,v){const m=byId(id);if(m){m.deathYear=v&&parseInt(v)>1800?parseInt(v):null;renderTree();}}
+
+// ── Inline edit ──────────────────────────────────────────────────────────────
+function startEdit(id){
+  const m=byId(id);if(!m)return;
+  const span=document.getElementById('tn-nm-'+id);if(!span)return;
+  const inp=document.createElement('input');
+  inp.className='vtn-name-edit';inp.type='text';inp.value=m.name||'';
+  inp.placeholder=roleLbl(m.role)+"'s name";inp.setAttribute('maxlength','40');
+  inp.onblur=()=>{m.name=inp.value.trim();renderTree();};
+  inp.onkeydown=(e)=>{if(e.key==='Enter'||e.key==='Escape'){e.preventDefault();inp.blur();}};
+  span.parentNode.replaceChild(inp,span);inp.focus();inp.select();
+}
+
+// ── Status helpers ───────────────────────────────────────────────────────────
+function wasAliveAtDeath(m){if(m.alive)return true;if(m.deathYear===null)return false;return m.deathYear>S.deathYear;}
+function predeceasedD(m){if(m.alive)return false;if(m.deathYear===null)return true;return m.deathYear<=S.deathYear;}
+
+// ── Tree rendering helpers ───────────────────────────────────────────────────
+function roleIcon(role){return{spouse:'💍',son:'👦',daughter:'👧',mother:'👩‍🦳',father:'👨‍🦳'}[role]||'👤';}
+function roleLbl(role){return{spouse:S.gender==='male'?'Wife':'Husband',son:'Son',daughter:'Daughter',mother:'Mother',father:'Father'}[role]||role;}
+
+// Build a vtnode card HTML
+function vtNodeCard(m, connClass, isLast, depth, subColor){
+  const isDead=!m.alive;
+  const isDeadChild=isDead&&(m.role==='son'||m.role==='daughter');
+  const showFam=isDeadChild&&depth<2;
+  const fam=childOf(m.id);
+  const fSp=fam.filter(f=>f.role==='spouse');
+  const fS=fam.filter(f=>f.role==='son');
+  const fD=fam.filter(f=>f.role==='daughter');
+  const yr=new Date().getFullYear();
+  const diedB=isDead&&m.deathYear&&m.deathYear<=S.deathYear;
+  const diedA=isDead&&m.deathYear&&m.deathYear>S.deathYear;
+  const diedU=isDead&&!m.deathYear;
+
+  let nodeClass='vtnode';
+  if(m.alive) nodeClass+=' vtnode-alive';
+  else if(diedB) nodeClass+=' vtnode-dead-b';
+  else if(diedA) nodeClass+=' vtnode-dead-a';
+  else nodeClass+=' vtnode-dead-u';
+
+  let tagHtml='';
+  if(diedB) tagHtml=`<span class="vtn-tag vtn-pd">died ${m.deathYear} — before ${S.name}</span>`;
+  else if(diedA) tagHtml=`<span class="vtn-tag vtn-post">died ${m.deathYear} — after ${S.name}</span>`;
+  else if(diedU) tagHtml=`<span class="vtn-tag vtn-unk">year unknown — assumed before ${S.name}</span>`;
+
+  const nameHtml=m.name
+    ?`<span id="tn-nm-${m.id}" class="vtn-name" onclick="startEdit(${m.id})">${m.name}</span>`
+    :`<span id="tn-nm-${m.id}" class="vtn-name empty" onclick="startEdit(${m.id})"><em>Click to name</em></span>`;
+
+  let statusHtml='';
+  if(m.alive){
+    statusHtml=`<span class="vtn-alive" onclick="setDead(${m.id})" title="Click if deceased">✅ Alive</span>`;
+  } else {
+    statusHtml=`<span class="vtn-dead">🕊️ Died&nbsp;<input type="number" class="vtn-yr"
+      placeholder="year" value="${m.deathYear||''}" min="1900" max="${yr}"
+      onclick="event.stopPropagation()"
+      onchange="updDY(${m.id},this.value)"></span>
+      <span class="vtn-alive-sm" onclick="setAlive(${m.id})" title="Mark as alive">↩ Alive</span>`;
+  }
+
+  // Sub-family for dead children
+  let subFamHtml='';
+  if(showFam){
+    const isPD=diedB||diedU;
+    const subCls=isPD?'vtree-sub-pd':'vtree-sub-post';
+    const bannerTxt=isPD
+      ?`🕊️ ${m.name||roleLbl(m.role)}'s family stepped in (died before ${S.name})`
+      :`↩️ ${m.name||roleLbl(m.role)}'s family holds the inherited share`;
+    const col=isPD?'pd':'post';
+
+    let subItems=[];
+    // At depth 0 show spouse; at depth 1 don't show spouse
+    if(depth<1){
+      fSp.forEach(f=>subItems.push({m:f,role:'spouse'}));
+    }
+    fS.forEach(f=>subItems.push({m:f,role:'son'}));
+    fD.forEach(f=>subItems.push({m:f,role:'daughter'}));
+
+    // Add buttons for sub-family
+    if(depth<1){
+      if(fSp.length===0) subItems.push({addBtn:true,parentId:m.id,role:'spouse',lbl:S.gender==='male'?'Widow':'Widower'});
+    }
+    subItems.push({addBtn:true,parentId:m.id,role:'son',lbl:'Son'});
+    subItems.push({addBtn:true,parentId:m.id,role:'daughter',lbl:'Daughter'});
+
+    let subListHtml='';
+    subItems.forEach((item,idx)=>{
+      const isLastSub=idx===subItems.length-1;
+      const connSub=isLastSub?`vtconn-last vtconn-${col}`:`vtconn-mid vtconn-${col}`;
+      if(item.addBtn){
+        const pStr=item.parentId===null?'null':item.parentId;
+        subListHtml+=`<div class="vtree-item${isLastSub?' vtree-last':''}">
+          <div class="${connSub}"></div>
+          <div class="vtree-body">
+            <button class="vtree-add-btn" onclick="addM(${pStr},'${item.role}')">+ Add ${item.lbl}</button>
+          </div>
+        </div>`;
+      } else {
+        subListHtml+=vtNodeCard(item.m,connSub,isLastSub,depth+1,col);
+      }
+    });
+
+    subFamHtml=`<div class="vtree-sub ${subCls}">
+      <div class="vtree-stem-sub"></div>
+      <span class="vtsub-banner">${bannerTxt}</span>
+      <div class="vtree-list vtree-sublist">${subListHtml}</div>
+    </div>`;
+  }
+
+  const connFinal=connClass||(isLast?'vtconn-last':'vtconn-mid');
+
+  return `<div class="vtree-item${isLast?' vtree-last':''}">
+    <div class="${connFinal}"></div>
+    <div class="vtree-body">
+      <div class="${nodeClass}">
+        <span class="vtn-ico">${roleIcon(m.role)}</span>
+        <div class="vtn-info">
+          ${nameHtml}
+          <span class="vtn-role">${roleLbl(m.role)}</span>
+          <div class="vtn-status">
+            ${statusHtml}
+            ${tagHtml}
+          </div>
+        </div>
+        <button class="vtn-rm" onclick="removeM(${m.id})" title="Remove">×</button>
+      </div>
+      ${subFamHtml}
+    </div>
+  </div>`;}
+
+function buildTreeListHtml(){
+  const d=S.members.filter(m=>m.parentId===null);
+  const sp=d.filter(m=>m.role==='spouse');
+  const sons=d.filter(m=>m.role==='son');
+  const daus=d.filter(m=>m.role==='daughter');
+  const moms=d.filter(m=>m.role==='mother');
+  const dads=d.filter(m=>m.role==='father');
+  const spl=S.gender==='male'?'Wife / Wives':'Husband';
+
+  let allItems=[];
+  allItems.push({divider:true,lbl:`💍 ${spl}`});
+  sp.forEach(m=>allItems.push({m}));
+  allItems.push({addBtn:true,parentId:null,role:'spouse',lbl:S.gender==='male'?'Wife':'Husband'});
+  allItems.push({divider:true,lbl:'👦 Sons'});
+  sons.forEach(m=>allItems.push({m}));
+  allItems.push({addBtn:true,parentId:null,role:'son',lbl:'Son'});
+  allItems.push({divider:true,lbl:'👧 Daughters'});
+  daus.forEach(m=>allItems.push({m}));
+  allItems.push({addBtn:true,parentId:null,role:'daughter',lbl:'Daughter'});
+  allItems.push({divider:true,lbl:`👩‍🦳👨‍🦳 Parents of ${S.name}`});
+  moms.forEach(m=>allItems.push({m}));
+  if(moms.length===0) allItems.push({addBtn:true,parentId:null,role:'mother',lbl:'Mother',max1:true,count:moms.length});
+  dads.forEach(m=>allItems.push({m}));
+  if(dads.length===0) allItems.push({addBtn:true,parentId:null,role:'father',lbl:'Father',max1:true,count:dads.length});
+
+  const realItems=allItems.filter(x=>!x.divider);
+  const lastRealIdx=realItems.length-1;
+  let listHtml='';
+  let realIdx=0;
+  allItems.forEach(item=>{
+    if(item.divider){listHtml+=`<div class="vtree-sec-div">${item.lbl}</div>`;return;}
+    const isLast=(realIdx===lastRealIdx);
+    const connClass=isLast?'vtconn-last':'vtconn-mid';
+    if(item.addBtn){
+      if(item.max1&&item.count>=1){realIdx++;return;}
+      const pStr=item.parentId===null?'null':item.parentId;
+      listHtml+=`<div class="vtree-item${isLast?' vtree-last':''}">
+        <div class="${connClass}"></div>
+        <div class="vtree-body">
+          <button class="vtree-add-btn" onclick="addM(${pStr},'${item.role}')">+ Add ${item.lbl}</button>
+        </div>
+      </div>`;
+    } else {
+      listHtml+=vtNodeCard(item.m,connClass,isLast,0,'');
+    }
+    realIdx++;
+  });
+  return listHtml;
+}
+
+function renderTree(){
+  const existing=document.getElementById('vtree-list');
+  if(existing){
+    existing.innerHTML=buildTreeListHtml();
+    return;
+  }
+  document.getElementById('app').innerHTML=`<div class="card fade-in">
+    ${prog(2,3,'Build the family tree')}
+    <div class="step-title">Build the family tree for <strong>${S.name}</strong></div>
+    <div class="step-sub">Add every family member — alive and deceased. Click a name to edit it. For deceased members, enter the year they died.</div>
+    <div class="vtree">
+      <div class="vtree-root-card">
+        <span class="vtrc-ico">🏠</span>
+        <span class="vtrc-name">${S.name}</span>
+        <span class="vtrc-sub">passed away ${S.deathYear}</span>
+      </div>
+      <div class="vtree-stem"></div>
+      <div class="vtree-list" id="vtree-list">${buildTreeListHtml()}</div>
+    </div>
+    <div class="ab" style="margin-top:14px;">💡 <strong>Year of death matters:</strong> Dying <em>before</em> ${S.name} → their family steps in as Class I heirs. Dying <em>after</em> ${S.name} → they first inherited, then their own estate distributes that share.</div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="go(1)">← Back</button>
+      <button class="btn btn-a" onclick="computeAndRender()" style="padding:14px 48px;font-size:1rem;">Calculate Who Inherits →</button>
+    </div>
+  </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function s2(){renderTree();}
+
+// ── Compute result from tree ─────────────────────────────────────────────────
+function branchData(m){
+  const fam=childOf(m.id);
+  const sp=fam.filter(f=>f.role==='spouse'&&f.alive);
+  const aS=fam.filter(f=>f.role==='son'&&f.alive);
+  const aD=fam.filter(f=>f.role==='daughter'&&f.alive);
+  const pdGS=fam.filter(f=>f.role==='son'&&!f.alive);
+  const pdGD=fam.filter(f=>f.role==='daughter'&&!f.alive);
+  const pdGSd=pdGS.map(g=>{const gf=childOf(g.id);return{
+    name:g.name,
+    aliveSons:gf.filter(f=>f.role==='son'&&f.alive).length,
+    aliveDaughters:gf.filter(f=>f.role==='daughter'&&f.alive).length,
+    sonNames:gf.filter(f=>f.role==='son'&&f.alive).map(f=>f.name),
+    dauNames:gf.filter(f=>f.role==='daughter'&&f.alive).map(f=>f.name),
+  };});
+  const pdGDd=pdGD.map(g=>{const gf=childOf(g.id);return{
+    name:g.name,
+    aliveSons:gf.filter(f=>f.role==='son'&&f.alive).length,
+    aliveDaughters:gf.filter(f=>f.role==='daughter'&&f.alive).length,
+    sonNames:gf.filter(f=>f.role==='son'&&f.alive).map(f=>f.name),
+    dauNames:gf.filter(f=>f.role==='daughter'&&f.alive).map(f=>f.name),
+  };});
+  return{memberName:m.name,widowCount:sp.length,spouseNames:sp.map(f=>f.name),
+    aliveSons:aS.length,sonNames:aS.map(f=>f.name),
+    aliveDaughters:aD.length,dauNames:aD.map(f=>f.name),
+    pdGSonCount:pdGS.length,pdGSons:pdGSd,pdGDauCount:pdGD.length,pdGDaus:pdGDd};}
+
+function postData(m){
+  const fam=childOf(m.id);
+  const sp=fam.filter(f=>f.role==='spouse'&&f.alive);
+  const aS=fam.filter(f=>f.role==='son'&&f.alive);
+  const aD=fam.filter(f=>f.role==='daughter'&&f.alive);
+  return{memberName:m.name,widowCount:sp.length,spouseNames:sp.map(f=>f.name),
+    aliveSons:aS.length,sonNames:aS.map(f=>f.name),
+    aliveDaughters:aD.length,dauNames:aD.map(f=>f.name)};}
+
+// ── Coparcenary step (auto-computed from family tree) ─────────────────────────
+function computeCoparcenersFromTree(){
+  const dir=S.members.filter(m=>m.parentId===null);
+  const items=[];
+  let total=0;
+
+  // The deceased himself
+  items.push({icon:'🏠',label:S.name||'The deceased',count:1,reason:'Always a coparcener in their own HUF.',included:true});
+  total+=1;
+
+  // Father — if alive at death, assumed undivided (user can remove via extra-cop counter)
+  const father=dir.find(m=>m.role==='father');
+  if(father){
+    const fn=nm(father.name,'Father');
+    if(wasAliveAtDeath(father)){
+      items.push({icon:'👨‍🦳',label:fn,count:1,reason:`Was alive at ${S.name}'s death — included as coparcener (assuming undivided HUF with father).`,included:true});
+      total+=1;
+    } else {
+      items.push({icon:'👨‍🦳',label:fn,count:0,reason:`Predeceased ${S.name} — no longer part of the HUF.`,included:false});
+    }
+  }
+
+  // Sons
+  const sons=dir.filter(m=>m.role==='son');
+  sons.forEach((son,i)=>{
+    const sn=nm(son.name,`Son #${i+1}`);
+    if(wasAliveAtDeath(son)){
+      items.push({icon:'👦',label:sn,count:1,reason:`Was alive at ${S.name}'s death — son is a coparcener by birth.`,included:true});
+      total+=1;
+    } else if(predeceasedD(son)){
+      // Predeceased son — his sons (grandsons) are coparceners in their own right
+      const grandsons=S.members.filter(c=>c.parentId===son.id&&c.role==='son'&&wasAliveAtDeath(c));
+      if(grandsons.length>0){
+        const gnames=grandsons.map((g,gi)=>nm(g.name,`Grandson #${gi+1}`)).join(', ');
+        items.push({icon:'🕊️',label:`${sn} (predeceased) → son${grandsons.length>1?'s':''}: ${gnames}`,count:grandsons.length,reason:`${sn} predeceased — his ${grandsons.length} son${grandsons.length>1?'s':''} alive at ${S.name}'s death are coparceners in their own right.`,included:true});
+        total+=grandsons.length;
+      } else {
+        items.push({icon:'🕊️',label:sn,count:0,reason:`Predeceased ${S.name} with no surviving sons — branch ends here.`,included:false});
+      }
+    } else {
+      // Post-death son — was alive at deceased's death, so is counted
+      items.push({icon:'👦',label:sn,count:1,reason:`Was alive at ${S.name}'s death (died later) — counted as coparcener.`,included:true});
+      total+=1;
+    }
+  });
+
+  // Daughters — coparceners only if deathYear >= 2005
+  const daus=dir.filter(m=>m.role==='daughter');
+  if(S.deathYear>=2005){
+    daus.forEach((dau,i)=>{
+      const dn=nm(dau.name,`Daughter #${i+1}`);
+      if(wasAliveAtDeath(dau)){
+        items.push({icon:'👧',label:dn,count:1,reason:`Was alive at ${S.name}'s death — daughter is a coparcener after the Hindu Succession (Amendment) Act 2005.`,included:true});
+        total+=1;
+      } else if(predeceasedD(dau)){
+        items.push({icon:'🕊️',label:dn,count:0,reason:`Predeceased ${S.name} — coparcenary interest devolved on her death. Daughters' children are not coparceners in the grandfather's HUF.`,included:false});
+      } else {
+        items.push({icon:'👧',label:dn,count:1,reason:`Was alive at ${S.name}'s death (died later) — counted as coparcener (2005 Amendment).`,included:true});
+        total+=1;
+      }
+    });
+  } else {
+    daus.forEach((dau,i)=>{
+      items.push({icon:'👧',label:nm(dau.name,`Daughter #${i+1}`),count:0,reason:`${S.name} died before 2005 — daughters were not coparceners before the Amendment Act.`,included:false});
+    });
+  }
+
+  return {items,total};
+}
+
+function showCoparcenaryStep(){
+  const {items,total}=computeCoparcenersFromTree();
+  S._baseCoparceners=total;
+
+  const listHtml=items.map(it=>`
+    <div style="display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-radius:6px;border:1px solid ${it.included?'#c2e0ce':'#eee'};background:${it.included?'#f5fbf7':'#f8f8f8'};margin-bottom:4px;">
+      <span style="font-size:1rem;flex-shrink:0;margin-top:1px;">${it.icon}</span>
+      <div style="flex:1;">
+        <div style="font-size:.83rem;font-weight:600;color:${it.included?'#111':'#aaa'};${it.included?'':'text-decoration:line-through;'}">${it.label}</div>
+        <div style="font-size:.72rem;color:#888;margin-top:1px;line-height:1.4;">${it.reason}</div>
+      </div>
+      <div style="font-weight:700;font-size:.88rem;color:${it.included?'#2a7a4b':'#ccc'};flex-shrink:0;margin-top:2px;">${it.count>0?`+${it.count}`:'—'}</div>
+    </div>`).join('');
+
+  app.innerHTML=`<div class="card fade-in">
+    <div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #ebebea;">
+      <div style="font-size:1.15rem;font-weight:700;color:#111;margin-bottom:3px;">🏛️ Coparcenary — who shares the HUF?</div>
+      <div style="font-size:.84rem;color:#666;line-height:1.5;">Under §6(3) HSA 1956, a notional partition is deemed on ${S.name}'s death. We've identified the coparceners from your family tree below.</div>
+    </div>
+    <div style="margin-bottom:12px;">${listHtml}</div>
+    <div style="background:#f8f8f6;border:1px solid #e0e0cc;border-radius:8px;padding:11px 14px;margin-bottom:14px;">
+      <div style="font-size:.84rem;font-weight:700;color:#333;">Identified from family tree: <span style="color:#1a3a5c;">${total} coparcener${total!==1?'s':''}</span></div>
+      <div style="font-size:.76rem;color:#777;margin-top:2px;">${S.name}'s notional share = 1/${total} (${pc(1,total)}) of total HUF property</div>
+    </div>
+    <div class="ab">⚠️ <strong>If the family was undivided with additional members not in the tree</strong> — such as ${S.name}'s brothers, uncles, or cousins from a prior joint family — add them below. If a prior partition deed exists, only ${S.name}'s share under that deed is relevant here.</div>
+    <div style="margin-top:16px;">
+      <label class="fl">Any additional coparceners not shown above?</label>
+      <div style="font-size:.78rem;color:#999;margin-bottom:8px;">(e.g. brothers of ${S.name}, or other HUF members from an undivided joint family)</div>
+      ${choiceG('hasExtraCop',[{v:'none',icon:'✅',lbl:'No — family tree is complete'},{v:'add',icon:'➕',lbl:'Yes — add more'}],S._extraCopChoice||'none','onExtraCopChange')}
+      <div id="extra-cop-area" style="display:${(S._extraCopChoice||'none')==='add'?'block':'none'};margin-top:10px;">
+        ${counter('extraCopCount',S._extraCopCount||1,'Additional coparceners')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="go(2)">← Edit family tree</button>
+      <button class="btn btn-a" onclick="proceedWithInheritance()" style="padding:14px 40px;font-size:1rem;">Calculate Who Inherits →</button>
+    </div>
+  </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function onExtraCopChange(v){
+  const a=document.getElementById('extra-cop-area');
+  if(a)a.style.display=v==='add'?'block':'none';
+  S._extraCopChoice=v;
+}
+
+function proceedWithInheritance(){
+  const extra=gcg('hasExtraCop')==='add'?Math.max(0,gc('extraCopCount')||0):0;
+  S.coparceners=(S._baseCoparceners||1)+extra;
+  S._extraCopChoice=gcg('hasExtraCop')||'none';
+  S._extraCopCount=extra;
+  doComputeAndRender();
+}
+
+function computeAndRender(){
+  if(S.gender==='male'&&(S.propType==='ancestral'||S.propType==='mixed')){
+    showCoparcenaryStep();
+    return;
+  }
+  doComputeAndRender();
+}
+
+function doComputeAndRender(){
+  const dir=S.members.filter(m=>m.parentId===null);
+  const sons=dir.filter(m=>m.role==='son');
+  const daus=dir.filter(m=>m.role==='daughter');
+  if(S.gender==='male'){
+    S.wifeCount=dir.filter(m=>m.role==='spouse'&&wasAliveAtDeath(m)).length;
+    S.wifeNames=dir.filter(m=>m.role==='spouse'&&wasAliveAtDeath(m)).map(m=>m.name);
+    S.aliveSons=sons.filter(m=>m.alive).length;
+    S.aliveSonNames=sons.filter(m=>m.alive).map(m=>m.name);
+    S.aliveDaughters=daus.filter(m=>m.alive).length;
+    S.aliveDauNames=daus.filter(m=>m.alive).map(m=>m.name);
+    const sPD=sons.filter(m=>predeceasedD(m));
+    const sPost=sons.filter(m=>!m.alive&&wasAliveAtDeath(m));
+    S.pdSonCount=sPD.length;S.pdSons=sPD.map(branchData);
+    S.postSonCount=sPost.length;S.postSons=sPost.map(postData);
+    const dPD=daus.filter(m=>predeceasedD(m));
+    const dPost=daus.filter(m=>!m.alive&&wasAliveAtDeath(m));
+    S.pdDauCount=dPD.length;S.pdDaus=dPD.map(branchData);
+    S.postDauCount=dPost.length;S.postDaus=dPost.map(postData);
+    const mo=dir.find(m=>m.role==='mother');S.motherAlive=mo?mo.alive:false;S.motherName=mo?mo.name:'';
+    const fa=dir.find(m=>m.role==='father');S.fatherAlive=fa?fa.alive:false;S.fatherName=fa?fa.name:'';
+    renderMaleResult();
+  } else {
+    const sp=dir.filter(m=>m.role==='spouse');
+    S.femHusband=sp.some(m=>wasAliveAtDeath(m));
+    S.femHusbandName=(sp.find(m=>wasAliveAtDeath(m))||{}).name||'';
+    S.femAliveSons=sons.filter(m=>m.alive).length;
+    S.femAliveSonNames=sons.filter(m=>m.alive).map(m=>m.name);
+    S.femAliveDaughters=daus.filter(m=>m.alive).length;
+    S.femAliveDauNames=daus.filter(m=>m.alive).map(m=>m.name);
+    const fsPD=sons.filter(m=>predeceasedD(m));
+    const fsPost=sons.filter(m=>!m.alive&&wasAliveAtDeath(m));
+    S.femPdSonCount=fsPD.length;S.femPdSons=fsPD.map(branchData);
+    S.femPostSonCount=fsPost.length;S.femPostSons=fsPost.map(postData);
+    const fdPD=daus.filter(m=>predeceasedD(m));
+    const fdPost=daus.filter(m=>!m.alive&&wasAliveAtDeath(m));
+    S.femPdDauCount=fdPD.length;S.femPdDaus=fdPD.map(branchData);
+    S.femPostDauCount=fdPost.length;S.femPostDaus=fdPost.map(postData);
+    const hasDir=S.femHusband||S.femAliveSons>0||S.femAliveDaughters>0||fsPD.length>0||fdPD.length>0||fsPost.length>0||fdPost.length>0;
+    S.femHusbFam=!hasDir&&sp.length>0;
+    const mo=dir.find(m=>m.role==='mother');const fa2=dir.find(m=>m.role==='father');
+    S.femParents=!!((mo&&mo.alive)||(fa2&&fa2.alive));
+    renderFemaleResult();}}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// STEPS
+// ══════════════════════════════════════════════════════════════════════════════
+
+function s0(){render(`
+  <div class="welcome-icon">🏠</div>
+  <div class="step-title" style="text-align:center;font-size:1.5rem;">Who gets the property?</div>
+  <div class="step-sub" style="text-align:center;">When a Hindu family member passes away <strong>without writing a will</strong>, this tool tells you exactly who has a legal right to their property — and how much each person gets.</div>
+  <ul class="fl-list">
+    <li><span class="fi">✅</span>Build the complete family tree — alive and deceased members</li>
+    <li><span class="fi">📊</span>Exact share for each heir with a plain-English reason</li>
+    <li><span class="fi">👨‍👩‍👧‍👦</span>Handles 3 generations of representation (grandchildren, great-grandchildren)</li>
+    <li><span class="fi">⚖️</span>All legal section references included for every calculation</li>
+    <li><span class="fi">📄</span>Print a report for the bank, Tahasil, or court</li>
+  </ul>
+  <div class="discl">⚠️ <strong>For information only.</strong> Handles intestate succession for Hindus — including self-acquired property, Mitakshara coparcenary (HUF/ancestral) under §6 notional partition, and the §15(2) source-of-property rule for women. For legal proceedings, consult an advocate.</div>
+  <div class="btn-row" style="justify-content:center;margin-top:24px;">
+    <button class="btn btn-a" onclick="go(1)" style="padding:14px 52px;font-size:1.05rem;">Let's begin →</button>
+  </div>
+`);}
+
+function s1(){render(`
+  ${prog(1,3,'About the person who passed away')}
+  <div class="step-title">Who passed away?</div>
+  <div class="step-sub">We need a few details about the person and their property before building the family tree.</div>
+  <label class="fl">Their full name</label>
+  <input type="text" id="dn" placeholder="e.g. Ramesh Kumar Sharma" value="${S.name}">
+  <label class="fl" style="margin-top:22px;">Were they a man or a woman?</label>
+  ${choiceG('gender',[{v:'male',icon:'👨',lbl:'Man'},{v:'female',icon:'👩',lbl:'Woman'}],S.gender,'onGenderChange')}
+  <label class="fl" style="margin-top:22px;">What year did they pass away?</label>
+  <input type="number" id="dyr" placeholder="e.g. 2023" value="${S.deathYear||''}" min="1900" max="${new Date().getFullYear()}" style="width:180px;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;color:#222;background:#fafaf8;">
+  <div class="hint">Year of death determines whether family members died before or after this person — which changes the inheritance rules.</div>
+
+  <div style="margin-top:22px;border-top:1px solid #ebebea;padding-top:18px;">
+    <label class="fl">Did they leave a will or any testamentary document?</label>
+    ${choiceG('hasWill',[{v:'no',icon:'📋',lbl:'No will'},{v:'yes',icon:'📜',lbl:'Yes, there is a will'}],S.hasWill,'onWillChange')}
+  </div>
+
+  <div id="will-yes-area" style="display:${S.hasWill==='yes'?'block':'none'}">
+    <div class="ab" style="margin-top:10px;">⚠️ <strong>A will overrides intestate rules.</strong> This tool applies only when there is <strong>no will</strong>. If a will exists, the will governs — consult an advocate for testamentary succession. You may continue below to understand the intestate position (e.g. if the will is invalid or covers only part of the estate).</div>
+  </div>
+
+  <div id="will-no-area" style="display:${S.hasWill!=='yes'?'block':'none'}">
+
+    <div id="male-prop-area" style="display:${S.gender==='male'?'block':'none'};margin-top:18px;">
+      <label class="fl">What type of property is this?</label>
+      ${choiceG('propType',[{v:'self',icon:'🏠',lbl:'Self-acquired'},{v:'ancestral',icon:'🏛️',lbl:'Ancestral / HUF'},{v:'mixed',icon:'⚖️',lbl:'Both (mixed)'}],S.propType)}
+      <div class="hint">Self-acquired = bought, earned, or gifted from maternal/non-paternal side. Ancestral/HUF = inherited from father or grandfather; undivided joint family property.</div>
+      ${(S.propType==='ancestral'||S.propType==='mixed')?`<div class="ib" style="margin-top:8px;">🏛️ After you build the family tree, we'll automatically identify the coparceners and show you the notional partition — no manual counting needed.</div>`:''}
+    </div>
+
+    <div id="fem-prop-area" style="display:${S.gender==='female'?'block':'none'};margin-top:18px;">
+      <label class="fl">How was this property originally acquired by ${S.name||'her'}?</label>
+      ${choiceG('femPropSource',[{v:'self',icon:'🏠',lbl:'Self-acquired / gifted by others'},{v:'from-father',icon:'👨‍🦳',lbl:'Inherited from her father or mother'},{v:'from-husband',icon:'💍',lbl:'Received from husband or in-laws'}],S.femPropSource||'self')}
+      <div class="hint">This determines Section 15(2) — property inherited from father or husband returns to that family's heirs if she had no children.</div>
+    </div>
+
+  </div>
+
+  <div class="ib" style="margin-top:16px;">💡 The law has different rules for men and women — that is why we ask.</div>
+  <div class="btn-row">
+    <button class="btn btn-s" onclick="go(0)">← Back</button>
+    <button class="btn btn-p" onclick="save1()">Next: Build Family Tree →</button>
+  </div>
+`);}
+function save1(){
+  const n=document.getElementById('dn').value.trim(),g=gcg('gender'),yr=parseInt(document.getElementById('dyr').value)||new Date().getFullYear()-1;
+  const hw=gcg('hasWill')||'no',pt=gcg('propType')||'self',fps=gcg('femPropSource')||'self';
+  if(!n){alert('Please enter the name.');return;}if(!g){alert('Please select man or woman.');return;}
+  S.name=n;S.gender=g;S.deathYear=yr;S.hasWill=hw;S.propType=pt;S.femPropSource=fps;
+  if(hw==='yes'){renderWillScreen();return;}
+  go(2);}
+
+// ── Will screen ───────────────────────────────────────────────────────────────
+function renderWillScreen(){
+  app.innerHTML=`<div class="card fade-in">
+    <div class="rh"><div class="bi">📜</div><h2>${S.name} left a will</h2><p>Testamentary succession · Hindu Succession Act does not apply automatically</p></div>
+    <div class="ab" style="margin-bottom:14px;">⚠️ <strong>When a will exists, the Hindu Succession Act's intestate rules do not apply.</strong> The will governs the distribution of the estate.</div>
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;">
+      <div style="padding:10px 14px;background:#f8f8f6;font-weight:700;font-size:.84rem;color:#333;">📋 Key rules when a Hindu dies with a will</div>
+      <div style="padding:14px 16px;font-size:.82rem;color:#444;line-height:1.9;">
+        <strong>1. Self-acquired property</strong> — A Hindu can dispose of self-acquired property by will in any manner. §30, HSA 1956.<br>
+        <strong>2. Coparcenary interest can also be willed</strong> — After the 2005 Amendment, a coparcener may dispose of their undivided share in HUF property by will. §30, HSA 1956; <em>Vineeta Sharma v. Rakesh Sharma</em> (2020) 9 SCC 1.<br>
+        <strong>3. No forced share</strong> — Unlike some civil law countries, Hindu law does not reserve a mandatory share for any heir. A will can disinherit any family member.<br>
+        <strong>4. Probate is mandatory</strong> in Bengaluru, Chennai, and Mumbai. In other jurisdictions it is optional but strongly advisable to prevent disputes.<br>
+        <strong>5. Unregistered wills are valid</strong> — Registration is not mandatory (Indian Registration Act §17) but prevents disputes about authenticity.<br>
+        <strong>6. Partial intestacy</strong> — If the will does not cover all property, or is partially invalid, the uncovered portion distributes intestate under this tool's rules.
+      </div>
+    </div>
+    <div class="ib">💡 If the will is invalid, unstamped/unprobated where required, or covers only part of the estate, the intestate rules below apply to that portion.</div>
+    <div class="print-row">
+      <button class="btn btn-s" onclick="go(1)">← Edit details</button>
+      <button class="btn btn-p" onclick="go(2)">Continue as intestate (for uncovered portion) →</button>
+    </div>
+  </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});}
+
+// ── Coparcenary banner ────────────────────────────────────────────────────────
+function coparcenaryBanner(N,propType){
+  if(propType==='self') return '';
+  const isMixed=propType==='mixed';
+  return `<div class="cop-banner">
+    <div class="cop-banner-title">🏛️ Mitakshara Coparcenary — §6, Hindu Succession Act 1956 (as amended 2005)</div>
+    <div class="cop-banner-body">
+      Under <strong>§6(3), HSA 1956</strong>, when a male Hindu coparcener dies, a notional partition is deemed to occur immediately before his death.
+      With <strong>${N} coparcener${N>1?'s':''}</strong> (including ${S.name}), his notional share = <strong>${fr(1,N)} (${pc(1,N)})</strong> of total HUF property.
+      ${isMixed?`<br><em>Self-acquired portion:</em> distributes as 100% of that asset. <em>Ancestral/HUF portion:</em> only the ${fr(1,N)} notional share distributes as below.`:''}
+      <br>The heirs below divide this <strong>${fr(1,N)}</strong> share. To find any heir's fraction of the <em>entire</em> HUF pool, multiply their fraction by&nbsp;${fr(1,N)}.
+      <span class="cop-law">§6(1), §6(3) Hindu Succession Act 1956; Hindu Succession (Amendment) Act 39 of 2005; <em>Vineeta Sharma v. Rakesh Sharma</em> (2020) 9 SCC 1</span>
+    </div>
+  </div>`;}
+
+// ── MALE RESULT ───────────────────────────────────────────────────────────────
+function renderMaleResult(){
+  function branchActive(b){return b.widowCount+(b.aliveSons||0)+(b.aliveDaughters||0)+(b.pdGSonCount||0)+(b.pdGDauCount||0)>0||(b.pdGSons||[]).some(g=>g.aliveSons+g.aliveDaughters>0)||(b.pdGDaus||[]).some(g=>g.aliveSons+g.aliveDaughters>0);}
+  const actPdSons=S.pdSons.filter(branchActive);
+  const actPdDaus=S.pdDaus.filter(branchActive);
+
+  const hasAny=S.wifeCount>0||S.aliveSons>0||S.aliveDaughters>0||S.motherAlive||actPdSons.length>0||actPdDaus.length>0||S.postSonCount>0||S.postDauCount>0;
+
+  if(!hasAny){
+    if(S.fatherAlive){renderSimple([{icon:'👨‍🦳',who:nml(S.fatherName,'Father'),share:'All of it',why:'No wife, children, grandchildren, or mother survived. So the father inherits everything.',law:'Section 8(b) + First Schedule, Class II, Group 1 — Hindu Succession Act 1956'}],'Father inherits everything','👴');return;}
+    renderSimple([{icon:'⚖️',who:'Consult an advocate',share:'—',why:'The next heirs are brothers, sisters, grandparents, and more distant relatives. Please see a lawyer.',law:'Section 8(c) & (d) — Agnates then Cognates, Hindu Succession Act 1956'}],'Distant relatives may be the heirs','❓');return;
+  }
+
+  const D=(S.wifeCount>0?1:0)+S.aliveSons+S.aliveDaughters+(S.motherAlive?1:0)+actPdSons.length+actPdDaus.length+S.postSonCount+S.postDauCount;
+  let html='';
+
+  if(S.wifeCount===1){
+    const wLbl=nml(S.wifeNames&&S.wifeNames[0],'Wife (Widow)');
+    html+=sliceRow('👩',wLbl,1,D,`Out of ${D} equal parts, the wife gets 1 part — the same as each child.`,'Section 10, Rule 1 — Hindu Succession Act 1956');
+  } else if(S.wifeCount>1){
+    html+=`<div class="branch-box"><div class="branch-header"><span class="bh-icon">👩</span><span class="bh-text">All ${S.wifeCount} wives together</span><span class="bh-share">${fr(1,D)} (${pc(1,D)})</span></div><div class="branch-body"><div class="branch-note">All wives share 1 equal part between them — each wife gets ${fr(1,D*S.wifeCount)} (${pc(1,D*S.wifeCount)}). <em>Section 10, Rule 1 — Hindu Succession Act 1956</em></div>`;
+    for(let w=1;w<=S.wifeCount;w++){
+      const wLbl=nml(S.wifeNames&&S.wifeNames[w-1],`Wife #${w}`);
+      html+=inlineSlice('👩',wLbl,1,D*S.wifeCount,'Her individual share.',`Section 10, Rule 1`);
+    }
+    html+='</div></div>';
+  }
+
+  for(let i=0;i<S.aliveSons;i++){
+    const lbl=nml(S.aliveSonNames&&S.aliveSonNames[i],`Son #${i+1}`);
+    html+=sliceRow('👦',lbl,1,D,`Out of ${D} equal parts, this son gets 1 part.`,'Section 10, Rule 2 — Hindu Succession Act 1956');
+  }
+  for(let i=0;i<S.aliveDaughters;i++){
+    const lbl=nml(S.aliveDauNames&&S.aliveDauNames[i],`Daughter #${i+1}`);
+    html+=sliceRow('👧',lbl,1,D,`Same as each son — daughters have equal rights since the 2005 Amendment.`,'Section 10, Rule 2 + Hindu Succession Amendment Act 2005 + Vineeta Sharma v. Rakesh Sharma (2020) 9 SCC 1');
+  }
+  if(S.motherAlive) html+=sliceRow('👩‍🦳',nml(S.motherName,'Mother'),1,D,'A mother gets a share equal to each child\'s share.','Section 10, Rule 2 — Hindu Succession Act 1956');
+
+  S.pdSons.forEach((b,i)=>{
+    if(branchActive(b)){
+      const pnm=nm(b.memberName,`Son #${i+1}`);
+      html+=buildBranchBox(`${pnm} — passed away before ${S.name}`,1,D,b,true);
+    } else {
+      const pnm=nm(b.memberName,`Son #${i+1}`);
+      html+=lapsedNote(`${pnm} passed away before ${S.name} and had no surviving family members. His share lapses back and is redistributed equally among all other heirs shown above.`);
+    }
+  });
+  S.pdDaus.forEach((b,i)=>{
+    const bActive=(b.aliveSons||0)+(b.aliveDaughters||0)+(b.pdGSonCount||0)+(b.pdGDauCount||0)>0||(b.pdGSons||[]).some(g=>g.aliveSons+g.aliveDaughters>0)||(b.pdGDaus||[]).some(g=>g.aliveSons+g.aliveDaughters>0);
+    if(bActive){
+      const pnm=nm(b.memberName,`Daughter #${i+1}`);
+      html+=buildBranchBox(`${pnm} — passed away before ${S.name}`,1,D,b,false);
+    } else {
+      const pnm=nm(b.memberName,`Daughter #${i+1}`);
+      html+=lapsedNote(`${pnm} passed away before ${S.name} and had no surviving children. Her share lapses back and is redistributed equally among all other heirs shown above.`);
+    }
+  });
+
+  S.postSons.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Son who inherited from ${S.name}`);
+    html+=buildPostDeathBox(`${pnm} — inherited from ${S.name}, has since passed away`,1,D,b,true);
+  });
+  S.postDaus.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Daughter who inherited from ${S.name}`);
+    html+=buildPostDeathBox(`${pnm} — inherited from ${S.name}, has since passed away`,1,D,b,false);
+  });
+
+  app.innerHTML=`<div class="card fade-in">
+    <div class="rh">
+      <div class="bi">🏠</div>
+      <h2>${S.name}'s Complete Family Tree &amp; Inheritance</h2>
+      <p>Intestate succession · Hindu Succession Act 1956 · ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+      <button class="btn btn-s" onclick="go(2)" style="font-size:.78rem;padding:6px 14px;">🌳 View / Edit Family Tree</button>
+    </div>
+    ${coparcenaryBanner(S.coparceners,S.propType)}
+    <div class="ib">💡 <strong>How to read this:</strong> The estate is divided into <strong>${D} equal parts</strong>. Every family member entered is shown below with their share and legal basis — including those who get nothing directly.${S.postSonCount+S.postDauCount>0?'<br>↩️ <strong>Green boxes</strong>: children who inherited from '+S.name+' but have since passed away — their families hold that portion through their own estate.':''}${S.pdSonCount+S.pdDauCount>0?'<br>🕊️ <strong>Dark boxes</strong>: children who died before '+S.name+' — their families step in as Class I heirs.':''}</div>
+    <div style="margin-top:18px;">${html}</div>
+    ${buildFamilyRoster(D)}
+    <div class="ab" style="margin-top:16px;">⚠️ <strong>This is a starting point, not a final legal document.</strong> To actually transfer property you will need a <strong>Legal Heir Certificate</strong> from the Tahasil or a <strong>Succession Certificate</strong> from court. Please consult an advocate before taking any action.</div>
+    ${lawSection('male')}
+    <div class="print-row">
+      <button class="btn btn-p" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button class="btn btn-s" onclick="go(2)">🌳 View Family Tree</button>
+      <button class="btn btn-s" onclick="go(0)">🔄 Start over</button>
+    </div>
+  </div>`;}
+
+function renderSimple(items,title,icon){
+  app.innerHTML=`<div class="card fade-in">
+    <div class="rh"><div class="bi">${icon}</div><h2>${title}</h2><p>${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p></div>
+    ${items.map(it=>`<div style="background:#f5f0e8;border-radius:10px;padding:16px 20px;margin-bottom:12px;">
+      <div style="font-size:1rem;font-weight:700;margin-bottom:4px;">${it.icon} ${it.who}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:var(--primary);margin-bottom:6px;">${it.share}</div>
+      <div style="font-size:.85rem;color:#555;margin-bottom:4px;">📌 ${it.why}</div>
+      <div style="font-size:.72rem;color:#999;font-style:italic;">⚖️ ${it.law}</div>
+    </div>`).join('')}
+    ${lawSection(S.gender)}
+    <div class="print-row"><button class="btn btn-p" onclick="window.print()">🖨️ Print</button><button class="btn btn-s" onclick="go(0)">🔄 Start over</button></div>
+  </div>`;}
+
+function renderFemaleResult(){
+  function bAct(b){return(b.aliveSons||0)+(b.aliveDaughters||0)+(b.pdGSonCount||0)+(b.pdGDauCount||0)>0||(b.pdGSons||[]).some(g=>g.aliveSons+g.aliveDaughters>0)||(b.pdGDaus||[]).some(g=>g.aliveSons+g.aliveDaughters>0);}
+  const actPS=S.femPdSons.filter(bAct), actPD=S.femPdDaus.filter(bAct);
+  const first=S.femHusband||S.femAliveSons>0||S.femAliveDaughters>0||actPS.length>0||actPD.length>0||S.femPostSonCount>0||S.femPostDauCount>0;
+
+  // Section 15(2) override — property source determines devolution when no children
+  const hasChildrenOrGC=S.femAliveSons>0||S.femAliveDaughters>0||actPS.length>0||actPD.length>0||S.femPostSonCount>0||S.femPostDauCount>0;
+  if(!hasChildrenOrGC&&S.femPropSource==='from-father'){
+    app.innerHTML=`<div class="card fade-in">
+      <div class="rh"><div class="bi">👨‍🦳</div><h2>${S.name}'s estate — §15(2)(a) applies</h2><p>Property inherited from father · Hindu Succession Act 1956</p></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px;"><button class="btn btn-s" onclick="go(2)" style="font-size:.78rem;padding:6px 14px;">🌳 View / Edit Family Tree</button></div>
+      <div class="sec15-2-banner">
+        <div class="sec15-2-title">⚖️ Section 15(2)(a) — Special Rule: Property inherited from father/mother</div>
+        <div class="sec15-2-body">
+          ${S.name} had <strong>no sons, daughters, or their children</strong>, and this property was <strong>inherited from her father or mother</strong>.
+          Under §15(2)(a), this property does <em>not</em> follow the normal §15(1) order (husband → children → husband's family → parents).
+          Instead it <strong>devolves upon the heirs of her father</strong> — as if her father had died intestate owning this property.
+          <span class="cop-law">§15(2)(a), Hindu Succession Act 1956 — overrides §15(1) when no children/grandchildren and property source is father/mother</span>
+        </div>
+      </div>
+      <div class="slice-row"><div class="slice-icon-col">👨‍🦳</div><div class="slice-body"><div class="slice-who">Heirs of ${S.name}'s father</div><div class="slice-share">All of it</div><div class="slice-why">📌 Property returns to the paternal line. Determine the father's heirs separately (his sons, daughters, widow, mother — in the same Class I order under §8, HSA 1956).</div><div class="slice-law">⚖️ §15(2)(a), Hindu Succession Act 1956</div></div></div>
+      <div class="ab" style="margin-top:12px;">⚠️ To identify the exact heirs of the father, consult an advocate or use this tool again with the father as the deceased person.</div>
+      ${lawSection('female')}
+      <div class="print-row"><button class="btn btn-p" onclick="window.print()">🖨️ Print / Save PDF</button><button class="btn btn-s" onclick="go(2)">🌳 View Family Tree</button><button class="btn btn-s" onclick="go(0)">🔄 Start over</button></div>
+    </div>`;
+    window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!hasChildrenOrGC&&S.femPropSource==='from-husband'){
+    app.innerHTML=`<div class="card fade-in">
+      <div class="rh"><div class="bi">💍</div><h2>${S.name}'s estate — §15(2)(b) applies</h2><p>Property received from husband · Hindu Succession Act 1956</p></div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px;"><button class="btn btn-s" onclick="go(2)" style="font-size:.78rem;padding:6px 14px;">🌳 View / Edit Family Tree</button></div>
+      <div class="sec15-2-banner">
+        <div class="sec15-2-title">⚖️ Section 15(2)(b) — Special Rule: Property from husband or in-laws</div>
+        <div class="sec15-2-body">
+          ${S.name} had <strong>no sons, daughters, or their children</strong>, and this property was <strong>received from her husband or father-in-law</strong>.
+          Under §15(2)(b), this property does <em>not</em> follow the normal §15(1) order.
+          Instead it <strong>devolves upon the heirs of her husband</strong> — as if the husband had died intestate owning this property.
+          <span class="cop-law">§15(2)(b), Hindu Succession Act 1956 — overrides §15(1) when no children/grandchildren and property source is husband/in-laws</span>
+        </div>
+      </div>
+      <div class="slice-row"><div class="slice-icon-col">💍</div><div class="slice-body"><div class="slice-who">Heirs of ${S.name}'s husband</div><div class="slice-share">All of it</div><div class="slice-why">📌 Property returns to the husband's family line. Determine the husband's heirs separately (his children, mother, father — under §8 Class I / Class II, HSA 1956).</div><div class="slice-law">⚖️ §15(2)(b), Hindu Succession Act 1956</div></div></div>
+      <div class="ab" style="margin-top:12px;">⚠️ To identify the exact heirs of the husband, consult an advocate or use this tool again with the husband as the deceased person.</div>
+      ${lawSection('female')}
+      <div class="print-row"><button class="btn btn-p" onclick="window.print()">🖨️ Print / Save PDF</button><button class="btn btn-s" onclick="go(2)">🌳 View Family Tree</button><button class="btn btn-s" onclick="go(0)">🔄 Start over</button></div>
+    </div>`;
+    window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!first){
+    if(S.femHusbFam){renderSimple([{icon:'👨‍👩‍👦',who:"Husband's family",share:'All of it',why:`No children or husband survived. Her property goes to her husband's family.`,law:'Section 15(1)(b), Hindu Succession Act 1956'}],"Husband's family inherits",'👨‍👩‍👦');return;}
+    if(S.femParents){renderSimple([{icon:'👴👵',who:'Father and/or Mother',share:'All of it (equally between them if both alive)',why:'No children, husband, or husband\'s family. Her parents inherit.',law:'Section 15(1)(c), Hindu Succession Act 1956'}],'Her parents inherit','👴');return;}
+    renderSimple([{icon:'⚖️',who:'Consult an advocate',share:'—',why:'Her father\'s relatives and then her mother\'s relatives are the next heirs. Please see a lawyer.',law:'Section 15(1)(d) & (e), Hindu Succession Act 1956'}],'Distant relatives may be the heirs','❓');return;
+  }
+  const D=(S.femHusband?1:0)+S.femAliveSons+S.femAliveDaughters+actPS.length+actPD.length+S.femPostSonCount+S.femPostDauCount;
+  let html='';
+  if(S.femHusband){
+    const hLbl=nml(S.femHusbandName,'Husband');
+    html+=sliceRow('👨',hLbl,1,D,`Out of ${D} equal parts, the husband gets 1 part — the same as each child.`,'Section 15(1)(a), Hindu Succession Act 1956');
+  }
+  for(let i=0;i<S.femAliveSons;i++){
+    const lbl=nml(S.femAliveSonNames&&S.femAliveSonNames[i],`Son #${i+1}`);
+    html+=sliceRow('👦',lbl,1,D,`Each son gets 1 equal part out of ${D}.`,'Section 15(1)(a), Hindu Succession Act 1956');
+  }
+  for(let i=0;i<S.femAliveDaughters;i++){
+    const lbl=nml(S.femAliveDauNames&&S.femAliveDauNames[i],`Daughter #${i+1}`);
+    html+=sliceRow('👧',lbl,1,D,`Each daughter gets 1 equal part out of ${D}.`,'Section 15(1)(a) + Hindu Succession Amendment Act 2005');
+  }
+  S.femPdSons.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Son #${i+1}`);
+    if(bAct(b)){html+=buildBranchBox(`${pnm} — passed away before ${S.name}`,1,D,b,false);}
+    else{html+=lapsedNote(`${pnm} passed away and had no surviving family. His share is redistributed among other heirs.`);}
+  });
+  S.femPdDaus.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Daughter #${i+1}`);
+    if(bAct(b)){html+=buildBranchBox(`${pnm} — passed away before ${S.name}`,1,D,b,false);}
+    else{html+=lapsedNote(`${pnm} passed away and had no surviving family. Her share is redistributed.`);}
+  });
+  S.femPostSons.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Son who inherited from ${S.name}`);
+    html+=buildPostDeathBox(`${pnm} — inherited from ${S.name}, has since passed away`,1,D,b,true);
+  });
+  S.femPostDaus.forEach((b,i)=>{
+    const pnm=nm(b.memberName,`Daughter who inherited from ${S.name}`);
+    html+=buildPostDeathBox(`${pnm} — inherited from ${S.name}, has since passed away`,1,D,b,false);
+  });
+
+  app.innerHTML=`<div class="card fade-in">
+    <div class="rh"><div class="bi">🏠</div><h2>${S.name}'s Complete Family Tree &amp; Inheritance</h2><p>Intestate succession · Section 15, Hindu Succession Act 1956 · ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p></div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
+      <button class="btn btn-s" onclick="go(2)" style="font-size:.78rem;padding:6px 14px;">🌳 View / Edit Family Tree</button>
+    </div>
+    ${S.femPropSource==='from-father'||S.femPropSource==='from-husband'?`<div class="sec15-2-banner" style="margin-bottom:12px;"><div class="sec15-2-title">ℹ️ §15(2) does not apply — children are present</div><div class="sec15-2-body">${S.name} has surviving children or grandchildren, so §15(2) is overridden. The normal §15(1) order applies regardless of the property source.</div></div>`:''}
+    <div class="ib">💡 The estate is divided into <strong>${D} equal parts</strong>. Every family member entered is shown with their share and legal basis.${S.femPostSonCount+S.femPostDauCount>0?'<br>↩️ <strong>Green boxes</strong>: children who inherited from '+S.name+' but have since passed away.':''}</div>
+    <div style="margin-top:18px;">${html}</div>
+    ${buildFamilyRoster(D)}
+    <div class="ab" style="margin-top:16px;">⚠️ To actually transfer property you will need a <strong>Legal Heir Certificate</strong> from the Tahasil or a <strong>Succession Certificate</strong> from court. Please consult an advocate.</div>
+    ${lawSection('female')}
+    <div class="print-row">
+      <button class="btn btn-p" onclick="window.print()">🖨️ Print / Save PDF</button>
+      <button class="btn btn-s" onclick="go(2)">🌳 View Family Tree</button>
+      <button class="btn btn-s" onclick="go(0)">🔄 Start over</button>
+    </div>
+  </div>`;}
+
+
+// ── Router ────────────────────────────────────────────────────────────────────
+function go(n){S.step=n;window.scrollTo({top:0,behavior:'smooth'});({0:s0,1:s1,2:s2}[n]||s0)();}
+go(0);
+</script>
+</body>
+</html>
