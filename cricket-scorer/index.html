@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sam Scorer">
+  <meta name="theme-color" content="#0f1117">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Sam Scorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen" class="splash">
+    <div class="splash-content">
+      <img src="logo.png" alt="Sam Scorer" class="splash-logo" id="splashLogo">
+      <div class="splash-bar"><div class="splash-bar-fill" id="splashBarFill"></div></div>
+    </div>
+  </div>
+
+  <!-- Lock Screen -->
+  <div id="lock-screen" class="screen">
+    <div class="lock-container">
+      <img src="logo.png" alt="Sam Scorer" class="lock-logo">
+      <p class="lock-subtitle">Enter passcode to continue</p>
+      <input type="password" id="lockInput" class="lock-input" placeholder="Passcode" autocomplete="off" maxlength="10">
+      <div id="lockError" class="lock-error"></div>
+      <button id="lockBtn" class="primary-btn">Unlock</button>
+    </div>
+  </div>
+
+  <!-- Setup Screen -->
+  <div id="setup-screen" class="screen">
+    <div class="setup-container">
+      <img src="logo.png" alt="Sam Scorer" class="setup-logo">
+      <div class="setup-form">
+        <label for="team1">Team 1</label>
+        <input type="text" id="team1" placeholder="Team A" autocomplete="off">
+
+        <label for="team2">Team 2</label>
+        <input type="text" id="team2" placeholder="Team B" autocomplete="off">
+
+        <label for="playersPerTeam">Players per Team</label>
+        <div class="players-picker">
+          <button class="player-btn" data-players="11">11</button>
+          <button class="player-btn selected" data-players="12">12</button>
+        </div>
+
+        <label for="totalOvers">Overs</label>
+        <div class="overs-picker">
+          <button class="over-btn" data-overs="5">5</button>
+          <button class="over-btn" data-overs="10">10</button>
+          <button class="over-btn selected" data-overs="20">20</button>
+          <button class="over-btn" data-overs="50">50</button>
+        </div>
+        <input type="number" id="totalOvers" min="1" max="99" value="20" class="overs-input">
+
+        <button id="startBtn" class="primary-btn">Start Match</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scoring Screen -->
+  <div id="scoring-screen" class="screen">
+    <!-- Header -->
+    <div class="score-header">
+      <img src="logo.png" alt="Sam Scorer" class="header-logo">
+      <div class="innings-label" id="inningsLabel">1st Innings</div>
+      <div class="batting-team" id="battingTeam">Team A</div>
+      <div class="score-display">
+        <span class="runs" id="totalRuns">0</span>
+        <span class="separator">/</span>
+        <span class="wickets" id="totalWickets">0</span>
+      </div>
+      <div class="overs-display">
+        Overs: <span id="currentOvers">0.0</span> / <span id="maxOvers">20</span>
+      </div>
+      <div class="extras-display">
+        Extras: <span id="extras">0</span> &nbsp; RR: <span id="runRate">0.00</span>
+      </div>
+      <div id="targetInfo" class="target-info"></div>
+    </div>
+
+    <!-- This Over -->
+    <div class="this-over">
+      <span class="over-title">This Over</span>
+      <div class="ball-track" id="ballTrack"></div>
+    </div>
+
+    <!-- Run Buttons -->
+    <div class="scoring-grid">
+      <button class="score-btn run-btn" data-run="0">0</button>
+      <button class="score-btn run-btn" data-run="1">1</button>
+      <button class="score-btn run-btn" data-run="2">2</button>
+      <button class="score-btn run-btn" data-run="3">3</button>
+      <button class="score-btn four-btn">4</button>
+      <button class="score-btn six-btn">6</button>
+    </div>
+
+    <!-- Extra & Wicket Buttons -->
+    <div class="extras-grid">
+      <button class="score-btn extra-btn" id="wideBtn">Wide</button>
+      <button class="score-btn extra-btn" id="noBallBtn">No Ball</button>
+      <button class="score-btn extra-btn" id="byeBtn">Bye</button>
+      <button class="score-btn extra-btn" id="legByeBtn">Leg Bye</button>
+      <button class="score-btn wicket-btn" id="wicketBtn">Wicket</button>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-bar">
+      <button class="action-btn" id="undoBtn">Undo</button>
+      <button class="action-btn" id="historyBtn">History</button>
+      <button class="action-btn" id="endInningsBtn">End Innings</button>
+    </div>
+  </div>
+
+  <!-- Summary Screen -->
+  <div id="summary-screen" class="screen">
+    <div class="summary-container">
+      <img src="logo.png" alt="Sam Scorer" class="summary-logo">
+      <h2 id="resultText">Match Result</h2>
+      <div class="summary-card">
+        <div class="summary-team">
+          <span class="summary-name" id="sumTeam1"></span>
+          <span class="summary-score" id="sumScore1"></span>
+          <span class="summary-overs" id="sumOvers1"></span>
+        </div>
+        <div class="vs">vs</div>
+        <div class="summary-team">
+          <span class="summary-name" id="sumTeam2"></span>
+          <span class="summary-score" id="sumScore2"></span>
+          <span class="summary-overs" id="sumOvers2"></span>
+        </div>
+      </div>
+      <button class="primary-btn" id="newMatchBtn">New Match</button>
+    </div>
+  </div>
+
+  <!-- History Screen -->
+  <div id="history-screen" class="screen">
+    <div class="history-header">
+      <button class="history-back" id="historyBackBtn">&larr; Back</button>
+      <span class="history-title">Over History</span>
+    </div>
+    <div class="history-tabs">
+      <button class="history-tab active" data-innings="0" id="histTab1">1st Innings</button>
+      <button class="history-tab" data-innings="1" id="histTab2">2nd Innings</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <!-- Extra Runs Popup -->
+  <div id="extraPopup" class="popup-overlay">
+    <div class="popup-card">
+      <div class="popup-title" id="popupTitle">Wide - Runs off this ball?</div>
+      <div class="popup-grid">
+        <button class="popup-run-btn" data-extra-run="0">0</button>
+        <button class="popup-run-btn" data-extra-run="1">1</button>
+        <button class="popup-run-btn" data-extra-run="2">2</button>
+        <button class="popup-run-btn" data-extra-run="3">3</button>
+        <button class="popup-run-btn popup-four" data-extra-run="4">4</button>
+        <button class="popup-run-btn" data-extra-run="5">5</button>
+        <button class="popup-run-btn popup-six" data-extra-run="6">6</button>
+      </div>
+      <button class="popup-cancel" id="popupCancel">Cancel</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
