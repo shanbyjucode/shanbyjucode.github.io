@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f0f1a">
+  <title>Sam Selector</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Splash Screen -->
+  <div id="splash-screen" class="splash-screen">
+    <img src="logo.png" alt="Sam Selector" class="splash-logo">
+    <h1 class="splash-title">Sam Selector</h1>
+    <p class="splash-tagline">Pick your dream team</p>
+  </div>
+
+  <div id="app">
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="teams">
+        <span class="material-icons-round">groups</span>
+        <span>Teams</span>
+      </button>
+      <button class="nav-item" data-tab="players">
+        <span class="material-icons-round">person_add</span>
+        <span>Players</span>
+      </button>
+    </nav>
+
+    <!-- Teams Tab -->
+    <div id="teams-tab" class="tab-content active">
+      <header class="app-header">
+        <div class="header-top">
+          <h1>Sam Selector</h1>
+        </div>
+        <p class="subtitle" id="team-subtitle">Tap shuffle to create teams</p>
+      </header>
+
+      <div class="drag-hint" id="drag-hint">
+        <span class="material-icons-round">swipe</span>
+        Long press and drag players to swap between teams
+      </div>
+
+      <div class="teams-container" id="teams-container">
+        <div class="team-card team-a" id="team-a-card">
+          <div class="team-header">
+            <div class="team-badge">A</div>
+            <h2>Team A</h2>
+            <span class="player-count" id="team-a-count">0</span>
+          </div>
+          <ul class="player-list" id="team-a-list" data-team="a"></ul>
+        </div>
+
+        <div class="team-card team-b" id="team-b-card">
+          <div class="team-header">
+            <div class="team-badge">B</div>
+            <h2>Team B</h2>
+            <span class="player-count" id="team-b-count">0</span>
+          </div>
+          <ul class="player-list" id="team-b-list" data-team="b"></ul>
+        </div>
+      </div>
+
+      <div id="empty-teams" class="empty-state">
+        <span class="material-icons-round">sports_cricket</span>
+        <p>Add players first, then shuffle to make teams!</p>
+      </div>
+
+      <!-- Sticky Bottom Action Bar -->
+      <div class="sticky-actions">
+        <button class="btn btn-primary" id="shuffle-btn">
+          <span class="material-icons-round">shuffle</span>
+          Shuffle
+        </button>
+        <button class="btn btn-image" id="image-btn">
+          <span class="material-icons-round">image</span>
+          Image
+        </button>
+        <button class="btn btn-share" id="share-btn">
+          <span class="material-icons-round">share</span>
+          Share
+        </button>
+      </div>
+
+      <!-- Confetti Canvas -->
+      <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <!-- Players Tab -->
+    <div id="players-tab" class="tab-content">
+      <header class="app-header">
+        <h1>Players</h1>
+        <p class="subtitle" id="player-count">0 players added</p>
+      </header>
+
+      <div class="add-player-form">
+        <div class="input-group">
+          <input type="text" id="player-name" placeholder="Enter player name" autocomplete="off">
+          <button class="btn btn-icon btn-primary" id="add-player-btn">
+            <span class="material-icons-round">add</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="quick-actions" id="quick-actions">
+        <button class="btn btn-secondary btn-sm" id="load-sample-btn">
+          <span class="material-icons-round">download</span>
+          Load Sample (24)
+        </button>
+        <button class="btn btn-danger btn-sm" id="clear-all-btn" style="display:none">
+          <span class="material-icons-round">delete_sweep</span>
+          Clear All
+        </button>
+      </div>
+
+      <ul class="all-players-list" id="all-players-list"></ul>
+
+      <div id="empty-players" class="empty-state">
+        <span class="material-icons-round">person_add</span>
+        <p>No players yet. Add names above or load sample data.</p>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
