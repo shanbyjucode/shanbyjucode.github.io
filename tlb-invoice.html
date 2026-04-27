@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tax Invoice — NFNG Tech Private Limited</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:#e8ecea;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px 20px;
+    color:#101828;
+  }
+
+  .page{
+    width:794px;
+    background:#ffffff;
+    box-shadow:0 20px 60px rgba(0,0,0,0.12);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* ── TOP HEADER BAND ── */
+  .header{
+    background:#0C1421;
+    padding:36px 48px 32px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    position:relative;
+  }
+  .header::after{
+    content:'';
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:4px;
+    background:linear-gradient(90deg,#207B74,#30B0A4,#207B74);
+  }
+
+  .logo-block{}
+  .company-name{
+    font-size:22px;
+    font-weight:700;
+    color:#ffffff;
+    letter-spacing:0.02em;
+    line-height:1.2;
+  }
+  .company-tag{
+    font-size:9px;
+    font-weight:500;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:#30B0A4;
+    margin-top:5px;
+    display:block;
+  }
+  .company-meta{
+    margin-top:14px;
+    font-size:10.5px;
+    color:#98A2B3;
+    line-height:1.75;
+  }
+  .company-meta span{
+    color:#6DCEC5;
+    font-weight:600;
+  }
+
+  .invoice-badge{
+    text-align:right;
+  }
+  .invoice-word{
+    font-size:36px;
+    font-weight:800;
+    color:#30B0A4;
+    letter-spacing:0.04em;
+    line-height:1;
+  }
+  .invoice-sub{
+    font-size:10px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:#667085;
+    margin-top:6px;
+  }
+  .paid-stamp{
+    display:inline-block;
+    margin-top:16px;
+    border:2px solid #289990;
+    color:#289990;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    padding:5px 14px;
+    border-radius:2px;
+  }
+
+  /* ── META ROW ── */
+  .meta-row{
+    display:flex;
+    justify-content:space-between;
+    padding:28px 48px;
+    background:#F0FAF9;
+    border-bottom:1px solid #D4F0ED;
+    gap:20px;
+  }
+  .meta-group{}
+  .meta-label{
+    font-size:9.5px;
+    font-weight:600;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:#667085;
+    margin-bottom:5px;
+  }
+  .meta-value{
+    font-size:13px;
+    font-weight:600;
+    color:#101828;
+  }
+  .meta-value.gold{color:#30B0A4;}
+
+  /* ── BILL TO / FROM ── */
+  .parties{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border-bottom:1px solid #F0F1F3;
+  }
+  .party{
+    padding:28px 48px;
+  }
+  .party:first-child{
+    border-right:1px solid #F0F1F3;
+  }
+  .party-label{
+    font-size:9px;
+    font-weight:600;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:#667085;
+    margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .party-label::after{
+    content:'';flex:1;height:1px;background:#F0F1F3;
+  }
+  .party-name{
+    font-size:15px;
+    font-weight:600;
+    color:#101828;
+    margin-bottom:6px;
+  }
+  .party-address{
+    font-size:11.5px;
+    color:#334155;
+    line-height:1.75;
+  }
+  .party-gstin{
+    margin-top:10px;
+    font-size:10px;
+    color:#667085;
+    font-weight:500;
+  }
+  .party-gstin strong{color:#101828;font-weight:600;}
+
+  /* ── SERVICES TABLE ── */
+  .table-section{
+    padding:32px 48px;
+  }
+  .table-title{
+    font-size:9.5px;
+    font-weight:600;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:#667085;
+    margin-bottom:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .table-title::after{content:'';flex:1;height:1px;background:#F0F1F3;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  thead tr{
+    background:#0C1421;
+  }
+  thead th{
+    padding:12px 16px;
+    font-size:9.5px;
+    font-weight:600;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:#30B0A4;
+    text-align:left;
+  }
+  thead th:last-child{text-align:right;}
+
+  tbody tr{
+    border-bottom:1px solid #F0F1F3;
+    transition:background .15s;
+  }
+  tbody tr:hover{background:#F0FAF9;}
+  tbody tr:last-child{border-bottom:none;}
+
+  td{
+    padding:16px 16px;
+    font-size:12.5px;
+    color:#1A2332;
+    vertical-align:top;
+  }
+  td:last-child{text-align:right;font-weight:600;}
+
+  .item-num{
+    font-size:11px;
+    font-weight:600;
+    color:#667085;
+    width:32px;
+  }
+  .item-name{
+    font-size:13px;
+    font-weight:600;
+    color:#101828;
+    margin-bottom:3px;
+  }
+  .item-desc{
+    font-size:11px;
+    color:#667085;
+    line-height:1.5;
+    font-weight:400;
+  }
+  .item-qty{
+    font-size:12px;
+    color:#334155;
+    text-align:center;
+    width:60px;
+  }
+  .item-rate{
+    font-size:12px;
+    color:#334155;
+    text-align:right;
+    width:90px;
+  }
+  .item-amount{
+    font-size:13px;
+    font-weight:600;
+    color:#101828;
+    text-align:right;
+    width:110px;
+  }
+
+  /* ── TOTALS ── */
+  .totals-row{
+    display:flex;
+    justify-content:flex-end;
+    padding:0 48px 32px;
+  }
+  .totals-box{
+    width:300px;
+    border:1px solid #F0F1F3;
+    overflow:hidden;
+    border-radius:4px;
+  }
+  .total-line{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:11px 18px;
+    border-bottom:1px solid #F0F1F3;
+    font-size:12px;
+  }
+  .total-line:last-child{border-bottom:none;}
+  .total-line .lbl{color:#334155;font-weight:400;}
+  .total-line .val{font-weight:600;color:#101828;}
+  .total-line.subtotal .lbl,.total-line.subtotal .val{font-size:12px;}
+  .total-line.tax .lbl{color:#667085;}
+  .total-line.tax .val{color:#667085;font-weight:500;}
+  .total-line.round .lbl{color:#98A2B3;font-size:11px;}
+  .total-line.round .val{color:#98A2B3;font-size:11px;font-weight:400;}
+  .total-line.grand{
+    background:#0C1421;
+  }
+  .total-line.grand .lbl{
+    color:#30B0A4;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+  }
+  .total-line.grand .val{
+    color:#ffffff;
+    font-size:16px;
+    font-weight:700;
+  }
+  .total-line.paid{background:#F0FAF9;}
+  .total-line.paid .lbl{color:#289990;font-weight:500;}
+  .total-line.paid .val{color:#289990;font-weight:600;}
+  .total-line.balance{background:#D4F0ED;}
+  .total-line.balance .lbl{color:#207B74;font-weight:600;font-size:12.5px;}
+  .total-line.balance .val{color:#207B74;font-weight:700;font-size:13.5px;}
+
+  .amount-words{
+    margin:0 48px 28px;
+    padding:14px 18px;
+    background:#F0FAF9;
+    border-left:3px solid #30B0A4;
+    font-size:11.5px;
+    color:#334155;
+  }
+  .amount-words strong{color:#101828;}
+
+  /* ── PAYMENT INFO ── */
+  .payment-section{
+    margin:0 48px 32px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .pay-box{
+    border:1px solid #F0F1F3;
+    padding:18px;
+    border-radius:4px;
+  }
+  .pay-box-title{
+    font-size:9px;
+    font-weight:600;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:#667085;
+    margin-bottom:12px;
+  }
+  .pay-detail{
+    font-size:11px;
+    color:#334155;
+    line-height:1.8;
+  }
+  .pay-detail strong{color:#101828;font-weight:600;}
+
+  /* ── SERVICES STRIP ── */
+  .services-strip{
+    margin:0 48px 32px;
+    padding:18px 20px;
+    background:#F0FAF9;
+    border:1px solid #D4F0ED;
+    border-radius:4px;
+  }
+  .services-strip-title{
+    font-size:9px;
+    font-weight:600;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:#207B74;
+    margin-bottom:10px;
+  }
+  .services-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .service-pill{
+    background:#ffffff;
+    border:1px solid #A8E2DB;
+    color:#207B74;
+    font-size:10px;
+    font-weight:500;
+    padding:4px 12px;
+    border-radius:20px;
+    letter-spacing:0.04em;
+  }
+
+  /* ── FOOTER ── */
+  .footer{
+    background:#0C1421;
+    padding:24px 48px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .footer-note{
+    font-size:10px;
+    color:#667085;
+    line-height:1.6;
+    max-width:360px;
+  }
+  .footer-note strong{color:#98A2B3;}
+  .footer-contact{
+    text-align:right;
+    font-size:10px;
+    color:#667085;
+    line-height:1.8;
+  }
+  .footer-contact a{color:#30B0A4;text-decoration:none;}
+  .footer-brand{
+    font-size:12px;
+    font-weight:700;
+    color:#30B0A4;
+    margin-bottom:4px;
+  }
+
+  .divider-line{
+    height:1px;background:#1A2332;margin:0 48px;
+  }
+
+  @media print{
+    body{background:white;padding:0;}
+    .page{box-shadow:none;width:100%;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-block">
+      <div class="company-name">NFNG Tech Private Limited</div>
+      <span class="company-tag">Property Consulting &amp; Document Verification</span>
+      <div class="company-meta">
+        CIN: U62011OD2024PTC046697<br/>
+        c/o Ananda Chandra Sahu, Village - Naranpur,<br/>
+        Kankadpal, Dhenkanal, Odisha - 759013<br/>
+        GSTIN: <span>21AAJCN8388E1Z9</span>
+      </div>
+    </div>
+    <div class="invoice-badge">
+      <div class="invoice-word">INVOICE</div>
+      <div class="invoice-sub">Tax Invoice</div>
+      <div class="paid-stamp">Paid</div>
+    </div>
+  </div>
+
+  <!-- META -->
+  <div class="meta-row">
+    <div class="meta-group">
+      <div class="meta-label">Invoice No.</div>
+      <div class="meta-value">#25260001</div>
+    </div>
+    <div class="meta-group">
+      <div class="meta-label">Invoice Date</div>
+      <div class="meta-value">13 March 2026</div>
+    </div>
+    <div class="meta-group">
+      <div class="meta-label">Due Date</div>
+      <div class="meta-value">13 March 2026</div>
+    </div>
+    <div class="meta-group">
+      <div class="meta-label">Payment Terms</div>
+      <div class="meta-value">Due on Receipt</div>
+    </div>
+    <div class="meta-group">
+      <div class="meta-label">Balance Due</div>
+      <div class="meta-value gold">INR 0.00</div>
+    </div>
+  </div>
+
+  <!-- PARTIES -->
+  <div class="parties">
+    <div class="party">
+      <div class="party-label">Billed To</div>
+      <div class="party-name">Mr. Nilakantha Panda</div>
+      <div class="party-address">
+        Flat No. B7/123, La PRISMA Society<br/>
+        Nangla Road, Zirakpur - 140603<br/>
+        Punjab, India
+      </div>
+    </div>
+    <div class="party">
+      <div class="party-label">Service Provider</div>
+      <div class="party-name">NFNG Tech Private Limited</div>
+      <div class="party-address">
+        Village - Naranpur, Kankadpal<br/>
+        Dhenkanal, Odisha - 759013<br/>
+        India
+      </div>
+      <div class="party-gstin">GSTIN: <strong>21AAJCN8388E1Z9</strong></div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-section">
+    <div class="table-title">Service Details</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Item &amp; Description</th>
+          <th style="width:70px;text-align:center">Qty</th>
+          <th style="width:100px;text-align:right">Rate (INR)</th>
+          <th style="width:120px;text-align:right">Amount (INR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="item-num">01</td>
+          <td>
+            <div class="item-name">ROR Correction</div>
+            <div class="item-desc">Record of Rights correction service - complete processing,<br/>documentation &amp; follow-up with concerned authorities</div>
+          </td>
+          <td class="item-qty">1</td>
+          <td class="item-rate">3,390.00</td>
+          <td class="item-amount">3,390.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TOTALS -->
+  <div class="totals-row">
+    <div class="totals-box">
+      <div class="total-line subtotal">
+        <span class="lbl">Sub Total</span>
+        <span class="val">INR 3,390.00</span>
+      </div>
+      <div class="total-line tax">
+        <span class="lbl">IGST @ 18%</span>
+        <span class="val">INR 610.20</span>
+      </div>
+      <div class="total-line round">
+        <span class="lbl">Rounding Off</span>
+        <span class="val">- INR 0.20</span>
+      </div>
+      <div class="total-line grand">
+        <span class="lbl">Total Amount</span>
+        <span class="val">INR 4,000.00</span>
+      </div>
+      <div class="total-line paid">
+        <span class="lbl">Amount Received</span>
+        <span class="val">INR 4,000.00</span>
+      </div>
+      <div class="total-line balance">
+        <span class="lbl">Balance Due</span>
+        <span class="val">INR 0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMOUNT IN WORDS -->
+  <div class="amount-words">
+    <strong>Amount in Words:</strong> &nbsp;Four Thousand Indian Rupees Only (INR 4,000.00)
+  </div>
+
+  <!-- PAYMENT INFO -->
+  <div class="payment-section">
+    <div class="pay-box">
+      <div class="pay-box-title">Payment Details</div>
+      <div class="pay-detail">
+        <strong>Mode:</strong> Bank / UPI Transfer<br/>
+        <strong>Date:</strong> 13th March 2026<br/>
+        <strong>Status:</strong> Received &amp; Confirmed
+      </div>
+    </div>
+    <div class="pay-box">
+      <div class="pay-box-title">Notes</div>
+      <div class="pay-detail">
+        This is a computer-generated invoice.<br/>
+        No physical signature is required.<br/>
+        Thank you for trusting us with your property needs.
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES STRIP -->
+  <div class="services-strip">
+    <div class="services-strip-title">Our Services - NFNG Tech / The Land Bankers</div>
+    <div class="services-list">
+      <span class="service-pill">EC Application &amp; Follow-Up</span>
+      <span class="service-pill">EC Analysis Report</span>
+      <span class="service-pill">Land Purchase - Document Verification</span>
+      <span class="service-pill">Expert Property Consulting</span>
+      <span class="service-pill">ROR Correction</span>
+    </div>
+  </div>
+
+  <div class="divider-line"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-note">
+      <strong>NFNG Tech Private Limited</strong><br/>
+      Subject to Dhenkanal jurisdiction. All disputes are subject to<br/>
+      Odisha courts. GST registered under IGST Act 2017.
+    </div>
+    <div class="footer-contact">
+      <div class="footer-brand">The Land Bankers</div>
+      <a href="https://www.thelandbankers.com">www.thelandbankers.com</a><br/>
+      Odisha, India - 759013
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
