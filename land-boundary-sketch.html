@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Land Boundary Sketch - Plot 77, Machhra, Koraput, Odisha</title>
+<style>
+  @page { size: 210mm 297mm; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11px;
+    color: #1a1a1a;
+    background: #f0f0f0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: white;
+    margin: 0 auto 20px;
+    padding: 24px 28px 50px;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  @media print {
+    body { background: white; margin: 0; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1a3a5c;
+    margin-bottom: 18px;
+  }
+  .header-left img {
+    height: 32px;
+  }
+  .header-right {
+    text-align: right;
+    font-size: 9px;
+    color: #666;
+    line-height: 1.6;
+  }
+  .header-right strong {
+    color: #1a3a5c;
+  }
+
+  /* Title block */
+  .title-block {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .title-block h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1a3a5c;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .title-block .subtitle {
+    font-size: 9.5px;
+    color: #777;
+    font-style: italic;
+  }
+  .title-block .plot-info {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    background: #f5f8fb;
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 4px;
+    border: 1px solid #dce6f0;
+  }
+
+  /* Map section */
+  .map-section {
+    margin-bottom: 0;
+  }
+  .map-section .map-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #1a3a5c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .map-frame {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .map-frame img {
+    width: 100%;
+    max-height: 200mm;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Section titles */
+  .section-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    background: #0C1421;
+    padding: 6px 14px;
+    border-radius: 4px 4px 0 0;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .section-title.green { background: #289990; }
+  .section-title.brown { background: #1A635E; }
+  .section-title.gray { background: #334155; }
+
+  /* Plot details table */
+  .details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border: 1px solid #d0d8e0;
+    border-top: none;
+  }
+  .details-table td {
+    padding: 7px 14px;
+    font-size: 10.5px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .details-table td:first-child {
+    font-weight: 600;
+    color: #555;
+    width: 140px;
+    background: #fafbfc;
+  }
+  .details-table td:last-child {
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  /* Purpose & docs section */
+  .purpose-box {
+    border: 1px solid #d0d8e0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  .purpose-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 10.5px;
+    line-height: 1.4;
+    color: #333;
+  }
+  .checkbox {
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid #aaa;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 9px;
+  }
+  .checkbox.checked {
+    background: #1a3a5c;
+    border-color: #1a3a5c;
+    color: white;
+  }
+
+  /* Area reconciliation */
+  .recon-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 14px;
+    border-bottom: 1px solid #eef0f3;
+    font-size: 10.5px;
+  }
+  .recon-row:last-child { border-bottom: none; }
+  .recon-row span:first-child { color: #555; }
+  .recon-row strong { color: #1a1a1a; }
+  .recon-box {
+    border: 1px solid #d0d8e0;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    margin-bottom: 20px;
+  }
+  .badge {
+    padding: 2px 8px;
+    border-radius: 3px;
+    color: white;
+    font-size: 8.5px;
+    font-weight: 700;
+  }
+
+  /* Common footer */
+  .page-footer {
+    position: absolute;
+    bottom: 16px;
+    left: 28px;
+    right: 28px;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
+    font-size: 8px;
+    color: #667085;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .page-footer .footer-disclaimer {
+    max-width: 55%;
+    line-height: 1.4;
+    color: #999;
+    font-size: 7.5px;
+  }
+  .page-footer .footer-center {
+    text-align: center;
+    font-size: 8px;
+    color: #667085;
+  }
+  .page-footer .footer-page {
+    font-weight: 600;
+    color: #1a3a5c;
+    font-size: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: Header, Map -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <img src="https://app.thelandbankers.com/assets/tlb_logo-Y_HGOQ-j.png" alt="TLB Logo">
+    </div>
+    <div class="header-right">
+      Ref: <strong>TLB/KRP/2026/5440</strong><br>
+      Date: 24 April 2026<br>
+      Sheet: 1 of 2
+    </div>
+  </div>
+
+  <div class="title-block">
+    <h1>Land Boundary Sketch</h1>
+    <div class="subtitle">Prepared for owner reference and physical land identification. Not a government survey or legal demarcation.</div>
+    <div class="plot-info">
+      Plot No. 77 &middot; Khata No. 07 &middot; Village: Machhra &middot; Tehsil: Koraput &middot; District: Koraput &middot; State: Odisha
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-label">Plot Boundary</div>
+    <div class="map-frame" style="position:relative;">
+      <img src="https://shanbyjucode.github.io/map-sample.jpg" alt="Plot boundary map">
+
+      <!-- Compass -->
+      <div style="position:absolute; top:14px; right:14px;">
+        <svg width="44" height="56" viewBox="0 0 44 56" xmlns="http://www.w3.org/2000/svg">
+          <text x="22" y="10" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3a5c" font-family="Arial">N</text>
+          <circle cx="22" cy="34" r="18" fill="white" stroke="#1a3a5c" stroke-width="1.5" opacity="0.9"/>
+          <polygon points="22,18 27,36 22,33 17,36" fill="#1a3a5c"/>
+          <polygon points="22,50 27,32 22,35 17,32" fill="white" stroke="#1a3a5c" stroke-width="0.8"/>
+        </svg>
+      </div>
+
+      <!-- Scale bar -->
+      <div style="position:absolute; bottom:14px; left:14px; background:rgba(255,255,255,0.9); padding:4px 8px; border-radius:4px;">
+        <svg width="110" height="22" viewBox="0 0 110 22" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="6" width="45" height="6" fill="#1a3a5c"/>
+          <rect x="45" y="6" width="45" height="6" fill="white" stroke="#1a3a5c" stroke-width="1"/>
+          <text x="0" y="5" font-size="7" fill="#333" font-family="Arial">0</text>
+          <text x="45" y="5" text-anchor="middle" font-size="7" fill="#333" font-family="Arial">20m</text>
+          <text x="90" y="5" text-anchor="end" font-size="7" fill="#333" font-family="Arial">40m</text>
+          <text x="45" y="20" text-anchor="middle" font-size="6.5" fill="#999" font-family="Arial">Scale: approx 1:500</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-disclaimer">This sketch is for private reference only and is not a government-certified survey or legal demarcation.</div>
+    <div class="footer-center">www.thelandbankers.com &nbsp;&middot;&nbsp; +91 63725 15684 &nbsp;&middot;&nbsp; hello@thelandbankers.com</div>
+    <div class="footer-page">Page 1 of 2</div>
+  </div>
+</div>
+
+<!-- PAGE 2: Plot Details, Purpose, Area Reconciliation, Documents -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <img src="https://app.thelandbankers.com/assets/tlb_logo-Y_HGOQ-j.png" alt="TLB Logo">
+    </div>
+    <div class="header-right">
+      Ref: <strong>TLB/KRP/2026/5440</strong><br>
+      Date: 24 April 2026<br>
+      Sheet: 2 of 2
+    </div>
+  </div>
+
+  <div class="section-title">Plot Details</div>
+  <table class="details-table">
+    <tr><td>Plot No.</td><td>77</td></tr>
+    <tr><td>Khata No.</td><td>07</td></tr>
+    <tr><td>Village</td><td>Machhra</td></tr>
+    <tr><td>Tehsil</td><td>Koraput</td></tr>
+    <tr><td>District</td><td>Koraput</td></tr>
+    <tr><td>State</td><td>Odisha</td></tr>
+    <tr><td>Total Vertices</td><td>35 points</td></tr>
+    <tr><td>Computed Area</td><td>3,540.1 sqm</td></tr>
+    <tr><td>Perimeter</td><td>1,152.1 ft (351.1 m)</td></tr>
+  </table>
+
+  <div class="section-title brown">Purpose of This Sketch</div>
+  <div class="purpose-box">
+    <div class="purpose-item">
+      <span class="checkbox checked">&#10003;</span>
+      <span>To identify approximate location and boundary of my land for personal reference</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>To plan construction of boundary wall or compound</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>To share with family members for awareness of land holding</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>To resolve informal boundary understanding with neighbours</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>To verify physical possession of purchased land</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>To prepare for approaching licensed surveyor / revenue authority</span>
+    </div>
+  </div>
+
+  <div class="section-title green">Area Reconciliation</div>
+  <div class="recon-box">
+    <div class="recon-row"><span>ROR (Patta) Area</span><strong>4,123 sqm</strong></div>
+    <div class="recon-row"><span>Computed Area</span><strong>3,540.1 sqm</strong></div>
+    <div class="recon-row"><span>Variance</span><strong>-14.1%</strong></div>
+    <div class="recon-row"><span>Status</span><span class="badge" style="background:#b8860b;">VERIFY WITH FIELD MEASUREMENT</span></div>
+    <div style="padding:6px 14px; font-size:8px; color:#888; border-top:1px solid #eef0f3; line-height:1.5;">
+      GPS-derived area. Variance within 15% is typical for field GPS polygons. Cross-verify with tape measurements on site.
+    </div>
+  </div>
+
+  <div class="section-title gray">Documents Provided by Owner</div>
+  <div class="purpose-box">
+    <div class="purpose-item">
+      <span class="checkbox checked">&#10003;</span>
+      <span>Record of Rights (ROR / Patta)</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox checked">&#10003;</span>
+      <span>Google Maps location pin</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>Registered Sale Deed with sketch</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>Encumbrance Certificate (EC)</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>Developer / Layout Plan</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>Previous boundary sketch</span>
+    </div>
+    <div class="purpose-item">
+      <span class="checkbox"></span>
+      <span>Other: ___________________</span>
+    </div>
+  </div>
+
+  <div style="background:#fff8ed; border:1px solid #f0dfc0; border-radius:4px; padding:10px 14px;">
+    <p style="font-size:9px; color:#6d4c1f; font-weight:600; margin-bottom:3px;">Important Notice</p>
+    <p style="font-size:8.5px; color:#555; line-height:1.5;">
+      This Land Boundary Sketch is prepared by The Land Bankers (a private advisory firm) solely on the request of the landowner, for private reference purposes only. It is based on digital cadastral data (ORSAC KYFL 2014), government land records, and documents provided by the owner. This document is NOT a government survey, is NOT certified by any revenue or survey authority, and must NOT be used as a substitute for official records in any legal, administrative, financial, or judicial proceeding.
+    </p>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-disclaimer">This sketch is for private reference only and is not a government-certified survey or legal demarcation.</div>
+    <div class="footer-center">www.thelandbankers.com &nbsp;&middot;&nbsp; +91 63725 15684 &nbsp;&middot;&nbsp; hello@thelandbankers.com</div>
+    <div class="footer-page">Page 2 of 2</div>
+  </div>
+</div>
+
+<!-- BONUS PAGE: TLB Marketing (not counted in sheet numbering) -->
+<div class="page" style="padding:0; display:flex; flex-direction:column;">
+  <!-- Top banner -->
+  <div style="background:#0C1421; padding:40px 36px 32px; text-align:center;">
+    <img src="https://www.thelandbankers.com/assets/images/tlb-logo-white.png" alt="TLB Logo" style="height:44px; margin-bottom:16px;">
+    <h2 style="font-size:26px; font-weight:800; color:white; letter-spacing:1px; margin-bottom:8px;">
+      India's First Land Rating Platform
+    </h2>
+    <p style="font-size:12px; color:#A8E2DB; font-style:italic; max-width:420px; margin:0 auto;">
+      We protect your land &mdash; online and on ground, not just on papers.
+    </p>
+  </div>
+
+  <!-- Intro -->
+  <div style="padding:28px 36px 0;">
+    <p style="font-size:11.5px; color:#334155; line-height:1.8; text-align:center; max-width:480px; margin:0 auto 28px;">
+      The Land Bankers simplifies land ownership by handling due diligence, identifying documentation issues, connecting you with expert solutions, and providing ongoing monitoring to protect your land value.
+    </p>
+
+    <!-- Services grid -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px;">
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">LandScore Rating</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">AI-powered property safety analysis with legal and on-ground risk evaluation. Get a clear rating for your land.</p>
+      </div>
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">Document Verification</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">Chain of title verification, missing document recovery, encumbrance review, and a secure digital document vault.</p>
+      </div>
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">Boundary Mapping</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">Land location verification with geo-boundaries, drone and satellite imaging, and physical survey coordination.</p>
+      </div>
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">Land Monitoring</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">Ongoing land monitoring with encroachment alerts, ownership validation, and proactive protection of your property.</p>
+      </div>
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">Valuation Reports</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">Market-aligned pricing with property dossier creation and comprehensive market benchmarking analysis.</p>
+      </div>
+
+      <div style="background:#F0FAF9; border:1px solid #D4F0ED; border-radius:6px; padding:18px 16px;">
+        <p style="font-size:11px; font-weight:700; color:#0C1421; margin-bottom:4px;">Buyer Network</p>
+        <p style="font-size:9.5px; color:#475467; line-height:1.5;">Access a verified buyer network for your property. We help connect serious buyers with verified land owners.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div style="margin-top:auto; background:#F0FAF9; border-top:1px solid #D4F0ED; padding:24px 36px; text-align:center;">
+    <p style="font-size:14px; font-weight:700; color:#0C1421; margin-bottom:12px;">Get started with The Land Bankers</p>
+    <div style="display:inline-flex; gap:20px; align-items:center;">
+      <span style="font-size:11px; color:#30B0A4; font-weight:600;">www.thelandbankers.com</span>
+      <span style="font-size:10px; color:#98A2B3;">|</span>
+      <span style="font-size:11px; color:#30B0A4; font-weight:600;">+91 63725 15684</span>
+      <span style="font-size:10px; color:#98A2B3;">|</span>
+      <span style="font-size:11px; color:#30B0A4; font-weight:600;">hello@thelandbankers.com</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
